@@ -33,6 +33,7 @@ jobs:
               run: |
                 git config --global user.name 'GitHub Actions Bot'
                 git config --global user.email '<>'
+                git fetch
                 git checkout main
                 git merge dev --strategy-option=theirs
                 git push origin main

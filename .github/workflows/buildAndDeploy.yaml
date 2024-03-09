@@ -30,6 +30,6 @@ jobs:
             - name: Push to main
               uses: ad-m/github-push-action@master
               with:
-                  github_token: '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'
+                  github_token: ${{ secrets.MY_GITHUB_TOKEN }}
                   branch: 'main'
                   directory: 'dist'

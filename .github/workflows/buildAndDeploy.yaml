@@ -27,15 +27,12 @@ jobs:
             - name: Build
               run: npm run build
 
-            - name: Pull latest changes
+            - name: Deploy to main
+              env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
-                git config --global user.email "action@github.com"
-                git config --global user.name "GitHub Action"
-                git pull --strategy-option ours origin main
-
-            - name: Push to main
-              uses: ad-m/github-push-action@master
-              with:
-                  github_token: ${{ secrets.MY_GITHUB_TOKEN }}
-                  branch: 'main'
-                  directory: 'dist'
+                git config --global user.name 'GitHub Actions Bot'
+                git config --global user.email '<>'
+                git checkout main
+                git merge dev --strategy-option=theirs
+                git push origin main

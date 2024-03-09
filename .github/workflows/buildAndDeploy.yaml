@@ -36,4 +36,6 @@ jobs:
                 git fetch
                 git checkout main
                 git merge dev --allow-unrelated-histories --strategy-option=theirs
+                git add .
+                git commit -m "Merge dev into main"
                 git push origin main

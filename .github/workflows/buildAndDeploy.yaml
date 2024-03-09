@@ -27,6 +27,12 @@ jobs:
             - name: Build
               run: npm run build
 
+            - name: Pull latest changes
+              run: |
+                git config --global user.email "action@github.com"
+                git config --global user.name "GitHub Action"
+                git pull origin main
+
             - name: Push to main
               uses: ad-m/github-push-action@master
               with:

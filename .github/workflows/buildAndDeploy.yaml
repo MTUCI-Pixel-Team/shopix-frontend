@@ -31,7 +31,7 @@ jobs:
               run: |
                 git config --global user.email "action@github.com"
                 git config --global user.name "GitHub Action"
-                git pull --rebase origin main
+                git pull --strategy-option ours origin main
 
             - name: Push to main
               uses: ad-m/github-push-action@master

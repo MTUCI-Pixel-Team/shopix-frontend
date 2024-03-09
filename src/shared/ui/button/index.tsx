@@ -15,8 +15,8 @@ export const Button: FC<ButtonProps> = ({
         size === 'small'
             ? { minWidth: 129, height: 30, fontSize: '12px', fontWeight: 400 }
             : size === 'medium'
-            ? { minWidth: 154, height: 57 }
-            : { minWidth: 237, height: 57 }
+              ? { minWidth: 154, height: 57 }
+              : { minWidth: 237, height: 57 }
     return (
         <button
             className={classNames(styles.button)}

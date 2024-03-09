@@ -29,6 +29,8 @@ export function Select<
                     borderRadius: '16px',
                     background: 'var(--second-primary)',
                     border: 'none',
+                    fontSize: '16px',
+                    fontWeight: '400',
                 }),
                 menu: (baseStyles) => ({
                     ...baseStyles,
@@ -38,7 +40,8 @@ export function Select<
                 option: (baseStyles, state) => ({
                     ...baseStyles,
                     borderRadius: '16px',
-
+                    fontSize: '16px',
+                    fontWeight: '400',
                     background: state.isSelected
                         ? 'var(--accent)'
                         : state.isFocused

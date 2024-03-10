@@ -1,3 +1,4 @@
+import { LayoutHeader } from '@/widgets/header'
 import { Button } from '@/shared/ui/button'
 import { Checkbox } from '@/shared/ui/checkbox'
 import { EmptyElement } from '@/shared/ui/empty'
@@ -7,15 +8,17 @@ import { Select } from '@/shared/ui/select'
 import { Slider } from '@/shared/ui/slider'
 import { Stars } from '@/shared/ui/stars'
 
-export default function Home() {
+export const Home = () => {
     const options = [
         { value: 'chocolate', label: 'Chocolate' },
         { value: 'strawberry', label: 'Strawberry' },
         { value: 'vanilla', label: 'Vanilla' },
     ]
     return (
-        <div>
-            <h1>Hello world</h1>
+        <>
+            <h1>Главная</h1>
+            {/* <h1>Hello world</h1>
+            <LayoutHeader />
             <Button size="small">Применить</Button>
             <Button size="big">Применить</Button>
             <Stars size="big" edit={true} />
@@ -29,7 +32,7 @@ export default function Home() {
                     <label htmlFor="pass">hello</label>
                 </div>
             </form>
-            <Slider />
-        </div>
+            <Slider /> */}
+        </>
     )
 }

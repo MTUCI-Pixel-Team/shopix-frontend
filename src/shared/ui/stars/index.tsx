@@ -3,17 +3,19 @@ import { FC, useState } from 'react'
 import styles from './styles.module.scss'
 
 interface StarsProps {
+    fill?: 1 | 2 | 3 | 4 | 5
     size?: 'small' | 'medium' | 'big'
     edit?: boolean
 }
 
 export const Stars: FC<StarsProps> = ({
+    fill = 0,
     size = 'small',
     edit = false,
     ...props
 }) => {
     const [hoveredIndexStar, setHoveredIndexStar] = useState<number | null>(
-        null
+        null,
     )
 
     const starSize = size === 'small' ? 16 : size === 'medium' ? 24 : 40
@@ -31,8 +33,9 @@ export const Stars: FC<StarsProps> = ({
                     key={index}
                     className={classNames(styles.star, {
                         [styles.active]:
-                            hoveredIndexStar !== null &&
-                            index <= hoveredIndexStar,
+                            (hoveredIndexStar !== null &&
+                                index <= hoveredIndexStar) ||
+                            (!edit && index < fill),
                     })}
                     style={{ cursor: edit ? 'pointer' : 'default' }}
                     onMouseEnter={() => hoverOnStar(index)}

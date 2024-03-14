@@ -41,7 +41,9 @@ export const Navigation = () => {
                 className={styles.popup}
                 onMouseLeave={() => setIsPopup(false)}
             >
-                <Popup reviewCard={<ReviewsCard />} />
+                <Popup
+                    reviewCard={<ReviewsCard style={{ color: 'black' }} />}
+                />
             </div>
         </div>
     )

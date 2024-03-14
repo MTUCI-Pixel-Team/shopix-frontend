@@ -1,5 +1,5 @@
 import { FC, HTMLAttributes, ReactNode } from 'react'
-import { Skelton } from './skeleton'
+import { ReviewsUserSkeleton } from '../skeleton'
 import styles from './styles.module.scss'
 
 interface PopupProps extends HTMLAttributes<HTMLDivElement> {
@@ -9,7 +9,9 @@ interface PopupProps extends HTMLAttributes<HTMLDivElement> {
 export const Popup: FC<PopupProps> = ({ reviewCard }) => {
     return (
         <div className={styles.popup}>
-            <div className={styles.card}>{reviewCard || <Skelton />}</div>
+            <div className={styles.card}>
+                {reviewCard || <ReviewsUserSkeleton />}
+            </div>
             <hr />
             <ul className={styles.info}>
                 <li>Мои отзывы</li>

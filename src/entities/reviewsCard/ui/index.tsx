@@ -1,9 +1,12 @@
+import { FC, HTMLAttributes } from 'react'
 import { Stars } from '@/shared/ui/stars'
 import styles from './styles.module.scss'
 
-export const ReviewsCard = () => {
+interface ReviewsCardProps extends HTMLAttributes<HTMLDivElement> {}
+
+export const ReviewsCard: FC<ReviewsCardProps> = ({ ...props }) => {
     return (
-        <div className={styles.card}>
+        <div {...props} className={styles.card}>
             <div className={styles.avatar}>
                 <img src="/public/images/profile.png" alt="" />
             </div>

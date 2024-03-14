@@ -1,22 +1,18 @@
-import { LayoutHeader } from '@/widgets/header'
-import { Button } from '@/shared/ui/button'
-import { Checkbox } from '@/shared/ui/checkbox'
-import { EmptyElement } from '@/shared/ui/empty'
-import { ErrorElement } from '@/shared/ui/error'
-import { Input } from '@/shared/ui/input'
-import { Select } from '@/shared/ui/select'
-import { Slider } from '@/shared/ui/slider'
-import { Stars } from '@/shared/ui/stars'
+import { ProductsList } from '@/widgets/productsList'
+import styles from './styles.module.scss'
 
 export const Home = () => {
-    const options = [
-        { value: 'chocolate', label: 'Chocolate' },
-        { value: 'strawberry', label: 'Strawberry' },
-        { value: 'vanilla', label: 'Vanilla' },
-    ]
+    // const options = [
+    //     { value: 'chocolate', label: 'Chocolate' },
+    //     { value: 'strawberry', label: 'Strawberry' },
+    //     { value: 'vanilla', label: 'Vanilla' },
+    // ]
     return (
-        <>
-            <h1>Главная</h1>
+        <div className={styles.home}>
+            <div className={styles.products}>
+                <ProductsList />
+            </div>
+            <h1>Фильтры</h1>
             {/* <h1>Hello world</h1>
             <LayoutHeader />
             <Button size="small">Применить</Button>
@@ -33,6 +29,6 @@ export const Home = () => {
                 </div>
             </form>
             <Slider /> */}
-        </>
+        </div>
     )
 }

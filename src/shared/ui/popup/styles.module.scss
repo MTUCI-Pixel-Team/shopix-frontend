@@ -1,11 +1,12 @@
 .popup {
-    color: var(--white-color);
+    color: black;
     font-size: 16px;
     font-weight: 400;
     width: 365px;
     border-radius: 0px 0px 16px 16px;
-    background: var(--primary);
-    box-shadow: 8px 17px 20px 0px rgba(22, 176, 255, 0.25);
+    background: var(--third-primary);
+    box-shadow: 0px 0px 20px 0px rgba(22, 176, 255, 0.25);
+
     display: flex;
     flex-direction: column;
 }

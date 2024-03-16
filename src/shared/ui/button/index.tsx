@@ -1,4 +1,4 @@
-import classNames from 'classnames'
+import cn from 'classnames'
 import { ButtonHTMLAttributes, FC } from 'react'
 import styles from './styles.module.scss'
 
@@ -18,11 +18,7 @@ export const Button: FC<ButtonProps> = ({
               ? { minWidth: 154, height: 57 }
               : { minWidth: 237, height: 57 }
     return (
-        <button
-            className={classNames(styles.button)}
-            style={buttonSize}
-            {...props}
-        >
+        <button className={cn(styles.button)} style={buttonSize} {...props}>
             {children}
         </button>
     )

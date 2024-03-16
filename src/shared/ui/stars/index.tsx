@@ -1,4 +1,4 @@
-import classNames from 'classnames'
+import cn from 'classnames'
 import { FC, useState } from 'react'
 import styles from './styles.module.scss'
 
@@ -31,7 +31,7 @@ export const Stars: FC<StarsProps> = ({
             {[...Array(5)].map((_, index) => (
                 <svg
                     key={index}
-                    className={classNames(styles.star, {
+                    className={cn(styles.star, {
                         [styles.active]:
                             (hoveredIndexStar !== null &&
                                 index <= hoveredIndexStar) ||

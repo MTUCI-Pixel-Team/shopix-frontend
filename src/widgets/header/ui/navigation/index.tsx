@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { FC } from 'react'
 import { NavLink } from 'react-router-dom'
-import { ReviewsCard } from '@/entities/reviewsCard'
-import { Popup } from '@/shared/ui/popup'
 import styles from './styles.module.scss'
 
-export const Navigation = () => {
-    const [isPopup, setIsPopup] = useState(false)
+interface NavigationProps {
+    setIsPopup: (arg: boolean) => void
+}
 
+export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
     return (
         <div className={styles.nav}>
             <nav>
@@ -35,15 +35,6 @@ export const Navigation = () => {
             </nav>
             <div onMouseEnter={() => setIsPopup(true)} className={styles.logo}>
                 <img src="/public/images/profile.png" alt="profile" />
-            </div>
-            <div
-                style={{ display: isPopup ? 'block' : 'none' }}
-                className={styles.popup}
-                onMouseLeave={() => setIsPopup(false)}
-            >
-                <Popup
-                    reviewCard={<ReviewsCard style={{ color: 'black' }} />}
-                />
             </div>
         </div>
     )

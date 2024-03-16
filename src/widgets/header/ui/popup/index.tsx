@@ -1,14 +1,26 @@
+import cn from 'classnames'
 import { FC, HTMLAttributes, ReactNode } from 'react'
-import { ReviewsUserSkeleton } from '../skeleton'
+import { ReviewsUserSkeleton } from '@/shared/ui/skeleton'
 import styles from './styles.module.scss'
 
 interface PopupProps extends HTMLAttributes<HTMLDivElement> {
     reviewCard: ReactNode
+    isPopup: boolean
+    setIsPopup: (arg: boolean) => void
 }
 
-export const Popup: FC<PopupProps> = ({ reviewCard }) => {
+export const Popup: FC<PopupProps> = ({
+    isPopup,
+    setIsPopup,
+    reviewCard,
+    className,
+}) => {
     return (
-        <div className={styles.popup}>
+        <div
+            onMouseLeave={() => setIsPopup(false)}
+            className={cn(styles.popup, className)}
+            style={{ display: isPopup ? 'block' : 'none' }}
+        >
             <div className={styles.card}>
                 {reviewCard || <ReviewsUserSkeleton />}
             </div>

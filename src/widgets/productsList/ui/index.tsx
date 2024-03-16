@@ -1,5 +1,5 @@
 import { FavoriteIcon } from '@/features/favorites'
-import { ProductCard } from '@/entities/productCard'
+import { ProductCard } from '@/entities/product-card'
 import { ProductCardSkeleton } from '@/shared/ui/skeleton'
 import styles from './styles.module.scss'
 

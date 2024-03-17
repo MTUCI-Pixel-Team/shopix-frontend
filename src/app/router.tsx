@@ -6,10 +6,10 @@ import { Layout } from '@/shared/ui/layout'
 
 export const router = createHashRouter([
     {
-        path: '/',
+        path: paths.home,
         element: <Layout layoutHeader={<LayoutHeader />} />,
         children: [
-            { path: paths.home, element: <Home /> },
+            { path: '', element: <Home /> },
             { path: paths.chats, element: <h2>chats</h2> },
         ],
     },

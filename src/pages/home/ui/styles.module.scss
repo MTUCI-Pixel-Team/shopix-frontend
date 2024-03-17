@@ -10,3 +10,9 @@
     grid-template-columns: repeat(auto-fill, minmax(250px, 360px));
     gap: 16px;
 }
+
+.up {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+}

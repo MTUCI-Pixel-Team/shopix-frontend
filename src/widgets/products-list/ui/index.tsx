@@ -1,7 +1,5 @@
 import { FavoriteIcon } from '@/features/card/favorites'
 import { ProductCard } from '@/entities/product-card'
-import { ProductCardSkeleton } from '@/shared/ui/skeleton'
-import styles from './styles.module.scss'
 
 export const ProductsList = () => {
     return (

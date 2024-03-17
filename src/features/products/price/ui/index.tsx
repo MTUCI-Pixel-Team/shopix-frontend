@@ -1,4 +1,3 @@
-import { Input } from '@/shared/ui/input'
 import { Slider } from '@/shared/ui/slider'
 import styles from './styles.module.scss'
 

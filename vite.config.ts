@@ -4,7 +4,7 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
     // base: '/shopix-frontend/',
-    base: process.env.BASE_PATH || '/',
+    base: process.env.NODE_ENV === 'production' ? '/shopix-frontend/' : '/',
     resolve: {
         alias: {
             '@': path.resolve(__dirname, './src'),

@@ -3,11 +3,13 @@ body,
 ul,
 p,
 ul,
-h1 h2,
+h1,
+h2,
 h3,
 h4,
 h5,
-li {
+li,
+hr {
     margin: 0;
     padding: 0;
 }
@@ -17,6 +19,14 @@ li {
     box-sizing: border-box;
 }
 
+li {
+    list-style: none;
+}
+
+html {
+    background-color: #d4eaf7;
+}
+
 :root {
     --white-color: #ffffff;
     --accent: #00baff;
@@ -24,5 +34,6 @@ li {
     --primary: #71c4ef;
     --black: #1d1c1c;
     --gray: rgb(169, 169, 169);
+    --third-primary: #afe4ff;
     --shadow: 0px 0px 8px 0px rgba(0, 186, 255, 0.5);
 }

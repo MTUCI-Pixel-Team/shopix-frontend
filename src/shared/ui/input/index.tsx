@@ -1,4 +1,4 @@
-import classNames from 'classnames'
+import cn from 'classnames'
 import { FC, InputHTMLAttributes } from 'react'
 import styles from './styles.module.scss'
 
@@ -8,7 +8,7 @@ export const Input: FC<InputHTMLAttributes<HTMLInputElement>> = ({
 }) => {
     return (
         <>
-            <input className={classNames(styles.input, className)} {...props} />
+            <input className={cn(styles.input, className)} {...props} />
         </>
     )
 }

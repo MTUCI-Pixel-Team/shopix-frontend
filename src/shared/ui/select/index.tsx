@@ -4,8 +4,13 @@ import './style.scss'
 export function Select<
     Option,
     IsMulti extends boolean = false,
-    Group extends GroupBase<Option> = GroupBase<Option>
->({ options, ...props }: Props<Option, IsMulti, Group>) {
+    Group extends GroupBase<Option> = GroupBase<Option>,
+>({
+    options,
+    height,
+    fontSize,
+    ...props
+}: { height: number; fontSize: number } & Props<Option, IsMulti, Group>) {
     let defaultValue: Option | undefined
     if (
         options &&
@@ -29,21 +34,26 @@ export function Select<
                     borderRadius: '16px',
                     background: 'var(--second-primary)',
                     border: 'none',
+                    fontSize: `${fontSize}px`,
+                    height: `${height}px`,
+                    fontWeight: '400',
                 }),
                 menu: (baseStyles) => ({
                     ...baseStyles,
                     borderRadius: '16px',
+                    fontSize: `${fontSize}px`,
                     background: 'var(--second-primary)',
                 }),
                 option: (baseStyles, state) => ({
                     ...baseStyles,
                     borderRadius: '16px',
-
+                    fontSize: `${fontSize}px`,
+                    fontWeight: '400',
                     background: state.isSelected
                         ? 'var(--accent)'
                         : state.isFocused
-                        ? 'var(--primary)'
-                        : 'var(--second-primary)',
+                          ? 'var(--primary)'
+                          : 'var(--second-primary)',
                 }),
                 singleValue: (baseStyles) => ({
                     ...baseStyles,

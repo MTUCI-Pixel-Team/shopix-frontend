@@ -7,6 +7,7 @@ module.exports = {
         'plugin:react-hooks/recommended',
         '@feature-sliced',
         'plugin:@conarti/feature-sliced/recommended',
+        'plugin:@tanstack/eslint-plugin-query/recommended',
     ],
     ignorePatterns: ['dist', '.eslintrc.cjs'],
     parser: '@typescript-eslint/parser',

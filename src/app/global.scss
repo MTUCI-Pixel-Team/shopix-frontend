@@ -27,6 +27,11 @@ html {
     background-color: #d4eaf7;
 }
 
+a {
+    text-decoration: none;
+    color: var(--black);
+}
+
 :root {
     --white-color: #ffffff;
     --accent: #00baff;

@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios'
 import { SERVER_API } from '../config/constants'
 
 export class Request {
-    static url: string = SERVER_API
+    static url: string = `${SERVER_API}/api/`
 
     static async get(url: string, params?: { [key: string]: string }) {
         try {

@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import { FC } from 'react'
 import { NavLink } from 'react-router-dom'
 import styles from './styles.module.scss'
@@ -15,7 +16,9 @@ export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
                         <NavLink
                             to="/"
                             className={({ isActive }) =>
-                                isActive ? styles.active : ''
+                                isActive
+                                    ? `${styles.active}  ${styles.link}`
+                                    : styles.link
                             }
                         >
                             Главная
@@ -25,7 +28,9 @@ export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
                         <NavLink
                             to={'/chats'}
                             className={({ isActive }) =>
-                                isActive ? styles.active : ''
+                                isActive
+                                    ? `${styles.active}  ${styles.link}`
+                                    : styles.link
                             }
                         >
                             Чаты <span className={styles.chats}>6</span>

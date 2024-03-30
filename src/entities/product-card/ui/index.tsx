@@ -1,15 +1,11 @@
 import { FC, HTMLAttributes, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { SERVER_API } from '@/shared/config/constants'
+import { IProduct } from '..'
 import styles from './styles.module.scss'
 
 interface ProductCardProps extends HTMLAttributes<HTMLDivElement> {
-    product?: {
-        id: number
-        name: string
-        price: number
-        url: string
-        image: string
-    }
+    product?: IProduct
     action?: ReactNode
 }
 
@@ -19,30 +15,41 @@ export const ProductCard: FC<ProductCardProps> = ({
     children,
     style,
 }) => {
-    // https://swapi.dev/api/people/2/ - example
-    const id = product?.url.split('/').splice(-2, 1)[0]
+    // Преобразвать в 30.03.2023 14:30
+    const time = new Date(product?.created_at || '').toLocaleString('ru', {
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+    })
+    console.log(time)
     return (
-        <Link style={style} to={`/product/${id}`} className={styles.card}>
+        <Link
+            style={style}
+            to={`/product/${product?.id}`}
+            className={styles.card}
+        >
             {!product ? (
                 children
             ) : (
                 <>
                     <img
                         className={styles.img}
-                        src={
-                            'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Star_Wars_Logo.svg/1041px-Star_Wars_Logo.svg.png'
-                        }
+                        src={`${SERVER_API}${product.first_image}`}
                         alt=""
                     />
 
                     <div className={styles.wrapper}>
                         <div className={styles.info}>
-                            <h2 className={styles.name}>{product?.name}</h2>
-                            <h3 className={styles.price}>{product?.price} ₽</h3>
+                            <h2 className={styles.name}>{product?.title}</h2>
+                            <h3 className={styles.price}>
+                                {Math.round(+product?.price)} ₽
+                            </h3>
                             <p className={styles.location}>
                                 Москва, Авиамотроная
                             </p>
-                            <p className={styles.time}>Сегодня в 10:39</p>
+                            <p className={styles.time}>{time}</p>
                         </div>
                         {action}
                     </div>

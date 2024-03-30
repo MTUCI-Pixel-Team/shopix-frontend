@@ -1,5 +1,6 @@
 import { createHashRouter } from 'react-router-dom'
 import { HomePage } from '@/pages/home'
+import { MyProductsPage } from '@/pages/my-products'
 import { ProductPage } from '@/pages/product'
 import { LayoutHeader } from '@/widgets/header'
 import { paths } from '@/shared/config/router'
@@ -11,7 +12,8 @@ export const router = createHashRouter([
         children: [
             { path: '', element: <HomePage /> },
             { path: paths.product, element: <ProductPage /> },
-            { path: paths.chats, element: <h2>chats</h2> },
+            { path: paths.myProduct, element: <MyProductsPage /> },
+            { path: paths.chats, element: <h1>Чаты</h1> },
         ],
     },
 ])

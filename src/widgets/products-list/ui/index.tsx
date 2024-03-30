@@ -3,10 +3,10 @@ import InfiniteScroll from 'react-infinite-scroll-component'
 import { v4 as uuidv4 } from 'uuid'
 import { FavoriteIcon } from '@/features/card/favorites'
 import { ProductCard } from '@/entities/product-card'
+import { IProduct } from '@/entities/product-card'
 import { ErrorElement } from '@/shared/ui/error'
 import { ProductCardSkeleton } from '@/shared/ui/skeleton'
 import { useGetProducts } from '../api'
-import { IProduct } from '../model'
 
 export const ProductsList = () => {
     const {
@@ -34,7 +34,6 @@ export const ProductsList = () => {
                         'repeat(auto-fill, minmax(283px, 1fr))',
                     gap: '20px',
                     alignItems: 'center',
-                    padding: '0px 8px',
                 }}
                 hasMore={hasNextPage || false}
             >

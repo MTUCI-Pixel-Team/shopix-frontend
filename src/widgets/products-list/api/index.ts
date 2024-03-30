@@ -11,10 +11,10 @@ export const useGetProducts = () => {
         isFetchingNextPage,
         status,
     } = useInfiniteQuery({
-        queryKey: ['peoples'],
+        queryKey: ['posts'],
         queryFn: async ({ pageParam }) => {
             console.log(pageParam)
-            const result = await Request.get('people', {
+            const result = await Request.get('posts/posts_list', {
                 page: `${pageParam}`,
             })
             console.log(result)
@@ -23,6 +23,7 @@ export const useGetProducts = () => {
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
             const nextPage = lastPage.next?.split('?page=')[1]
+            console.log(nextPage)
             return lastPage.next ? nextPage : undefined
         },
     })

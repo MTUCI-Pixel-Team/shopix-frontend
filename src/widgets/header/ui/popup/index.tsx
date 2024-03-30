@@ -1,5 +1,6 @@
 import cn from 'classnames'
 import { FC, HTMLAttributes, ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { ReviewsUserSkeleton } from '@/shared/ui/skeleton'
 import styles from './styles.module.scss'
 
@@ -27,7 +28,11 @@ export const Popup: FC<PopupProps> = ({
             <hr />
             <ul className={styles.info}>
                 <li>Мои отзывы</li>
-                <li>Мои объявления</li>
+                <li>
+                    <Link className={styles.link} to={'/me/products'}>
+                        Мои объявления
+                    </Link>
+                </li>
                 <li>Избранное</li>
                 <li>Мои чаты</li>
             </ul>

@@ -1,9 +1,6 @@
-import styles from './styles.module.scss'
-
 export const FavoriteIcon = () => {
     return (
         <svg
-            className={styles.icon}
             xmlns="http://www.w3.org/2000/svg"
             width="44"
             height="44"

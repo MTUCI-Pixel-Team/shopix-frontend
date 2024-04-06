@@ -8,6 +8,7 @@ import styles from './styles.module.scss'
 
 export const LayoutHeader = () => {
     const [isPopup, setIsPopup] = useState(false)
+    const token = localStorage.getItem('token')
 
     return (
         <div className={styles.header}>
@@ -15,12 +16,14 @@ export const LayoutHeader = () => {
                 <Logo />
             </Link>
             <Navigation setIsPopup={setIsPopup} />
-            <Popup
-                isPopup={isPopup}
-                setIsPopup={setIsPopup}
-                className={styles.popup}
-                reviewCard={<ReviewsCard />}
-            />
+            {token && (
+                <Popup
+                    isPopup={isPopup}
+                    setIsPopup={setIsPopup}
+                    className={styles.popup}
+                    reviewCard={<ReviewsCard />}
+                />
+            )}
         </div>
     )
 }

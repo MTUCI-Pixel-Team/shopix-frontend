@@ -23,7 +23,7 @@ export const ProductCard: FC<ProductCardProps> = ({
         hour: 'numeric',
         minute: 'numeric',
     })
-    console.log(time)
+
     return (
         <Link
             style={style}

@@ -1,6 +1,7 @@
 import cn from 'classnames'
-import { FC, HTMLAttributes, ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { FC, HTMLAttributes, ReactNode, useEffect, useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { paths } from '@/shared/config/router'
 import { ReviewsUserSkeleton } from '@/shared/ui/skeleton'
 import styles from './styles.module.scss'
 
@@ -16,9 +17,34 @@ export const Popup: FC<PopupProps> = ({
     reviewCard,
     className,
 }) => {
+    const navigate = useNavigate()
+    const popupRef = useRef(null)
+    const exit = () => {
+        localStorage.removeItem('token')
+        navigate(paths.auth)
+    }
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (popupRef.current && !popupRef.current.contains(event.target)) {
+                setIsPopup(false)
+            }
+        }
+
+        if (isPopup) {
+            document.addEventListener('mousedown', handleClickOutside)
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [isPopup, setIsPopup])
+
     return (
         <div
-            onMouseLeave={() => setIsPopup(false)}
+            ref={popupRef}
+            // onMouseLeave={() => setIsPopup(false)}
             className={cn(styles.popup, className)}
             style={{ display: isPopup ? 'block' : 'none' }}
         >
@@ -39,7 +65,9 @@ export const Popup: FC<PopupProps> = ({
             <hr />
             <ul className={styles.info}>
                 <li>Настройки</li>
-                <li className={styles.exit}>Выйти</li>
+                <li onClick={exit} className={styles.exit}>
+                    Выйти
+                </li>
             </ul>
         </div>
     )

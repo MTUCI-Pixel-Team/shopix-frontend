@@ -38,3 +38,19 @@ export const ProductCardSkeleton = () => (
         <rect x="0" y="309" rx="8" ry="8" width="232" height="19" />
     </ContentLoader>
 )
+
+export const ReviewsCardSkeleton = (props) => (
+    <ContentLoader
+        speed={2}
+        width={226}
+        height={50}
+        viewBox="0 0 226 50"
+        backgroundColor="var(--second-primary)"
+        foregroundColor="#ffffff"
+        {...props}
+    >
+        <circle cx="25" cy="25" r="25" />
+        <rect x="64" y="6" rx="8" ry="8" width="161" height="13" />
+        <rect x="65" y="28" rx="8" ry="8" width="161" height="13" />
+    </ContentLoader>
+)

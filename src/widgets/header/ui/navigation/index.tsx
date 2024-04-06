@@ -1,6 +1,7 @@
 import cn from 'classnames'
 import { FC } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { paths } from '@/shared/config/router'
 import styles from './styles.module.scss'
 
 interface NavigationProps {
@@ -8,6 +9,16 @@ interface NavigationProps {
 }
 
 export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
+    const navigate = useNavigate()
+    const handlePopup = () => {
+        const token = localStorage.getItem('token')
+        if (token) {
+            setIsPopup(true)
+        } else {
+            navigate(paths.auth)
+        }
+    }
+
     return (
         <div className={styles.nav}>
             <nav>
@@ -15,11 +26,12 @@ export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
                     <li>
                         <NavLink
                             to="/"
-                            className={({ isActive }) =>
-                                isActive
-                                    ? `${styles.active}  ${styles.link}`
+                            className={({ isActive }) => {
+                                console.log(isActive)
+                                return isActive
+                                    ? `${styles.link} ${styles.active}`
                                     : styles.link
-                            }
+                            }}
                         >
                             Главная
                         </NavLink>
@@ -38,7 +50,7 @@ export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
                     </li>
                 </ul>
             </nav>
-            <div onMouseEnter={() => setIsPopup(true)} className={styles.logo}>
+            <div onClick={handlePopup} className={styles.logo}>
                 <img src="/public/images/profile.png" alt="profile" />
             </div>
         </div>

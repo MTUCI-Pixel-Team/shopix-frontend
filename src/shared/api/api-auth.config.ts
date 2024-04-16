@@ -1,6 +1,12 @@
 import axios, { AxiosError } from 'axios'
 import { SERVER_API } from '../config/constants'
-import { getRefreshToken, getToken, setToken } from '../config/storage'
+import { paths } from '../config/router'
+import {
+    getRefreshToken,
+    getToken,
+    removeTokens,
+    setToken,
+} from '../config/storage'
 
 export const instance = axios.create({
     // к запросу будет приуепляться cookies
@@ -38,21 +44,24 @@ instance.interceptors.response.use(
             error.config &&
             !error.config._isRetry
         ) {
-            try {
-                // запрос на обновление токенов
-                const resp = await instance.post('/api/users/token/refresh/', {
+            instance
+                .post('/api/users/token/refresh/', {
                     refresh: getRefreshToken(),
                 })
-                // сохраняем новый accessToken в localStorage
-                console.log(resp)
-                setToken(resp.data.access)
-                // переотправляем запрос с обновленным accessToken
-                return instance.request(originalRequest)
-            } catch (error) {
-                if (error instanceof AxiosError) {
-                    throw new Error(error.message)
-                }
-            }
+                .then((resp) => {
+                    setToken(resp.data.access)
+                    return instance.request(originalRequest)
+                })
+                .catch((error) => {
+                    if (
+                        error instanceof AxiosError &&
+                        error.response?.data.code === 'token_not_valid'
+                    ) {
+                        console.log(error, '-----------------')
+                        removeTokens()
+                        window.location.href = paths.auth
+                    }
+                })
         }
         // на случай, если возникла другая ошибка (не связанная с авторизацией)
         // пробросим эту ошибку

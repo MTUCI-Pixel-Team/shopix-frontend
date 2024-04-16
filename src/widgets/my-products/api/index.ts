@@ -7,9 +7,9 @@ import { Request } from '@/shared/api'
 
 export const useGetMyProducts = () => {
     const { data, isLoading, isError, error } = useQuery({
-        queryKey: ['my_products'],
+        queryKey: ['me/products'],
         queryFn: async () => {
-            const result = await Request.get('posts')
+            const result = await Request.getWithToken('users/me/posts/')
             return result
         },
     })

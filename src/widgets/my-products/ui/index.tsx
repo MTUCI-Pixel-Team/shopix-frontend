@@ -1,11 +1,12 @@
 import { MoreIcon } from '@/entities/more'
 import { IProduct, ProductCard } from '@/entities/product-card'
+import { ErrorElement } from '@/shared/ui/error'
 import { ProductCardSkeleton } from '@/shared/ui/skeleton'
 import { useGetMyProducts } from '..'
 import styles from './styles.module.scss'
 
 export const MyProducts = () => {
-    const { data, isLoading, isError } = useGetMyProducts()
+    const { data, isLoading, isError, error } = useGetMyProducts()
     console.log(data)
     return (
         <>
@@ -16,9 +17,7 @@ export const MyProducts = () => {
                     </ProductCard>
                 ))
             ) : isError ? (
-                <>
-                    <div>Ошибка</div>
-                </>
+                <ErrorElement message={error?.message || ''} />
             ) : (
                 data.results?.map((product: IProduct) => (
                     <ProductCard
@@ -37,9 +36,9 @@ export const MyProducts = () => {
                                                 <path
                                                     d="M4.26074 5.83333H19.6774M10.042 9.16667V14.1667M13.8962 9.16667V14.1667M5.22428 5.83333L6.18783 15.8333C6.18783 16.2754 6.39086 16.6993 6.75225 17.0118C7.11365 17.3244 7.60381 17.5 8.11491 17.5H15.8232C16.3343 17.5 16.8245 17.3244 17.1859 17.0118C17.5473 16.6993 17.7503 16.2754 17.7503 15.8333L18.7139 5.83333M9.07845 5.83333V3.33333C9.07845 3.11232 9.17997 2.90036 9.36067 2.74408C9.54136 2.5878 9.78644 2.5 10.042 2.5H13.8962C14.1517 2.5 14.3968 2.5878 14.5775 2.74408C14.7582 2.90036 14.8597 3.11232 14.8597 3.33333V5.83333"
                                                     stroke="white"
-                                                    stroke-width="2"
-                                                    stroke-linecap="round"
-                                                    stroke-linejoin="round"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
                                                 />
                                             </svg>
                                             Удалить объявление

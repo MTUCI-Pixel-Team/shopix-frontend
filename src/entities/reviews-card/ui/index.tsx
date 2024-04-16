@@ -1,4 +1,6 @@
 import { FC, HTMLAttributes, useEffect } from 'react'
+import { Navigate } from 'react-router-dom'
+import { paths } from '@/shared/config/router'
 import { ReviewsCardSkeleton } from '@/shared/ui/skeleton'
 import { Stars } from '@/shared/ui/stars'
 import { useGetMe } from '../api'
@@ -8,7 +10,7 @@ import styles from './styles.module.scss'
 interface ReviewsCardProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const ReviewsCard: FC<ReviewsCardProps> = ({ ...props }) => {
-    const { data, isError, isLoading } = useGetMe()
+    const { data, isError, isLoading, error } = useGetMe()
 
     const username = useInfo((state) => state.username)
     const stars = useInfo((state) => state.stars)
@@ -24,6 +26,11 @@ export const ReviewsCard: FC<ReviewsCardProps> = ({ ...props }) => {
         return <ReviewsCardSkeleton />
     }
 
+    // if (isError) {
+    //     console.log(error)
+    //     return <Navigate to={paths.auth} />
+    // }
+
     return (
         <div {...props} className={styles.card}>
             <div className={styles.avatar}>
@@ -32,7 +39,7 @@ export const ReviewsCard: FC<ReviewsCardProps> = ({ ...props }) => {
             <div className={styles.info}>
                 <div className={styles.name}>{username || 'Loading'}</div>
                 <div className={styles.reviews}>
-                    <div className={styles.rating}>{parseFloat(stars)}</div>
+                    <div className={styles.rating}>{stars}</div>
                     <Stars fill={stars} />
                 </div>
             </div>

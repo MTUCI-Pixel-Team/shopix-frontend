@@ -6,6 +6,7 @@ import { ProductPage } from '@/pages/product'
 import { RegisterPage } from '@/pages/register'
 import { LayoutHeader } from '@/widgets/header'
 import { Layout, LayoutAuth } from '@/widgets/layout'
+import { AuthCheck } from '@/entities/auth-check'
 import { paths } from '@/shared/config/router'
 
 export const router = createBrowserRouter([
@@ -16,7 +17,14 @@ export const router = createBrowserRouter([
             { path: '', element: <HomePage /> },
             { path: paths.product, element: <ProductPage /> },
             { path: paths.myProduct, element: <MyProductsPage /> },
-            { path: paths.chats, element: <h1>Чаты</h1> },
+            {
+                path: paths.chats,
+                element: (
+                    <AuthCheck>
+                        <h1>Чаты</h1>
+                    </AuthCheck>
+                ),
+            },
         ],
     },
     {

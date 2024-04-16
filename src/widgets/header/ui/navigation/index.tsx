@@ -1,7 +1,7 @@
-import cn from 'classnames'
 import { FC } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { paths } from '@/shared/config/router'
+import { getToken } from '@/shared/config/storage'
 import styles from './styles.module.scss'
 
 interface NavigationProps {
@@ -11,7 +11,7 @@ interface NavigationProps {
 export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
     const navigate = useNavigate()
     const handlePopup = () => {
-        const token = localStorage.getItem('token')
+        const token = getToken()
         if (token) {
             setIsPopup(true)
         } else {

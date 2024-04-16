@@ -15,7 +15,6 @@ export const ProductCard: FC<ProductCardProps> = ({
     children,
     style,
 }) => {
-    // Преобразвать в 30.03.2023 14:30
     const time = new Date(product?.created_at || '').toLocaleString('ru', {
         day: 'numeric',
         month: 'numeric',
@@ -51,7 +50,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                             </p>
                             <p className={styles.time}>{time}</p>
                         </div>
-                        {action}
+                        <div className={styles.action}>{action}</div>
                     </div>
                 </>
             )}

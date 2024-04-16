@@ -14,7 +14,7 @@ export const useGetProducts = () => {
         queryKey: ['posts'],
         queryFn: async ({ pageParam }) => {
             console.log(pageParam)
-            const result = await Request.get('posts/posts_list', {
+            const result = await Request.get('posts', {
                 params: {
                     page: `${pageParam}`,
                 },

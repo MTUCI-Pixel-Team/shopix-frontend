@@ -36,7 +36,7 @@ export const LoginPage = () => {
         mutation.mutate(formData)
     }
 
-    console.log(mutation)
+    console.log(mutation, 'error')
 
     return (
         <div className={styles.login}>

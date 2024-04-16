@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import { SERVER_API } from '../config/constants'
+import { instance } from './api-auth.config'
 // interface RequestSettings {
 //     params?: {}
 // }
@@ -39,6 +40,40 @@ export class Request {
         } catch (error) {
             if (error instanceof AxiosError) {
                 console.log(error)
+                throw new Error(error.response?.data?.message || error.message)
+            }
+        }
+    }
+
+    static async getWithToken(
+        url: string,
+        params?: {
+            headers?: {
+                [key: string]: string
+            }
+            params?: {
+                [key: string]: string
+            }
+        },
+    ) {
+        try {
+            const response = await instance.get(this.url + url, {
+                ...params,
+            })
+            return response.data
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                throw new Error(error.message)
+            }
+        }
+    }
+
+    static async postWithToken<T>(url: string, data: T) {
+        try {
+            const response = await instance.post<T>(this.url + url, data)
+            return response.data
+        } catch (error) {
+            if (error instanceof AxiosError) {
                 throw new Error(error.message)
             }
         }

@@ -9,7 +9,7 @@ export const useGetMyProducts = () => {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ['my_products'],
         queryFn: async () => {
-            const result = await Request.get('posts/posts_list')
+            const result = await Request.get('posts')
             return result
         },
     })

@@ -3,7 +3,7 @@ export const paths = {
     product: '/product/:id',
     myProduct: '/me/products',
     chats: '/chats',
-    auth: 'auth',
+    auth: '/auth',
     login: 'login',
     register: 'register',
 }

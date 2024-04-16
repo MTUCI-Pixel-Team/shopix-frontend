@@ -1,10 +1,16 @@
 import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { combine, devtools } from 'zustand/middleware'
 
 export const useInfo = create(
-    devtools((set) => ({
-        username: 0,
-        stars: 0,
-        setUsername: (username: string) => set({ username }),
-    })),
+    devtools(
+        combine(
+            {
+                username: '',
+                stars: 0,
+            },
+            (set) => ({
+                setUsername: (username: string) => set({ username }),
+            }),
+        ),
+    ),
 )

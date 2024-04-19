@@ -14,7 +14,7 @@ export const AddButton: FC<AddButtonProps> = ({
     }
     return (
         <Button
-            size="big"
+            size="medium"
             className={className}
             onClick={handleClick}
             {...props}

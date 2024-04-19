@@ -33,7 +33,6 @@ export const ProductsList = () => {
                     gridTemplateColumns:
                         'repeat(auto-fill, minmax(283px, 1fr))',
                     gap: '20px',
-                    alignItems: 'center',
                 }}
                 hasMore={hasNextPage || false}
             >

@@ -55,13 +55,6 @@ export const PopupAddProduct = ({
     })
 
     useEffect(() => {
-        document.body.style.overflow = 'hidden'
-        return () => {
-            document.body.style.overflow = 'auto'
-        }
-    }, [])
-
-    useEffect(() => {
         register('images', {
             required:
                 images.length === 0
@@ -95,8 +88,17 @@ export const PopupAddProduct = ({
         mutate.mutate(formData)
     }
 
+    const handleClose = (e) => {
+        if (e.target !== e.currentTarget) {
+            return
+        }
+
+        setIsPopup(false)
+        console.log(e.target)
+    }
+
     return (
-        <Popup>
+        <Popup onClick={handleClose}>
             <div className={styles.popup}>
                 <h2 className={styles.title}>Создание объявления</h2>
                 <form
@@ -225,11 +227,8 @@ export const PopupAddProduct = ({
                         </p>
                     </div>
                     <div className={styles.buttons}>
-                        <Button size="big" className={styles.create}>
-                            Создать
-                        </Button>
+                        <Button className={styles.create}>Создать</Button>
                         <Button
-                            size="big"
                             className={styles.cancel}
                             onClick={() => setIsPopup(false)}
                         >

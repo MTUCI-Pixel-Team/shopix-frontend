@@ -39,6 +39,9 @@ export const AddressCheck = ({ height, ...props }: { height: number }) => {
         <Select
             height={height}
             maxMenuHeight={300}
+            isLoading={isLoading}
+            loadingMessage={() => 'Загрузка...'}
+            noOptionsMessage={() => 'Нет результатов'}
             onChange={(option) => {
                 console.log(option)
                 setVisibleInput(option?.label || '')

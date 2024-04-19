@@ -1,7 +1,8 @@
 import classNames from 'classnames'
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { Controller, useForm, useWatch } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
+import { AddressCheck } from '@/entities/address-check'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { Popup } from '@/shared/ui/popup'
@@ -46,7 +47,10 @@ export const PopupAddProduct = ({
             images: [],
             category: '',
             price: '',
-            address: '',
+            address: {
+                label: '',
+                value: 0,
+            },
         },
     })
 
@@ -75,7 +79,7 @@ export const PopupAddProduct = ({
             title: data.title,
             description: data.description,
             price: data.price,
-            address: data.address,
+            address: data.address.label,
             category: selectedOption?.value,
             status: 'active',
             created_at: new Date().toISOString(),
@@ -178,7 +182,7 @@ export const PopupAddProduct = ({
                             </p>
                         </div>
                     </div>
-                    <div className={styles.item}>
+                    <div className={classNames(styles.item, styles.select)}>
                         <label htmlFor="category">Категория:</label>
                         {isLoading ? (
                             <p>Загрузка...</p>
@@ -186,9 +190,9 @@ export const PopupAddProduct = ({
                             <p>Ошибка: {error?.message}</p>
                         ) : (
                             <Select
-                                maxMenuHeight={400}
+                                maxMenuHeight={300}
                                 options={data || []}
-                                height={30}
+                                height={43}
                                 fontSize={16}
                                 onChange={setSelectedOption}
                             />
@@ -206,15 +210,15 @@ export const PopupAddProduct = ({
                         />
                         <p className={styles.error}>{errors.price?.message}</p>
                     </div>
-                    <div className={styles.item}>
+                    <div className={classNames(styles.item, styles.select)}>
                         <label>Адрес:</label>
-                        <Input
-                            id="address"
-                            placeholder="Адрес"
-                            type="text"
-                            {...register('address', {
-                                required: 'Это поле обязательное',
-                            })}
+                        <Controller
+                            name="address"
+                            control={control}
+                            rules={{ required: 'Это поле обязательное' }}
+                            render={({ field }) => (
+                                <AddressCheck height={43} {...field} />
+                            )}
                         />
                         <p className={styles.error}>
                             {errors.address?.message}

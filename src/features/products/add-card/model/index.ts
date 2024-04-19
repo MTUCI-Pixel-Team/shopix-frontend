@@ -9,5 +9,5 @@ export interface FormAddCard {
     images: File[]
     category: string
     price: string
-    address: string
+    address: { label: string; value: number }
 }

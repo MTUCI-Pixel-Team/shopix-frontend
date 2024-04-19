@@ -6,9 +6,15 @@ import styles from './styles.module.scss'
 
 interface NavigationProps {
     setIsPopup: (arg: boolean) => void
+    name: string
+    image?: string
 }
 
-export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
+export const Navigation: FC<NavigationProps> = ({
+    setIsPopup,
+    name = 'Guest',
+    image,
+}) => {
     const navigate = useNavigate()
     const handlePopup = () => {
         const token = getToken()
@@ -38,7 +44,7 @@ export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
                     </li>
                     <li>
                         <NavLink
-                            to={'/chats'}
+                            to={paths.chats}
                             className={({ isActive }) =>
                                 isActive
                                     ? `${styles.active}  ${styles.link}`
@@ -51,7 +57,12 @@ export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
                 </ul>
             </nav>
             <div onClick={handlePopup} className={styles.logo}>
-                <img src="/public/images/profile.png" alt="profile" />
+                {image ? (
+                    <img src={image} alt="profile" />
+                ) : (
+                    name.slice(0, 1).toUpperCase()
+                )}
+                {/* <img src="/public/images/profile.png" alt="profile" /> */}
             </div>
         </div>
     )

@@ -1,9 +1,11 @@
 import { Fragment } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { v4 as uuidv4 } from 'uuid'
-import { FavoriteIcon } from '@/features/card/favorites'
+import { useGetFavorites } from '@/widgets/favorites-list'
+import { FavoriteIcon, useAddFavorite } from '@/features/card/favorites'
 import { ProductCard } from '@/entities/product-card'
 import { IProduct } from '@/entities/product-card'
+import { EmptyElement } from '@/shared/ui/empty'
 import { ErrorElement } from '@/shared/ui/error'
 import { ProductCardSkeleton } from '@/shared/ui/skeleton'
 import { useGetProducts } from '../api'
@@ -17,9 +19,18 @@ export const ProductsList = () => {
         hasNextPage,
         isFetchingNextPage,
     } = useGetProducts()
+    const mutation = useAddFavorite()
 
     if (error) {
         return <ErrorElement message={error.message} />
+    }
+
+    const handleAddFavorite = async (id: number) => {
+        await mutation.mutateAsync(id)
+    }
+
+    if (data?.pages[0].results.length === 0 && !isFetching) {
+        return <EmptyElement />
     }
 
     return (
@@ -40,14 +51,22 @@ export const ProductsList = () => {
                     <Fragment key={uuidv4()}>
                         {item.results.map((product: IProduct) => (
                             <ProductCard
-                                action={<FavoriteIcon />}
+                                action={
+                                    <FavoriteIcon
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            e.preventDefault()
+                                            handleAddFavorite(product.id)
+                                        }}
+                                    />
+                                }
                                 key={product.id}
                                 product={product}
                             />
                         ))}
                     </Fragment>
                 ))}
-                {(isFetchingNextPage || (isFetching && !data)) &&
+                {(isFetchingNextPage || isFetching || !data) &&
                     new Array(12).fill(0).map((_, i) => (
                         <ProductCard style={{ display: 'block' }} key={i}>
                             <ProductCardSkeleton />

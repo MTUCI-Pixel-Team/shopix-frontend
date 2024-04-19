@@ -8,9 +8,13 @@ import styles from './styles.module.scss'
 
 export const MyProducts = () => {
     const { data, isLoading, isError, error } = useGetMyProducts()
+
     console.log(data)
     return (
-        <>
+        <div
+            className={styles.products}
+            style={{ display: data?.length === 0 ? 'block' : 'grid' }}
+        >
             {isLoading ? (
                 new Array(6).fill(0).map((_, i) => (
                     <ProductCard style={{ display: 'block' }} key={i}>
@@ -70,6 +74,6 @@ export const MyProducts = () => {
             ) : (
                 <EmptyElement />
             )}
-        </>
+        </div>
     )
 }

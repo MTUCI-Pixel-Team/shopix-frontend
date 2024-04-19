@@ -7,9 +7,7 @@ export const MyProductsPage = () => {
         <div className={styles.page}>
             <h1>Мои объявления: </h1>
             <AddProductLayout className={styles.button} />
-            <div className={styles.products}>
-                <MyProducts />
-            </div>
+            <MyProducts />
         </div>
     )
 }

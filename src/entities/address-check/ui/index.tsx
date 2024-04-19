@@ -5,7 +5,14 @@ import { set } from 'react-hook-form'
 import { InputActionMeta } from 'react-select'
 import { Select } from '@/shared/ui/select'
 
-export const AddressCheck = ({ height, ...props }: { height: number }) => {
+export const AddressCheck = ({
+    setAddress,
+    height,
+    ...props
+}: {
+    height: number
+    setAddress: (value: string) => void
+}) => {
     const [input, setInput] = useState('')
     const [visibleInput, setVisibleInput] = useState('')
     const { data, error, isLoading, isError, refetch } = useQuery({
@@ -45,6 +52,7 @@ export const AddressCheck = ({ height, ...props }: { height: number }) => {
             onChange={(option) => {
                 console.log(option)
                 setVisibleInput(option?.label || '')
+                setAddress(option?.label || '')
             }}
             onInputChange={(value) => setVisibleInput(value)}
             isSearchable={true}

@@ -44,6 +44,12 @@
     width: 60px;
     height: 60px;
     border-radius: 100%;
+    background-color: var(--accent);
+    color: var(--white-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
     img {
         display: block;
         width: 100%;

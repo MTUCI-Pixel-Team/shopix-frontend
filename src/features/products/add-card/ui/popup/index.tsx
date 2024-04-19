@@ -21,6 +21,7 @@ export const PopupAddProduct = ({
     const mutate = useMutationAddCard()
 
     const [images, setImages] = useState<File[]>([])
+    const [address, setAddress] = useState<string>('')
     const [selectedOption, setSelectedOption] = useState<
         | {
               value: number
@@ -47,10 +48,7 @@ export const PopupAddProduct = ({
             images: [],
             category: '',
             price: '',
-            address: {
-                label: '',
-                value: 0,
-            },
+            address: '',
         },
     })
 
@@ -63,16 +61,25 @@ export const PopupAddProduct = ({
         })
     }, [images, register])
 
+    useEffect(() => {
+        register('address', {
+            required: !address
+                ? { value: true, message: 'Это поле обязательное' }
+                : undefined,
+        })
+    }, [address, register])
+
     const handelDeletePhoto = (index: number) => {
         setImages((image) => image.filter((_, i) => i !== index))
     }
 
     const onSubmit = (data: FormAddCard) => {
+        console.log(address)
         const formatedData = {
             title: data.title,
             description: data.description,
             price: data.price,
-            address: data.address.label,
+            address: address,
             category: selectedOption?.value,
             status: 'active',
             created_at: new Date().toISOString(),
@@ -96,6 +103,8 @@ export const PopupAddProduct = ({
         setIsPopup(false)
         console.log(e.target)
     }
+
+    console.log(address)
 
     return (
         <Popup onClick={handleClose}>
@@ -214,14 +223,14 @@ export const PopupAddProduct = ({
                     </div>
                     <div className={classNames(styles.item, styles.select)}>
                         <label>Адрес:</label>
-                        <Controller
+                        <Input
                             name="address"
-                            control={control}
-                            rules={{ required: 'Это поле обязательное' }}
-                            render={({ field }) => (
-                                <AddressCheck height={43} {...field} />
-                            )}
+                            type="text"
+                            onChange={(e) => {
+                                setAddress(e.target.value)
+                            }}
                         />
+                        {/* <AddressCheck setAddress={setAddress} height={43} /> */}
                         <p className={styles.error}>
                             {errors.address?.message}
                         </p>

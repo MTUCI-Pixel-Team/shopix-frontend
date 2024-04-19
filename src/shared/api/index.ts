@@ -78,4 +78,15 @@ export class Request {
             }
         }
     }
+
+    static async deleteWithToken(url: string) {
+        try {
+            const response = await instance.delete(this.url + url)
+            return response.data
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                throw new Error(error.message)
+            }
+        }
+    }
 }

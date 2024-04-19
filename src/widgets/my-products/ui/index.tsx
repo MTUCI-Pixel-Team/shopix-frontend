@@ -1,5 +1,6 @@
 import { MoreIcon } from '@/entities/more'
 import { IProduct, ProductCard } from '@/entities/product-card'
+import { EmptyElement } from '@/shared/ui/empty'
 import { ErrorElement } from '@/shared/ui/error'
 import { ProductCardSkeleton } from '@/shared/ui/skeleton'
 import { useGetMyProducts } from '..'
@@ -18,8 +19,8 @@ export const MyProducts = () => {
                 ))
             ) : isError ? (
                 <ErrorElement message={error?.message || ''} />
-            ) : (
-                data.results?.map((product: IProduct) => (
+            ) : data.length > 0 ? (
+                data.map((product: IProduct) => (
                     <ProductCard
                         action={
                             <MoreIcon
@@ -66,6 +67,8 @@ export const MyProducts = () => {
                         product={product}
                     />
                 ))
+            ) : (
+                <EmptyElement />
             )}
         </>
     )

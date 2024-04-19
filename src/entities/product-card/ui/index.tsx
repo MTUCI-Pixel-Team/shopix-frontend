@@ -46,7 +46,7 @@ export const ProductCard: FC<ProductCardProps> = ({
                                 {Math.round(+product?.price)} ₽
                             </h3>
                             <p className={styles.location}>
-                                Москва, Авиамотроная
+                                {product?.address || ''}
                             </p>
                             <p className={styles.time}>{time}</p>
                         </div>

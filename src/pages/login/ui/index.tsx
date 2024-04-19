@@ -86,7 +86,7 @@ export const LoginPage = () => {
             </form>
             <div className={styles.without}>
                 <p>Нет аккаунта?</p>
-                <Link to={`/${paths.auth}/${paths.register}`}>
+                <Link to={`${paths.auth}/${paths.register}`}>
                     Зарегистрируйтесь
                 </Link>
             </div>

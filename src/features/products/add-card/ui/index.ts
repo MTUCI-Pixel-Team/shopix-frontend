@@ -1,5 +1,2 @@
-import React from 'react'
-
-export const AddProduct = () => {
-    return <div>AddProduct</div>
-}
+import { AddProductLayout } from './add-product-layout'
+export { AddProductLayout }

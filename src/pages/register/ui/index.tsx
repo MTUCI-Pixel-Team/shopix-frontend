@@ -92,7 +92,7 @@ export const RegisterPage = () => {
             </form>
             <div className={styles.without}>
                 <p>Уже есть аккаунт?</p>
-                <Link to={`/${paths.auth}/${paths.login}`}>Авторизуйтесь</Link>
+                <Link to={`${paths.auth}/${paths.login}`}>Авторизуйтесь</Link>
             </div>
         </div>
         // <div className={styles.register}>

@@ -6,6 +6,7 @@ export interface IProduct {
     updated_at?: string
     status?: string
     views?: number
+    address?: string
     id: number
     first_image: string
 }

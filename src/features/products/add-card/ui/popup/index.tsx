@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { useEffect, useState } from 'react'
+import { MouseEvent, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Controller, useForm } from 'react-hook-form'
 import { AddressCheck } from '@/entities/address-check'
@@ -95,7 +95,7 @@ export const PopupAddProduct = ({
         mutate.mutate(formData)
     }
 
-    const handleClose = (e) => {
+    const handleClose = (e: MouseEvent<HTMLDivElement>) => {
         if (e.target !== e.currentTarget) {
             return
         }
@@ -147,7 +147,7 @@ export const PopupAddProduct = ({
                         </p>
                     </div>
                     <div className={styles.item}>
-                        <p>Фотографии</p>
+                        <p>Фотографии:</p>
                         <div
                             {...getRootProps({
                                 className: classNames(
@@ -223,14 +223,14 @@ export const PopupAddProduct = ({
                     </div>
                     <div className={classNames(styles.item, styles.select)}>
                         <label>Адрес:</label>
-                        <Input
+                        {/* <Input
                             name="address"
                             type="text"
                             onChange={(e) => {
                                 setAddress(e.target.value)
                             }}
-                        />
-                        {/* <AddressCheck setAddress={setAddress} height={43} /> */}
+                        /> */}
+                        <AddressCheck setAddress={setAddress} height={43} />
                         <p className={styles.error}>
                             {errors.address?.message}
                         </p>

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { set } from 'react-hook-form'
 import { InputActionMeta } from 'react-select'
 import { Select } from '@/shared/ui/select'
+import { useGetAddress } from '../api'
 
 export const AddressCheck = ({
     setAddress,
@@ -15,14 +16,7 @@ export const AddressCheck = ({
 }) => {
     const [input, setInput] = useState('')
     const [visibleInput, setVisibleInput] = useState('')
-    const { data, error, isLoading, isError, refetch } = useQuery({
-        queryKey: ['address', input],
-        queryFn: async () => {
-            return axios.get(
-                `https://suggest-maps.yandex.ru/v1/suggest?apikey=4608e0a2-e6dd-4045-9cc9-beac38186506&text=${input}&print_address=1`,
-            )
-        },
-    })
+    const { data, error, isLoading, isError, refetch } = useGetAddress(input)
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -39,11 +33,12 @@ export const AddressCheck = ({
     }))
 
     if (isError) {
-        return <div>Ошибка: {error.message}</div>
+        return <div>Ошибка: {error?.message}</div>
     }
 
     return (
         <Select
+            placeholder="Введите адрес"
             height={height}
             maxMenuHeight={300}
             isLoading={isLoading}

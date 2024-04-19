@@ -36,6 +36,7 @@ export const FavoritesList = () => {
                 dataLength={data?.pages.length || 0}
                 next={fetchNextPage}
                 loader={<></>}
+                className={styles.list}
                 style={
                     !isEmpty
                         ? {

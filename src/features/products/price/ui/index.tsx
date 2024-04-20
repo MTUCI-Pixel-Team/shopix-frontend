@@ -8,12 +8,20 @@ export const Price = () => {
             <div className={styles.inputs}>
                 <div className={styles.input}>
                     <p>от</p>
-                    <input type="number" />
+                    <input
+                        type="number"
+                        placeholder="_________"
+                        name={`min_price`}
+                    />
                     <p>₽</p>
                 </div>
                 <div className={styles.input}>
                     <p>до</p>
-                    <input type="number" />
+                    <input
+                        type="number"
+                        placeholder="_________"
+                        name={`max_price`}
+                    />
                     <p>₽</p>
                 </div>
             </div>

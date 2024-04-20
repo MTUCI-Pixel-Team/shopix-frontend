@@ -19,6 +19,7 @@ export const Search = () => {
                 type="text"
                 placeholder="Поиск..."
                 className={styles.input}
+                name={'search'}
             />
         </div>
     )

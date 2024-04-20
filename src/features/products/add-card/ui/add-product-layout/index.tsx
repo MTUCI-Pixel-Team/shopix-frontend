@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { Button } from '@/shared/ui/button'
+import { useState } from 'react'
 import { AddButton } from '../add-button'
 import { PopupAddProduct } from '../popup'
 

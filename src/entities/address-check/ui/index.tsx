@@ -1,10 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
-import axios, { AxiosError } from 'axios'
-import React, { useEffect, useState } from 'react'
-import { set } from 'react-hook-form'
-import { InputActionMeta } from 'react-select'
+import { useEffect, useState } from 'react'
 import { Select } from '@/shared/ui/select'
 import { useGetAddress } from '../api'
+import { IAddressCheck, OptionType } from '../model'
 
 export const AddressCheck = ({
     setAddress,
@@ -27,10 +24,12 @@ export const AddressCheck = ({
         return () => clearTimeout(timer)
     }, [input, visibleInput, refetch])
 
-    const options = data?.data?.results?.map((item, i) => ({
-        value: i,
-        label: item.address.formatted_address,
-    }))
+    const options = data?.data?.results?.map(
+        (item: IAddressCheck, i: number) => ({
+            value: i,
+            label: item.address.formatted_address,
+        }),
+    )
 
     if (isError) {
         return <div>Ошибка: {error?.message}</div>
@@ -44,10 +43,11 @@ export const AddressCheck = ({
             isLoading={isLoading}
             loadingMessage={() => 'Загрузка...'}
             noOptionsMessage={() => 'Нет результатов'}
-            onChange={(option) => {
-                console.log(option)
-                setVisibleInput(option?.label || '')
-                setAddress(option?.label || '')
+            onChange={(option: OptionType | null) => {
+                if (option) {
+                    setVisibleInput(option?.label || '')
+                    setAddress(option?.label || '')
+                }
             }}
             onInputChange={(value) => setVisibleInput(value)}
             isSearchable={true}

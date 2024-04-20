@@ -2,6 +2,7 @@ import classNames from 'classnames'
 import { MouseEvent, useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Controller, useForm } from 'react-hook-form'
+import { SingleValue } from 'react-select'
 import { AddressCheck } from '@/entities/address-check'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
@@ -205,7 +206,15 @@ export const PopupAddProduct = ({
                                 options={data || []}
                                 height={43}
                                 fontSize={16}
-                                onChange={setSelectedOption}
+                                onChange={(
+                                    newValue: SingleValue<{
+                                        value: number
+                                        label: string
+                                    }>,
+                                ) => {
+                                    console.log(newValue)
+                                    setSelectedOption(newValue || undefined)
+                                }}
                             />
                         )}
                     </div>

@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useNavigate } from 'react-router-dom'
 import { Request } from '@/shared/api'
 import { Categories } from '../model'
 
@@ -27,17 +26,9 @@ export const useGetCategories = () => {
 }
 
 export const useMutationAddCard = () => {
-    const navigate = useNavigate()
     return useMutation({
         mutationFn: (data: FormData) => {
             return Request.postWithToken('posts/', data)
-        },
-        onSuccess: (data) => {
-            console.log(data)
-        },
-        onError: (error) => {
-            console.log(error, '-----------')
-            return error
         },
     })
 }

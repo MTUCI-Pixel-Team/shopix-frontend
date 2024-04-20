@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, ReactNode, useEffect } from 'react'
+import { FC, HTMLAttributes, useEffect } from 'react'
 import styles from './styles.module.scss'
 
 export const Popup: FC<HTMLAttributes<HTMLDivElement>> = ({

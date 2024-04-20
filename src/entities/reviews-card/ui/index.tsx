@@ -1,6 +1,4 @@
 import { FC, HTMLAttributes, useEffect } from 'react'
-import { Navigate } from 'react-router-dom'
-import { paths } from '@/shared/config/router'
 import { ReviewsCardSkeleton } from '@/shared/ui/skeleton'
 import { Stars } from '@/shared/ui/stars'
 import { useGetMe } from '../api'
@@ -27,10 +25,9 @@ export const ReviewsCard: FC<ReviewsCardProps> = ({ ...props }) => {
         return <ReviewsCardSkeleton />
     }
 
-    // if (isError) {
-    //     console.log(error)
-    //     return <Navigate to={paths.auth} />
-    // }
+    if (isError) {
+        return <div>{error?.message}</div>
+    }
 
     return (
         <div {...props} className={styles.card}>

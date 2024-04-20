@@ -1,7 +1,6 @@
 import { Fragment } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { v4 as uuidv4 } from 'uuid'
-import { useGetFavorites } from '@/widgets/favorites-list'
 import { FavoriteIcon, useAddFavorite } from '@/features/card/favorites'
 import { ProductCard } from '@/entities/product-card'
 import { IProduct } from '@/entities/product-card'

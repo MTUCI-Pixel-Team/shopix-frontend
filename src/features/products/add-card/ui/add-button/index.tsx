@@ -1,4 +1,4 @@
-import React, { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes } from 'react'
 import { Button } from '@/shared/ui/button'
 
 interface AddButtonProps extends HTMLAttributes<HTMLButtonElement> {

@@ -5,7 +5,7 @@ import { Providers } from './Providers'
 import './global.scss'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <Providers />,
-    // <React.StrictMode>
-    // </React.StrictMode>,
+    <React.StrictMode>
+        <Providers />,
+    </React.StrictMode>,
 )

@@ -39,7 +39,7 @@ export const ProductCardSkeleton = () => (
     </ContentLoader>
 )
 
-export const ReviewsCardSkeleton = (props) => (
+export const ReviewsCardSkeleton = () => (
     <ContentLoader
         speed={2}
         width={226}
@@ -47,7 +47,6 @@ export const ReviewsCardSkeleton = (props) => (
         viewBox="0 0 226 50"
         backgroundColor="var(--second-primary)"
         foregroundColor="#ffffff"
-        {...props}
     >
         <circle cx="25" cy="25" r="25" />
         <rect x="64" y="6" rx="8" ry="8" width="161" height="13" />

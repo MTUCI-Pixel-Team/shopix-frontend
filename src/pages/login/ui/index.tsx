@@ -1,8 +1,5 @@
-import { error } from 'console'
-import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
-import { Auth } from '@/widgets/auth'
 import { paths } from '@/shared/config/router'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
@@ -25,14 +22,15 @@ export const LoginPage = () => {
     })
 
     const getAuth = (data: LoginModel) => {
-        console.log(data, 'dgdggdgdgdg')
         const formData = new FormData()
 
         for (const key in data) {
-            if (data.hasOwnProperty(key)) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
+                // @ts-expect-error Без понятия, как это типизировать
                 formData.append(key, data[key])
             }
         }
+        // @ts-expect-error Тут мне даже copilot написал, что это очень сложно типизировать
         mutation.mutate(formData)
     }
 

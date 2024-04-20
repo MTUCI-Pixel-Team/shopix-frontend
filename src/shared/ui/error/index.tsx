@@ -1,7 +1,7 @@
-import { FC } from 'react'
+import { FC, HTMLAttributes } from 'react'
 import styles from './styles.module.scss'
 
-interface ErrorElementProps {
+interface ErrorElementProps extends HTMLAttributes<HTMLDivElement> {
     message: string
     color?: 'dark' | 'light'
 }
@@ -9,6 +9,7 @@ interface ErrorElementProps {
 export const ErrorElement: FC<ErrorElementProps> = ({
     color = 'dark',
     message,
+    ...props
 }) => {
     return (
         <div
@@ -16,6 +17,7 @@ export const ErrorElement: FC<ErrorElementProps> = ({
             style={{
                 color: color === 'dark' ? 'var(--black)' : 'var(--white-color)',
             }}
+            {...props}
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -4,6 +4,12 @@
     height: 845px;
     padding: 20px;
     background-color: var(--primary);
+    ::-webkit-scrollbar-track {
+        border-radius: 16px;
+    }
+    ::-webkit-scrollbar-thumb {
+        border-radius: 16px;
+    }
     h2 {
         margin: 16px 0;
         font-size: 20px;

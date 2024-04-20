@@ -1,1 +1,4 @@
-export * from './ui'
+import { useRemoveFavorite, useAddFavorite } from './api'
+
+export { useAddFavorite, useRemoveFavorite }
+export * from './ui/'

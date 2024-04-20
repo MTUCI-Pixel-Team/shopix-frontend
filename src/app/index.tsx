@@ -6,6 +6,6 @@ import './global.scss'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <React.StrictMode>
-        <Providers />
+        <Providers />,
     </React.StrictMode>,
 )

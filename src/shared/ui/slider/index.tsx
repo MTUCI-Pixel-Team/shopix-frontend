@@ -9,6 +9,7 @@ export const Slider: FC<ReactSliderProps> = ({ className, ...props }) => {
 
     const handleChange = (event: number[]) => {
         setValue(event)
+        console.log(value)
     }
 
     return (

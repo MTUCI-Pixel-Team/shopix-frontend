@@ -27,13 +27,12 @@
     color: var(--accent);
 }
 
-a {
+.link {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
     text-decoration: none;
-    color: var(--black);
 
     transition: all 0.3s ease;
     &:hover {
@@ -45,6 +44,12 @@ a {
     width: 60px;
     height: 60px;
     border-radius: 100%;
+    background-color: var(--accent);
+    color: var(--white-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
     img {
         display: block;
         width: 100%;

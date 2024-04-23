@@ -23,8 +23,8 @@ export const RegisterPage = () => {
     })
 
     const getAuth = (data: RegisterModel) => {
-        console.log(data)
-        mutation.mutate(data)
+        const dataNew = { ...data, is_active: true }
+        mutation.mutate(dataNew)
     }
 
     console.log(mutation)

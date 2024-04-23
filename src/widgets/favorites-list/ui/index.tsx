@@ -48,6 +48,7 @@ export const FavoritesList = () => {
                             <ProductCard
                                 action={
                                     <FavoriteIcon
+                                        isFavorite={true}
                                         className={styles.icon}
                                         onClick={(e) => {
                                             e.preventDefault()

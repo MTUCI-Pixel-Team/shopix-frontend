@@ -6,11 +6,11 @@ export const useGetCategories = () => {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ['posts/categories'],
         queryFn: async () => {
-            const result = await Request.get('posts/categories/')
+            const result = await Request.get<Categories[]>('posts/categories/')
             return result
         },
         select: (data) => {
-            return data.map((item: Categories) => ({
+            return data?.map((item: Categories) => ({
                 value: item.id,
                 label: item.name,
             }))

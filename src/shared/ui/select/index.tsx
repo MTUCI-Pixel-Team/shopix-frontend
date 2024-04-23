@@ -74,6 +74,7 @@ export function Select<
                 }),
                 dropdownIndicator: (baseStyles, state) => ({
                     ...baseStyles,
+                    display: state.isDisabled ? 'none' : 'block',
                     fill: 'var(--white-color)',
                     transition: 'transform 0.3s ease',
                     transform: state.selectProps.menuIsOpen

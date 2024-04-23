@@ -7,7 +7,7 @@ import { instance } from './api-auth.config'
 export class Request {
     static url: string = `${SERVER_API}/api/`
 
-    static async get(
+    static async get<T>(
         url: string,
         params?: {
             headers?: {
@@ -20,7 +20,7 @@ export class Request {
     ) {
         try {
             console.log(this.url + url, params)
-            const response = await axios.get(this.url + url, params)
+            const response = await axios.get<T>(this.url + url, params)
             return response.data
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -45,7 +45,7 @@ export class Request {
         }
     }
 
-    static async getWithToken(
+    static async getWithToken<T>(
         url: string,
         params?: {
             headers?: {
@@ -57,7 +57,7 @@ export class Request {
         },
     ) {
         try {
-            const response = await instance.get(this.url + url, {
+            const response = await instance.get<T>(this.url + url, {
                 ...params,
             })
             return response.data
@@ -79,9 +79,9 @@ export class Request {
         }
     }
 
-    static async deleteWithToken(url: string) {
+    static async deleteWithToken<T>(url: string) {
         try {
-            const response = await instance.delete(this.url + url)
+            const response = await instance.delete<T>(this.url + url)
             return response.data
         } catch (error) {
             if (error instanceof AxiosError) {

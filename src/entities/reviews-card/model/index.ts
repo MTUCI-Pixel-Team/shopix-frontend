@@ -10,7 +10,6 @@ export const useInfo = create(
                 stars: 0,
             },
             (set) => ({
-                setUsername: (username: string) => set({ username }),
                 setStars: (stars: number) => set({ stars }),
                 setImage: (image: string) => set({ image }),
             }),

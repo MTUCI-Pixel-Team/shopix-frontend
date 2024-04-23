@@ -56,7 +56,7 @@ export const Sidebar = () => {
 
     const installFilters = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
-        let requestInformation = {
+        const requestInformation = {
             search: '',
             sort_by: '',
             categories: [],

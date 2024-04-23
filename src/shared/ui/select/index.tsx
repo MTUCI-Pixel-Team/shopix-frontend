@@ -7,10 +7,15 @@ export function Select<
     Group extends GroupBase<Option> = GroupBase<Option>,
 >({
     options,
-    height,
-    fontSize,
+    isSearchable = false,
+    height = 43,
+    fontSize = 16,
     ...props
-}: { height: number; fontSize: number } & Props<Option, IsMulti, Group>) {
+}: { height?: number; fontSize?: number; isSearchable?: boolean } & Props<
+    Option,
+    IsMulti,
+    Group
+>) {
     let defaultValue: Option | undefined
     if (
         options &&
@@ -25,7 +30,7 @@ export function Select<
         <SelectLib
             className="react-select-container"
             classNamePrefix="react-select"
-            isSearchable={false}
+            isSearchable={isSearchable}
             defaultValue={defaultValue}
             options={options}
             styles={{
@@ -76,6 +81,10 @@ export function Select<
                         : 'scale(1.3)',
                 }),
                 placeholder: (baseStyles) => ({
+                    ...baseStyles,
+                    color: 'var(--white-color)',
+                }),
+                input: (baseStyles) => ({
                     ...baseStyles,
                     color: 'var(--white-color)',
                 }),

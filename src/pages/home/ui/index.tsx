@@ -4,7 +4,7 @@ import { Sidebar } from '@/widgets/sidebar'
 import { UpButton } from '@/shared/ui/up'
 import styles from './styles.module.scss'
 
-export const Home = () => {
+export const HomePage = () => {
     const [scroll, setScroll] = useState(false)
 
     useEffect(() => {
@@ -25,9 +25,9 @@ export const Home = () => {
 
     return (
         <div onScroll={handleScroll} className={styles.home}>
-            <div className={styles.products}>
-                <ProductsList />
-            </div>
+            <ProductsList />
+            {/* <div className={styles.products}>
+            </div> */}
             <Sidebar />
             <UpButton
                 style={{ display: scroll ? 'flex' : 'none' }}

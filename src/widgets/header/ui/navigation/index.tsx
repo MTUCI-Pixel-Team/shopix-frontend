@@ -1,12 +1,30 @@
 import { FC } from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { paths } from '@/shared/config/router'
+import { getToken } from '@/shared/config/storage'
 import styles from './styles.module.scss'
 
 interface NavigationProps {
     setIsPopup: (arg: boolean) => void
+    name: string
+    image?: string
 }
 
-export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
+export const Navigation: FC<NavigationProps> = ({
+    setIsPopup,
+    name = 'Guest',
+    image,
+}) => {
+    const navigate = useNavigate()
+    const handlePopup = () => {
+        const token = getToken()
+        if (token) {
+            setIsPopup(true)
+        } else {
+            navigate(paths.auth)
+        }
+    }
+
     return (
         <div className={styles.nav}>
             <nav>
@@ -14,18 +32,23 @@ export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
                     <li>
                         <NavLink
                             to="/"
-                            className={({ isActive }) =>
-                                isActive ? styles.active : ''
-                            }
+                            className={({ isActive }) => {
+                                console.log(isActive)
+                                return isActive
+                                    ? `${styles.link} ${styles.active}`
+                                    : styles.link
+                            }}
                         >
                             Главная
                         </NavLink>
                     </li>
                     <li>
                         <NavLink
-                            to={'/chats'}
+                            to={paths.chats}
                             className={({ isActive }) =>
-                                isActive ? styles.active : ''
+                                isActive
+                                    ? `${styles.active}  ${styles.link}`
+                                    : styles.link
                             }
                         >
                             Чаты <span className={styles.chats}>6</span>
@@ -33,8 +56,13 @@ export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
                     </li>
                 </ul>
             </nav>
-            <div onMouseEnter={() => setIsPopup(true)} className={styles.logo}>
-                <img src="/public/images/profile.png" alt="profile" />
+            <div onClick={handlePopup} className={styles.logo}>
+                {image ? (
+                    <img src={image} alt="profile" />
+                ) : (
+                    name.slice(0, 1).toUpperCase()
+                )}
+                {/* <img src="/public/images/profile.png" alt="profile" /> */}
             </div>
         </div>
     )

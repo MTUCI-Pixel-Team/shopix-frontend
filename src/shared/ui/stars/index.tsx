@@ -3,7 +3,7 @@ import { FC, useState } from 'react'
 import styles from './styles.module.scss'
 
 interface StarsProps {
-    fill?: 1 | 2 | 3 | 4 | 5
+    fill?: number
     size?: 'small' | 'medium' | 'big'
     edit?: boolean
 }

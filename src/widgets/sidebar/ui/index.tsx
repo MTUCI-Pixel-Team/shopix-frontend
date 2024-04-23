@@ -4,7 +4,18 @@ import { Price } from '@/features/products/price'
 import { Search } from '@/features/products/search'
 import { Sort } from '@/features/products/sort'
 import { Button } from '@/shared/ui/button'
+import { Request } from '@/shared/api'
 import styles from './styles.module.scss'
+import qs from 'qs'
+
+interface RequestInformation {
+    search: string
+    sort_by: string
+    category: string[]
+    min_price: number | null
+    max_price: number | null
+    page: number
+}
 
 export const Sidebar = () => {
     const options = [
@@ -18,40 +29,12 @@ export const Sidebar = () => {
         { value: '-title', label: 'По алфавиту (Я ➡️ А)' },
     ]
 
-    const GivePosts = async ([
-        search,
-        sort_by,
-        categories,
-        min_price,
-        max_price,
-        page,
-    ]: [
-        string | null,
-        string,
-        string | null,
-        number | null,
-        number | null,
-        number,
-    ]) => {
-        const params = {
-            page: page,
-            sort_by: sort_by,
-            category: categories, // категории - это массив
-            search: search,
-            min_price: min_price,
-            max_price: max_price,
-        }
-
-        try {
-            const response = await axios.get(
-                'http://147.45.40.23:8000/api/posts/',
-                {
-                    params,
-                },
-            )
-        } catch (error) {
-            console.error(error)
-        }
+    const GivePosts = async (requestInformation: RequestInformation) => {
+        Request.get('posts/', {
+            params: { ...requestInformation },
+            paramsSerializer: (params: RequestInformation) =>
+                qs.stringify(params, { arrayFormat: 'repeat' }),
+        })
     }
 
     const installFilters = (event: React.FormEvent<HTMLFormElement>) => {
@@ -59,29 +42,23 @@ export const Sidebar = () => {
         const requestInformation = {
             search: '',
             sort_by: '',
-            categories: [],
+            category: [] as string[],
             min_price: null,
             max_price: null,
             page: 1,
         }
         const formData = new FormData(event.currentTarget)
+        console.log(Array.from(formData.entries()))
         Array.from(formData.entries()).map(([key, value]) => {
             if (!key.includes('filter')) {
                 // Преобразуйте значение как нужно
+                // @ts-expect-error - не знаю как это исправить
                 requestInformation[key] = value
             } else {
-                requestInformation['categories'].push(key.split('-')[1])
+                requestInformation['category'].push(key.split('-')[1])
             }
         })
-        console.log(requestInformation)
-        GivePosts([
-            requestInformation['search'],
-            requestInformation['sort_by'],
-            requestInformation['categories'],
-            requestInformation['min_price'],
-            requestInformation['max_price'],
-            requestInformation['page'],
-        ])
+        GivePosts(requestInformation)
     }
 
     return (

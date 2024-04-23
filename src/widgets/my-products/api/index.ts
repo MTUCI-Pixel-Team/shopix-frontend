@@ -17,10 +17,10 @@
 //     }
 // }
 
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
 import { Request } from '@/shared/api'
 
-export const useGetMyProducts = () => {
+export const useGetMyProducts = (type: string) => {
     const {
         data,
         error,
@@ -32,12 +32,13 @@ export const useGetMyProducts = () => {
         refetch,
         status,
     } = useInfiniteQuery({
-        queryKey: ['me/posts'],
+        queryKey: ['me/posts/', type],
         queryFn: async ({ pageParam }) => {
             console.log(pageParam)
             const result = await Request.getWithToken('users/me/posts/', {
                 params: {
                     page: `${pageParam}`,
+                    status: type,
                 },
             })
             console.log(result)
@@ -61,4 +62,20 @@ export const useGetMyProducts = () => {
         status,
         isError,
     }
+}
+
+export const useUpdateProduct = () => {
+    const mutation = useMutation({
+        mutationFn: async (values: {
+            post: { status: string; id: number; title: string }
+        }) => {
+            console.log(values)
+            const result = await Request.putWithToken(
+                `posts/${values.post.id}/`,
+                values,
+            )
+            return result
+        },
+    })
+    return mutation
 }

@@ -4,3 +4,13 @@
     gap: 16px;
     margin-top: 32px;
 }
+
+.empty,
+.error {
+    margin-top: 64px;
+}
+
+.inactive {
+    // background-color: red;
+    filter: brightness(0.5);
+}

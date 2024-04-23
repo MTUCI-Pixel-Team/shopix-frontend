@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import { FC, HTMLAttributes, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { SERVER_API } from '@/shared/config/constants'
@@ -10,6 +11,7 @@ interface ProductCardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export const ProductCard: FC<ProductCardProps> = ({
+    className,
     product,
     action,
     children,
@@ -27,7 +29,7 @@ export const ProductCard: FC<ProductCardProps> = ({
         <Link
             style={style}
             to={`/product/${product?.id}`}
-            className={styles.card}
+            className={classNames(styles.card, className)}
         >
             {!product ? (
                 children

@@ -12,6 +12,7 @@ interface Post {
     category: number
     created_at: string
     updated_at: string
+    is_favorite?: boolean
     status: string
     views: number
     id: number

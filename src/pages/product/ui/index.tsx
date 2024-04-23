@@ -1,6 +1,11 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { ImageSlider } from '@/widgets/image-slider'
+import {
+    FavoriteIcon,
+    useAddFavorite,
+    useRemoveFavorite,
+} from '@/features/card/favorites'
 import { useGetCategories } from '@/features/products/filters/api'
 import { ReviewsCard } from '@/entities/reviews-card'
 import { useGetUsers } from '@/entities/reviews-card/api'
@@ -8,13 +13,14 @@ import { SERVER_API } from '@/shared/config/constants'
 import { Button } from '@/shared/ui/button'
 import { Select } from '@/shared/ui/select'
 import { ReviewsCardSkeleton } from '@/shared/ui/skeleton'
-import { Textarea } from '@/shared/ui/textarea'
 import { useGetProduct } from '../api'
 import styles from './styles.module.scss'
 
 export const ProductPage = () => {
     const { id } = useParams()
     const { data, isError, isLoading } = useGetProduct(id || '')
+    const mutationAddFavorite = useAddFavorite(id || '')
+    const mutationRemoveFavorite = useRemoveFavorite(id || '')
     const {
         data: categories,
         isError: isErrorCategories,
@@ -35,6 +41,16 @@ export const ProductPage = () => {
     const images = data?.images?.map(
         (image: { image: string }) => `${SERVER_API}${image.image}`,
     )
+
+    const handleAddFavorite = () => {
+        if (data) {
+            if (data.post.is_favorite) {
+                mutationRemoveFavorite.mutate(data.post.id)
+            } else {
+                mutationAddFavorite.mutate(data.post.id)
+            }
+        }
+    }
 
     console.log(user?.username)
 
@@ -66,9 +82,9 @@ export const ProductPage = () => {
                         <p>Ошибка</p>
                     ) : (
                         <ReviewsCard
-                            username={user?.username}
-                            image={user?.avatar}
-                            stars={user?.rating}
+                            username={user?.username || ''}
+                            image={user?.avatar || ''}
+                            stars={user?.rating || 0}
                         />
                     )}
                     <div className={styles.address}>
@@ -112,9 +128,15 @@ export const ProductPage = () => {
                         </div>
                     </div>
                 </div>
-                <Button className={styles.button} size="big">
-                    НАПИСАТЬ
-                </Button>
+                <div className={styles.action}>
+                    <Button className={styles.button} size="big">
+                        НАПИСАТЬ
+                    </Button>
+                    <FavoriteIcon
+                        onClick={handleAddFavorite}
+                        isFavorite={data?.post.is_favorite || false}
+                    />
+                </div>
             </div>
         </div>
     )

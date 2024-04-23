@@ -3,7 +3,7 @@ import { Request } from '@/shared/api'
 import { getToken } from '@/shared/config/storage'
 import { useProducts } from '../model'
 
-export const useGetProducts = (params = '') => {
+export const useGetProducts = () => {
     const setMinPrice = useProducts((state) => state.setMinPrice)
     const setMaxPrice = useProducts((state) => state.setMaxPrice)
 
@@ -21,10 +21,10 @@ export const useGetProducts = (params = '') => {
         queryFn: async ({ pageParam }) => {
             console.log(pageParam)
             const token = getToken()
+
             if (token) {
                 return await Request.getWithToken('posts', {
                     params: {
-                        params,
                         page: `${pageParam}`,
                     },
                 })

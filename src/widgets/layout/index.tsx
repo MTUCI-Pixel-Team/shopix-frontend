@@ -24,7 +24,7 @@ export const LayoutAuth = () => {
                 <div className={styles.content}>
                     <Outlet />
                 </div>
-                <Link to="/">
+                <Link className={styles.img} to="/">
                     <img
                         src="/public/images/auth.png"
                         alt=""

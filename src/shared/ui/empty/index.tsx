@@ -1,17 +1,23 @@
-import { FC } from 'react'
+import classNames from 'classnames'
+import { FC, HTMLAttributes } from 'react'
 import styles from './styles.module.scss'
 
-interface EmptyElementProps {
+interface EmptyElementProps extends HTMLAttributes<HTMLDivElement> {
     color?: 'dark' | 'light'
 }
 
-export const EmptyElement: FC<EmptyElementProps> = ({ color = 'dark' }) => {
+export const EmptyElement: FC<EmptyElementProps> = ({
+    color = 'dark',
+    className,
+    ...props
+}) => {
     return (
         <div
-            className={styles.empty}
+            className={classNames(styles.empty, className)}
             style={{
                 color: color === 'dark' ? 'var(--black)' : 'var(--white-color)',
             }}
+            {...props}
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

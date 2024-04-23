@@ -89,4 +89,21 @@ export class Request {
             }
         }
     }
+
+    static async putWithToken<T>(url: string, data: T) {
+        console.log(data)
+        console.log(this.url + url)
+        try {
+            const response = await instance.put<T>(this.url + url, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            return response.data
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                throw new Error(error.message)
+            }
+        }
+    }
 }

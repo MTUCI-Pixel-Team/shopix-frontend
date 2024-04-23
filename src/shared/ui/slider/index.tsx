@@ -4,12 +4,24 @@ import ReactSlider from 'react-slider'
 import { ReactSliderProps } from 'react-slider'
 import './styles.scss'
 
-export const Slider: FC<ReactSliderProps> = ({ className, ...props }) => {
-    const [value, setValue] = useState<number[]>([0, 100])
+interface SliderProps extends ReactSliderProps {
+    weight: number[]
+    setSlider: (value: number[]) => void
+}
+
+export const Slider: FC<SliderProps> = ({
+    min,
+    max,
+    weight,
+    setSlider,
+    className,
+    ...props
+}) => {
+    // const [value, setValue] = useState<number[]>(weight)
 
     const handleChange = (event: number[]) => {
-        setValue(event)
-        console.log(value)
+        console.log(event)
+        setSlider(event)
     }
 
     return (
@@ -18,15 +30,16 @@ export const Slider: FC<ReactSliderProps> = ({ className, ...props }) => {
             className={cn('horizontal-slider', className)}
             thumbClassName="example-thumb"
             trackClassName="example-track"
-            value={value}
-            defaultValue={[0, 100]}
+            value={weight}
+            min={min}
+            max={max}
             ariaLabel={['Lower thumb', 'Upper thumb']}
             onChange={(value: number[]) => {
                 handleChange(value)
             }}
             ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
             pearling
-            minDistance={10}
+            // minDistance={minDistance}
             {...props}
         />
     )

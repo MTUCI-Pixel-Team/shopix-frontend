@@ -1,7 +1,7 @@
 import { FC, HTMLAttributes, ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { SERVER_API } from '@/shared/config/constants'
-import { IProduct } from '..'
+import { IProduct } from '../model'
 import styles from './styles.module.scss'
 
 interface ProductCardProps extends HTMLAttributes<HTMLDivElement> {

@@ -9,6 +9,7 @@ export const Checkbox: FC<CheckboxProps> = ({ ...props }) => {
             <input
                 type="checkbox"
                 id="checkbox"
+                name="checkbox"
                 className={styles.checkbox__input}
                 {...props}
             />

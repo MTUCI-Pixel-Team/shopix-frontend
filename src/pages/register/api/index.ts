@@ -13,7 +13,7 @@ export const useMutationRegister = () => {
         },
         onSuccess: () => {
             console.log('success')
-            navigate(`/${paths.auth}/${paths.login}`)
+            navigate(`${paths.auth}/${paths.login}`)
         },
     })
 }

@@ -62,12 +62,21 @@ export const Popup: FC<PopupProps> = ({
             <ul className={styles.info}>
                 <li>Мои отзывы</li>
                 <li>
-                    <Link className={styles.link} to={paths.myProduct}>
+                    <Link
+                        onClick={() => setIsPopup(false)}
+                        className={styles.link}
+                        to={paths.myProduct}
+                    >
                         Мои объявления
                     </Link>
                 </li>
                 <li>
-                    <Link to={paths.favorites}>Избранное</Link>
+                    <Link
+                        onClick={() => setIsPopup(false)}
+                        to={paths.favorites}
+                    >
+                        Избранное
+                    </Link>
                 </li>
                 <li>Мои чаты</li>
             </ul>

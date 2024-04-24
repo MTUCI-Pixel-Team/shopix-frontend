@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Request } from '@/shared/api'
+import { getToken } from '@/shared/config/storage'
 
 export const useGetProducts = () => {
     const {
@@ -14,13 +15,20 @@ export const useGetProducts = () => {
         queryKey: ['posts'],
         queryFn: async ({ pageParam }) => {
             console.log(pageParam)
-            const result = await Request.get('posts', {
-                params: {
-                    page: `${pageParam}`,
-                },
-            })
-            console.log(result)
-            return result
+            const token = getToken()
+            if (token) {
+                return await Request.getWithToken('posts', {
+                    params: {
+                        page: `${pageParam}`,
+                    },
+                })
+            } else {
+                return await Request.get('posts', {
+                    params: {
+                        page: `${pageParam}`,
+                    },
+                })
+            }
         },
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {

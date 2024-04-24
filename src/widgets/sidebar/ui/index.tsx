@@ -1,12 +1,12 @@
-import axios from 'axios'
+import qs from 'qs'
+import { useState } from 'react'
 import { Filters } from '@/features/products/filters'
 import { Price } from '@/features/products/price'
 import { Search } from '@/features/products/search'
 import { Sort } from '@/features/products/sort'
-import { Button } from '@/shared/ui/button'
 import { Request } from '@/shared/api'
+import { Button } from '@/shared/ui/button'
 import styles from './styles.module.scss'
-import qs from 'qs'
 
 interface RequestInformation {
     search: string
@@ -29,6 +29,40 @@ export const Sidebar = () => {
         { value: '-title', label: 'По алфавиту (Я ➡️ А)' },
     ]
 
+    const defaultState: RequestInformation = {
+        search: '',
+        sort_by: '',
+        category: [] as string[],
+        min_price: 0,
+        max_price: 1000000,
+        page: 1,
+    }
+
+    const [form, setForm] = useState<RequestInformation>(defaultState)
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = event.target
+
+        if (
+            'filter' === name.split('-')[0] &&
+            !form.category.includes(name.split('-')[1])
+        ) {
+            setForm({
+                ...form,
+                category: [...form.category, name.split('-')[1]],
+            })
+        } else {
+            setForm({
+                ...form,
+                [name]: value,
+            })
+        }
+        console.log(form)
+    }
+    const resetForm = () => {
+        setForm(defaultState)
+    }
+
     const GivePosts = async (requestInformation: RequestInformation) => {
         Request.get('posts/', {
             params: { ...requestInformation },
@@ -47,8 +81,9 @@ export const Sidebar = () => {
             max_price: null,
             page: 1,
         }
+
         const formData = new FormData(event.currentTarget)
-        console.log(Array.from(formData.entries()))
+
         Array.from(formData.entries()).map(([key, value]) => {
             if (!key.includes('filter')) {
                 // Преобразуйте значение как нужно
@@ -63,7 +98,7 @@ export const Sidebar = () => {
 
     return (
         <div className={styles.sidebar}>
-            <form onSubmit={installFilters}>
+            <form onSubmit={installFilters} onChange={handleChange}>
                 <Search />
                 <div className={styles.sort}>
                     <h2>Сортировать:</h2>
@@ -78,10 +113,15 @@ export const Sidebar = () => {
                     <Price />
                 </div>
                 <div className={styles.buttons}>
-                    <Button size="big" className={styles.button}>
+                    <Button type="button" size="big" className={styles.button}>
                         ПРИМЕНИТЬ
                     </Button>
-                    <Button size="big" className={styles.button}>
+                    <Button
+                        type="button"
+                        size="big"
+                        className={styles.button}
+                        onClick={resetForm}
+                    >
                         СБРОСИТЬ
                     </Button>
                 </div>

@@ -5,30 +5,14 @@ export interface OptionType {
 
 export interface IAddressCheck {
     title: Title
-    subtitle: Subtitle
     tags: string[]
     distance: Distance
     address: Address
+    subtitle?: Subtitle
 }
 
 interface Title {
     text: string
-    hl?: Hl[]
-}
-
-interface Hl {
-    begin: number
-    end: number
-}
-
-interface Subtitle {
-    text: string
-    hl?: Hl2[]
-}
-
-interface Hl2 {
-    begin: number
-    end: number
 }
 
 interface Distance {
@@ -44,4 +28,8 @@ interface Address {
 interface Component {
     name: string
     kind: string[]
+}
+
+interface Subtitle {
+    text: string
 }

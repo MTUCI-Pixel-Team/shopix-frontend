@@ -1,6 +1,9 @@
+import { FC, InputHTMLAttributes } from 'react'
 import styles from './style.module.scss'
 
-export const Search = () => {
+export const Search: FC<InputHTMLAttributes<HTMLInputElement>> = ({
+    ...props
+}) => {
     return (
         <div className={styles.search}>
             <svg
@@ -16,6 +19,7 @@ export const Search = () => {
                 />
             </svg>
             <input
+                {...props}
                 type="text"
                 placeholder="Поиск..."
                 className={styles.input}

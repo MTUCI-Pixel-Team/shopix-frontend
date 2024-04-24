@@ -22,6 +22,7 @@ export const HomePage = () => {
             setScroll(false)
         }
     }
+    console.log('rerender')
 
     return (
         <div onScroll={handleScroll} className={styles.home}>

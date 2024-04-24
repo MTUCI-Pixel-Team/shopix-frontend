@@ -6,12 +6,11 @@ import {
     useAddFavorite,
     useRemoveFavorite,
 } from '@/features/card/favorites'
-import { ProductCard } from '@/entities/product-card'
+import { ProductCard, useGetProducts } from '@/entities/product-card'
 import { IProduct } from '@/entities/product-card'
 import { EmptyElement } from '@/shared/ui/empty'
 import { ErrorElement } from '@/shared/ui/error'
 import { ProductCardSkeleton } from '@/shared/ui/skeleton'
-import { useGetProducts } from '../api'
 
 export const ProductsList = () => {
     const {

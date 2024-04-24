@@ -58,7 +58,12 @@ export const PopupAddProduct = ({
             required:
                 images.length === 0
                     ? { value: true, message: 'Это поле обязательное' }
-                    : undefined,
+                    : images.length > 10
+                      ? {
+                            value: true,
+                            message: 'Максимальное количество фотографий 10',
+                        }
+                      : undefined,
         })
     }, [images, register])
 
@@ -124,6 +129,10 @@ export const PopupAddProduct = ({
                             type="text"
                             {...register('title', {
                                 required: 'Это поле обязательное',
+                                maxLength: {
+                                    value: 200,
+                                    message: 'Максимальная длина 200 символов',
+                                },
                             })}
                         />
                         <p className={styles.error}>{errors.title?.message}</p>
@@ -133,7 +142,13 @@ export const PopupAddProduct = ({
                         <Controller
                             name="description"
                             control={control}
-                            rules={{ required: 'Это поле обязательное' }}
+                            rules={{
+                                required: 'Это поле обязательное',
+                                maxLength: {
+                                    value: 5000,
+                                    message: 'Максимальная длина 5000 символов',
+                                },
+                            }}
                             render={({ field }) => (
                                 <Textarea
                                     className={styles.textarea}
@@ -243,6 +258,15 @@ export const PopupAddProduct = ({
                         <p className={styles.error}>
                             {errors.address?.message}
                         </p>
+                    </div>
+                    <div className={styles.status}>
+                        {mutate.isPending ? (
+                            <p>Загрузка...</p>
+                        ) : mutate.isError ? (
+                            <p>Ошибка: {mutate.error.message}</p>
+                        ) : mutate.isSuccess ? (
+                            <p>Объявление успешно создано</p>
+                        ) : null}
                     </div>
                     <div className={styles.buttons}>
                         <Button className={styles.create}>Создать</Button>

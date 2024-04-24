@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Request } from '@/shared/api'
 
-export const useAddFavorite = () => {
+export const useAddFavorite = (id: string) => {
     const queryClient = useQueryClient()
 
     const mutation = useMutation({
@@ -13,13 +13,16 @@ export const useAddFavorite = () => {
         onSuccess: () => {
             console.log('success')
             queryClient.invalidateQueries({ queryKey: ['posts'] })
+            if (id) {
+                queryClient.invalidateQueries({ queryKey: ['posts', id] })
+            }
         },
     })
 
     return mutation
 }
 
-export const useRemoveFavorite = () => {
+export const useRemoveFavorite = (id: string) => {
     const queryClient = useQueryClient()
 
     const mutation = useMutation({
@@ -30,6 +33,9 @@ export const useRemoveFavorite = () => {
             console.log('success')
             queryClient.invalidateQueries({ queryKey: ['posts'] })
             queryClient.invalidateQueries({ queryKey: ['posts/favorites'] })
+            if (id) {
+                queryClient.invalidateQueries({ queryKey: ['posts', id] })
+            }
         },
     })
 

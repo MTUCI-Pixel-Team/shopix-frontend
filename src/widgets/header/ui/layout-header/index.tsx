@@ -8,22 +8,21 @@ import { Popup } from '../popup'
 import styles from './styles.module.scss'
 
 export const LayoutHeader = () => {
-    // const token = getToken()
-    const [isPopup, setIsPopup] = useState(false)
-    const name = useInfo((state) => state.username)
+    const [isPopup, setIsPopup] = useState<boolean>(false)
+    const [username, setUsername] = useState<string>('Guest')
 
     return (
         <div className={styles.header}>
             <Link to="/">
                 <Logo />
             </Link>
-            <Navigation setIsPopup={setIsPopup} name={name} />
+            <Navigation setIsPopup={setIsPopup} username={username} />
             {getToken() && (
                 <Popup
                     isPopup={isPopup}
                     setIsPopup={setIsPopup}
                     className={styles.popup}
-                    reviewCard={<ReviewsCard />}
+                    setUsername={setUsername}
                 />
             )}
         </div>

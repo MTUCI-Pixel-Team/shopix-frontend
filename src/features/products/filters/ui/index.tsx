@@ -30,6 +30,7 @@ export const Filters = ({
                                     }}
                                     {...props}
                                     id={String(i)}
+                                    name={`filter-${String(i + 1)}`}
                                 />
                                 <label htmlFor={String(i)}>{item.label}</label>
                             </div>

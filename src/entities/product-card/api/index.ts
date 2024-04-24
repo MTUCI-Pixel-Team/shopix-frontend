@@ -1,9 +1,9 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Request } from '@/shared/api'
 import { getToken } from '@/shared/config/storage'
-import { useProducts } from '../model'
+import { useProducts } from '..'
 
-export const useGetProducts = () => {
+export const useGetProducts = (queryParams = {}) => {
     const setMinPrice = useProducts((state) => state.setMinPrice)
     const setMaxPrice = useProducts((state) => state.setMaxPrice)
 
@@ -17,22 +17,21 @@ export const useGetProducts = () => {
         refetch,
         status,
     } = useInfiniteQuery({
-        queryKey: ['posts'],
+        queryKey: ['posts', queryParams],
         queryFn: async ({ pageParam }) => {
             console.log(pageParam)
             const token = getToken()
-
+            const params = {
+                ...queryParams,
+                page: String(pageParam),
+            }
             if (token) {
                 return await Request.getWithToken('posts', {
-                    params: {
-                        page: `${pageParam}`,
-                    },
+                    params,
                 })
             } else {
                 return await Request.get('posts', {
-                    params: {
-                        page: `${pageParam}`,
-                    },
+                    params,
                 })
             }
         },

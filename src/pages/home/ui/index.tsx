@@ -1,11 +1,34 @@
 import { useEffect, useState } from 'react'
 import { ProductsList } from '@/widgets/products-list'
 import { Sidebar } from '@/widgets/sidebar'
+import { useGetProducts } from '@/entities/product-card'
 import { UpButton } from '@/shared/ui/up'
 import styles from './styles.module.scss'
 
 export const HomePage = () => {
     const [scroll, setScroll] = useState(false)
+    const [maxPrice, setMaxPrice] = useState<number>(0)
+    const [minPrice, setMinPrice] = useState<number>(0)
+    const [once, setOnce] = useState<boolean>(true)
+    const [filters, setFilters] = useState({ sort_by: '-created_at' })
+    const {
+        data,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        refetch,
+        status,
+    } = useGetProducts(filters)
+
+    useEffect(() => {
+        if (data && once) {
+            setMaxPrice(data.pages[0].max_price)
+            setMinPrice(data.pages[0].min_price)
+            setOnce(false)
+        }
+    }, [data])
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll)
@@ -26,10 +49,23 @@ export const HomePage = () => {
 
     return (
         <div onScroll={handleScroll} className={styles.home}>
-            <ProductsList />
+            <ProductsList
+                data={data}
+                error={error}
+                fetchNextPage={fetchNextPage}
+                hasNextPage={hasNextPage}
+                isFetching={isFetching}
+                isFetchingNextPage={isFetchingNextPage}
+                status={status}
+            />
             {/* <div className={styles.products}>
             </div> */}
-            <Sidebar />
+            <Sidebar
+                qureyParams={filters}
+                setQureyParams={setFilters}
+                maxPrice={maxPrice}
+                minPrice={minPrice}
+            />
             <UpButton
                 style={{ display: scroll ? 'flex' : 'none' }}
                 className={styles.up}

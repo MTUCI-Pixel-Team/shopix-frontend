@@ -1,3 +1,3 @@
 export * from './ui'
 export * from './api/'
-export * from './model'
+export { useProducts, type IProduct } from './model'

@@ -14,6 +14,7 @@ export const Sort: FC<SortProps> = ({ options, ...props }) => {
             height={43}
             fontSize={16}
             className={styles.sort}
+            // getOptionValue={(option) => console.log(option.value)}
             {...props}
         />
     )

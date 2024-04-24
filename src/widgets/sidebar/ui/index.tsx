@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import qs from 'qs'
+import { useEffect, useRef, useState } from 'react'
 import { Filters } from '@/features/products/filters'
 import { Price } from '@/features/products/price'
 import { Search } from '@/features/products/search'
 import { Sort } from '@/features/products/sort'
 import { useProducts } from '@/entities/product-card'
+import { Request } from '@/shared/api'
 import { Button } from '@/shared/ui/button'
 import styles from './styles.module.scss'
 
@@ -16,9 +18,20 @@ interface RequestInformation {
     page: number
 }
 
-export const Sidebar = () => {
-    const minPrice = useProducts((state) => state.minPrice)
-    const maxPrice = useProducts((state) => state.maxPrice)
+export const Sidebar = ({
+    qureyParams,
+    setQureyParams,
+    maxPrice,
+    minPrice,
+}: {
+    qureyParams: object
+    setQureyParams: (obj: object) => void
+    maxPrice: number
+    minPrice: number
+}) => {
+    // const minPrice = useProducts((state) => state.minPrice)
+    // const maxPrice = useProducts((state) => state.maxPrice)
+    const ref = useRef<HTMLFormElement>(null)
     const [price, setPrice] = useState<number[]>([0, 0])
     const [sort, setSort] = useState<string>('')
     const [filters, setFilters] = useState<string[]>([])
@@ -28,75 +41,53 @@ export const Sidebar = () => {
         setPrice([minPrice, maxPrice])
     }, [minPrice, maxPrice])
 
-    console.log(sort)
-
     const options = [
-        { value: 'created_at', label: 'Сначала старые' },
         { value: '-created_at', label: 'Сначала новые' },
-        { value: '-price', label: 'Сначала дешевле' },
-        { value: 'price', label: 'Сначала дороже' },
-        { value: 'views', label: 'Больше просмотров' },
-        { value: '-views', label: 'Меньше просмотров' },
+        { value: 'created_at', label: 'Сначала старые' },
+        { value: '-price', label: 'Сначала дороже' },
+        { value: 'price', label: 'Сначала дешевле' },
+        { value: 'views', label: 'Меньше просмотров' },
+        { value: '-views', label: 'Больше просмотров' },
         { value: 'title', label: 'По алфавиту (А ➡️ Я)' },
         { value: '-title', label: 'По алфавиту (Я ➡️ А)' },
     ]
 
-    const defaultState: RequestInformation = {
-        search: '',
-        sort_by: '',
-        category: [] as string[],
-        min_price: 0,
-        max_price: 1000000,
-        page: 1,
+    const resetForm = (event) => {
+        event.preventDefault()
+        ref?.current.reset()
+        setPrice([minPrice, maxPrice])
+        setSearch('')
+        setSort('created_at')
+        setQureyParams({ sort_by: '-created_at' })
     }
 
-    const [form, setForm] = useState<RequestInformation>(defaultState)
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = event.target
-
-        if (
-            'filter' === name.split('-')[0] &&
-            !form.category.includes(name.split('-')[1])
-        ) {
-            setForm({
-                ...form,
-                category: [...form.category, name.split('-')[1]],
-            })
-        } else {
-            setForm({
-                ...form,
-                [name]: value,
-            })
-        }
-        console.log(form)
-    }
-    const resetForm = () => {
-        setForm(defaultState)
-    }
-
-    const GivePosts = async (requestInformation: RequestInformation) => {
-        Request.get('posts/', {
-            params: { ...requestInformation },
-            paramsSerializer: (params: RequestInformation) =>
-                qs.stringify(params, { arrayFormat: 'repeat' }),
-        })
-    }
+    // const GivePosts = async (requestInformation: RequestInformation) => {
+    //     console.log(requestInformation)
+    //     Request.get('posts/', {
+    //         params: { ...requestInformation },
+    //         paramsSerializer: (params: RequestInformation) =>
+    //             qs.stringify(params, { arrayFormat: 'repeat' }),
+    //     })
+    // }
 
     const installFilters = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const requestInformation = {
-            search: '',
-            sort_by: '',
+            search: search,
+            sort_by: sort,
             category: [] as string[],
-            min_price: null,
-            max_price: null,
+            min_price: price[0] || null,
+            max_price: price[1] || null,
             page: 1,
         }
+
+        console.log(requestInformation)
+        console.log(sort)
 
         const formData = new FormData(event.currentTarget)
 
         Array.from(formData.entries()).map(([key, value]) => {
+            console.log(key, value)
             if (!key.includes('filter')) {
                 // Преобразуйте значение как нужно
                 // @ts-expect-error - не знаю как это исправить
@@ -105,11 +96,12 @@ export const Sidebar = () => {
                 requestInformation['category'].push(key.split('-')[1])
             }
         })
-        GivePosts(requestInformation)
+        setQureyParams(requestInformation)
+        // GivePosts(requestInformation)
     }
 
     return (
-        <form className={styles.sidebar}>
+        <form ref={ref} className={styles.sidebar} onSubmit={installFilters}>
             <Search
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -118,9 +110,10 @@ export const Sidebar = () => {
                 <h2>Сортировать:</h2>
                 <Sort
                     onChange={(e) => {
-                        console.log(e)
                         setSort(e.value)
                     }}
+                    value={options.find((option) => option.value === sort)}
+                    // value={sort}
                     options={options}
                 />
             </div>
@@ -140,7 +133,12 @@ export const Sidebar = () => {
                 <Button type="submit" size="big" className={styles.button}>
                     ПРИМЕНИТЬ
                 </Button>
-                <Button size="big" className={styles.button}>
+                <Button
+                    type="submit"
+                    size="big"
+                    className={styles.button}
+                    onClick={resetForm}
+                >
                     СБРОСИТЬ
                 </Button>
             </div>

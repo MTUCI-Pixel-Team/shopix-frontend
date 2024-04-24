@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Request } from '@/shared/api'
 
-export const useAddFavorite = (id: string) => {
+export const useAddFavorite = (id: string | null = null) => {
     const queryClient = useQueryClient()
 
     const mutation = useMutation({
@@ -22,7 +22,7 @@ export const useAddFavorite = (id: string) => {
     return mutation
 }
 
-export const useRemoveFavorite = (id: string) => {
+export const useRemoveFavorite = (id: string | null = null) => {
     const queryClient = useQueryClient()
 
     const mutation = useMutation({

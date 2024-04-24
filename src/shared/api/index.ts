@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios'
+import qs from 'qs'
 import { SERVER_API } from '../config/constants'
 import { instance } from './api-auth.config'
 // interface RequestSettings {
@@ -21,7 +22,11 @@ export class Request {
     ) {
         try {
             console.log(this.url + url, params)
-            const response = await axios.get<T>(this.url + url, params)
+            const response = await axios.get<T>(this.url + url, {
+                ...params,
+                paramsSerializer: (params) =>
+                    qs.stringify(params, { arrayFormat: 'repeat' }),
+            })
             return response.data
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -60,6 +65,8 @@ export class Request {
         try {
             const response = await instance.get<T>(this.url + url, {
                 ...params,
+                paramsSerializer: (params) =>
+                    qs.stringify(params, { arrayFormat: 'repeat' }),
             })
             return response.data
         } catch (error) {

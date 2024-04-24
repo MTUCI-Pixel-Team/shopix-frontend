@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { FC, Fragment } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { v4 as uuidv4 } from 'uuid'
 import {
@@ -12,15 +12,33 @@ import { EmptyElement } from '@/shared/ui/empty'
 import { ErrorElement } from '@/shared/ui/error'
 import { ProductCardSkeleton } from '@/shared/ui/skeleton'
 
-export const ProductsList = () => {
-    const {
-        data,
-        error,
-        isFetching,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
-    } = useGetProducts()
+interface ProductsListProps {
+    isLoading: boolean
+    data: any
+    error: Error | null
+    isFetching: boolean
+    fetchNextPage: () => void
+    hasNextPage: boolean
+    isFetchingNextPage: boolean
+    status: string
+}
+
+export const ProductsList: FC<ProductsListProps> = ({
+    data,
+    error,
+    isFetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+}) => {
+    // const {
+    //     data,
+    //     error,
+    //     isFetching,
+    //     fetchNextPage,
+    //     hasNextPage,
+    //     isFetchingNextPage,
+    // } = useGetProducts()
     const mutation = useAddFavorite()
     const mutationRemove = useRemoveFavorite()
 

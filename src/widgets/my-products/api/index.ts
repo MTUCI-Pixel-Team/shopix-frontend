@@ -17,7 +17,12 @@
 //     }
 // }
 
-import { useInfiniteQuery, useMutation } from '@tanstack/react-query'
+import {
+    useInfiniteQuery,
+    useMutation,
+    useQueryClient,
+} from '@tanstack/react-query'
+import { post } from 'node_modules/axios/index.d.cts'
 import { Request } from '@/shared/api'
 
 export const useGetMyProducts = (type: string) => {
@@ -65,16 +70,33 @@ export const useGetMyProducts = (type: string) => {
 }
 
 export const useUpdateProduct = () => {
+    const queryClient = useQueryClient()
     const mutation = useMutation({
-        mutationFn: async (values: {
-            post: { status: string; id: number; title: string }
-        }) => {
+        mutationFn: async (values: { status: string; id: number }) => {
             console.log(values)
-            const result = await Request.putWithToken(
-                `posts/${values.post.id}/`,
-                values,
-            )
+            const result = await Request.putWithToken(`posts/${values.id}/`, {
+                post: JSON.stringify(values),
+            })
             return result
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(['me/posts/', 'active'])
+            queryClient.invalidateQueries(['me/posts/', 'inactive'])
+        },
+    })
+    return mutation
+}
+
+export const useDeleteProduct = () => {
+    const queryClient = useQueryClient()
+    const mutation = useMutation({
+        mutationFn: async (id: number) => {
+            const result = await Request.deleteWithToken(`posts/${id}/`)
+            return result
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries(['me/posts/', 'active'])
+            queryClient.invalidateQueries(['me/posts/', 'inactive'])
         },
     })
     return mutation

@@ -6,11 +6,13 @@ import { IProduct } from '../model'
 import styles from './styles.module.scss'
 
 interface ProductCardProps extends HTMLAttributes<HTMLDivElement> {
+    inactive?: boolean
     product?: IProduct
     action?: ReactNode
 }
 
 export const ProductCard: FC<ProductCardProps> = ({
+    inactive = false,
     className,
     product,
     action,
@@ -25,11 +27,19 @@ export const ProductCard: FC<ProductCardProps> = ({
         minute: 'numeric',
     })
 
+    console.log(inactive)
+
     return (
         <Link
             style={style}
             to={`/product/${product?.id}`}
-            className={classNames(styles.card, className)}
+            className={classNames(
+                styles.card,
+                {
+                    [styles.inactive]: inactive,
+                },
+                className,
+            )}
         >
             {!product ? (
                 children

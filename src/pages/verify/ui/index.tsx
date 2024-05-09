@@ -1,14 +1,17 @@
 import { useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { paths } from '@/shared/config/router'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
+import { useVerify } from '../api'
 import { VerifyModel } from '../model'
 import styles from './styles.module.scss'
 
 export const VerifyPage = () => {
     // const mutation = useMutationLogin()
+    const { id } = useParams()
     const navigate = useNavigate()
+    const verification = useVerify()
     const {
         register,
         handleSubmit,
@@ -19,16 +22,10 @@ export const VerifyPage = () => {
         },
     })
 
-    const getAuth = (data: LoginModel) => {
-        // const formData = new FormData()
-        // for (const key in data) {
-        //     if (Object.prototype.hasOwnProperty.call(data, key)) {
-        //         // @ts-expect-error Без понятия, как это типизировать
-        //         formData.append(key, data[key])
-        //     }
-        // }
-        // // @ts-expect-error Тут мне даже copilot написал, что это очень сложно типизировать
-        // mutation.mutate(formData)
+    const getAuth = (data: VerifyModel) => {
+        if (id) {
+            verification.mutate({ code: data.code, id: id })
+        }
     }
 
     // console.log(mutation, 'error')

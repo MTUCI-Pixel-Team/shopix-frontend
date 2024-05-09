@@ -51,7 +51,7 @@ export const router = createBrowserRouter([
             { path: '', element: <Navigate to={paths.login} /> },
             { path: paths.login, element: <LoginPage /> },
             { path: paths.register, element: <RegisterPage /> },
-            // { path: paths.verify, element: <VerifyPage /> },
+            { path: paths.verify + '/:id', element: <VerifyPage /> },
         ],
     },
 ])

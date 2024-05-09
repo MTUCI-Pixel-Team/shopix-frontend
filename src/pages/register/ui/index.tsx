@@ -13,6 +13,7 @@ export const RegisterPage = () => {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors },
     } = useForm<RegisterModel>({
         defaultValues: {
@@ -22,6 +23,8 @@ export const RegisterPage = () => {
             passwordRetry: '',
         },
     })
+
+    const password = watch('password')
 
     const getAuth = (data: RegisterModel) => {
         const dataNew = { ...data, is_active: true }

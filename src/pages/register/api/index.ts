@@ -11,9 +11,10 @@ export const useMutationRegister = () => {
         mutationFn: (data: RegisterModel) => {
             return Request.post<RegisterModel>('users/create/', data)
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
+            console.log(data.id)
             console.log('success')
-            navigate(`${paths.auth}/${paths.login}`)
+            navigate(`${paths.auth}/${paths.verify}/${data.id}`)
         },
     })
 }

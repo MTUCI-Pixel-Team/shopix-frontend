@@ -21,11 +21,16 @@ interface RequestInformation {
 export const Sidebar = ({
     qureyParams,
     setQureyParams,
+    setSearchForPrice,
+    setCategoryForPrice,
+    setOnce,
     maxPrice,
     minPrice,
 }: {
     qureyParams: object
     setQureyParams: (obj: object) => void
+    setCategoryForPrice: (state: boolean) => void
+    setOnce: (state: boolean) => void
     maxPrice: number
     minPrice: number
 }) => {
@@ -106,7 +111,11 @@ export const Sidebar = ({
             </div>
             <div className={styles.filters}>
                 <h2>Фильтры: </h2>
-                <Filters filters={filters} setFilters={setFilters} />
+                <Filters
+                    filters={filters}
+                    setFilters={setFilters}
+                    setCategoryForPrice={setCategoryForPrice}
+                />
             </div>
             <div className={styles.price}>
                 <h2>Цена: </h2>

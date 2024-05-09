@@ -4,11 +4,13 @@ import styles from './styles.module.scss'
 
 export const Filters = ({
     filters,
+    setCategoryForPrice,
     setFilters,
     ...props
 }: {
     filters: string[]
     setFilters: (state: string[]) => void
+    setCategoryForPrice: (state: boolean) => void
 }) => {
     const { data, error, isLoading } = useGetCategories()
     console.log(data)
@@ -27,6 +29,7 @@ export const Filters = ({
                                             ...filters,
                                             String(item.value),
                                         ])
+                                        setCategoryForPrice(true)
                                     }}
                                     {...props}
                                     id={String(i)}

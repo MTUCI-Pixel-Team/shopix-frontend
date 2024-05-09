@@ -10,6 +10,8 @@ export const HomePage = () => {
     const [maxPrice, setMaxPrice] = useState<number>(0)
     const [minPrice, setMinPrice] = useState<number>(0)
     const [once, setOnce] = useState<boolean>(true)
+    const [searchForPrice, setSearchForPrice] = useState<boolean>(false)
+    const [categoryForPrice, setCategoryForPrice] = useState<boolean>(false)
     const [filters, setFilters] = useState({ sort_by: '-created_at' })
     const {
         data,
@@ -63,8 +65,11 @@ export const HomePage = () => {
             <Sidebar
                 qureyParams={filters}
                 setQureyParams={setFilters}
+                setOnce={setOnce}
                 maxPrice={maxPrice}
                 minPrice={minPrice}
+                setSearchForPrice={setSearchForPrice}
+                setCategoryForPrice={setCategoryForPrice}
             />
             <UpButton
                 style={{ display: scroll ? 'flex' : 'none' }}

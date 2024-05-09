@@ -6,7 +6,7 @@ import {
     useAddFavorite,
     useRemoveFavorite,
 } from '@/features/card/favorites'
-import { ProductCard, useGetProducts } from '@/entities/product-card'
+import { ProductCard } from '@/entities/product-card'
 import { IProduct } from '@/entities/product-card'
 import { EmptyElement } from '@/shared/ui/empty'
 import { ErrorElement } from '@/shared/ui/error'
@@ -31,14 +31,6 @@ export const ProductsList: FC<ProductsListProps> = ({
     hasNextPage,
     isFetchingNextPage,
 }) => {
-    // const {
-    //     data,
-    //     error,
-    //     isFetching,
-    //     fetchNextPage,
-    //     hasNextPage,
-    //     isFetchingNextPage,
-    // } = useGetProducts()
     const mutation = useAddFavorite()
     const mutationRemove = useRemoveFavorite()
 
@@ -57,6 +49,8 @@ export const ProductsList: FC<ProductsListProps> = ({
     if (data?.pages[0].results.length === 0 && !isFetching) {
         return <EmptyElement />
     }
+
+    console.log(hasNextPage)
 
     return (
         <>

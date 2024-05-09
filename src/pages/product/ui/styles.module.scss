@@ -16,6 +16,18 @@
     justify-content: space-between;
 }
 
+.title,
+.price {
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    color: var(--black);
+    &::placeholder {
+        color: var(--black) !important;
+    }
+}
+
 .title {
     font-size: 39px;
     font-weight: 700;
@@ -88,4 +100,11 @@
     gap: 16px;
     margin-top: 16px;
     align-items: center;
+}
+
+.change {
+    border-radius: 16px;
+    background-color: var(--third-primary);
+    padding: 4px;
+    border: 2px dashed var(--accent);
 }

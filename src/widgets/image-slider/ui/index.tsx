@@ -1,14 +1,21 @@
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
-import { dot } from 'node:test/reporters'
-import classNames from 'classnames'
+//@ts-expect-error it's correct
 import Slider from 'react-slick'
 import './styles.scss'
+import { ImagesDrop } from '@/entities/images-drop'
 
-export const ImageSlider = ({ images }: { images: string[] }) => {
+export const ImageSlider = ({
+    images,
+    setImages,
+    isChange,
+}: {
+    images: (string | File)[]
+    isChange: boolean
+    setImages: (images: (File | string)[]) => void
+}) => {
     const settings = {
-        customPaging: function (i) {
-            console.log(i)
+        customPaging: function (i: number) {
             return (
                 <a className={'dot'}>
                     <img src={images[i]} />
@@ -62,17 +69,33 @@ export const ImageSlider = ({ images }: { images: string[] }) => {
             </svg>
         ),
     }
-    console.log(images)
 
     return (
         <div className={'slider'}>
-            <Slider {...settings}>
-                {images.map((image, index) => (
-                    <div key={index}>
-                        <img src={image} alt={`Slide ${index}`} />
-                    </div>
-                ))}
-            </Slider>
+            {isChange ? (
+                <ImagesDrop
+                    className={'slider-change'}
+                    images={images}
+                    setImages={setImages}
+                />
+            ) : (
+                <Slider {...settings}>
+                    {images.map((image, index) => (
+                        <div key={index}>
+                            <img
+                                src={
+                                    typeof image === 'string'
+                                        ? image
+                                        : URL.createObjectURL(
+                                              image || new Blob(),
+                                          )
+                                }
+                                alt={`Slide ${index}`}
+                            />
+                        </div>
+                    ))}
+                </Slider>
+            )}
         </div>
     )
 }

@@ -1,5 +1,9 @@
-import { useState } from 'react'
+import { title } from 'process'
+import classNames from 'classnames'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { useParams } from 'react-router-dom'
+import { SingleValue } from 'react-select'
 import { ImageSlider } from '@/widgets/image-slider'
 import {
     FavoriteIcon,
@@ -13,14 +17,28 @@ import { SERVER_API } from '@/shared/config/constants'
 import { Button } from '@/shared/ui/button'
 import { Select } from '@/shared/ui/select'
 import { ReviewsCardSkeleton } from '@/shared/ui/skeleton'
-import { useGetProduct } from '../api'
+import { useGetProduct, useUpdateProduct } from '../api'
+import { Post } from '../model'
 import styles from './styles.module.scss'
 
 export const ProductPage = () => {
     const { id } = useParams()
+    const mutationUpdate = useUpdateProduct(id || '')
     const { data, isError, isLoading } = useGetProduct(id || '')
+    const [titleValue, setTitleValue] = useState<string>('')
+    const [priceValue, setPriceValue] = useState<string>('')
+    const [descriptionValue, setDescriptionValue] = useState('')
     const mutationAddFavorite = useAddFavorite(id || '')
     const mutationRemoveFavorite = useRemoveFavorite(id || '')
+    const [pickCategory, setPickCategory] = useState<
+        | {
+              value: number
+              label: string
+          }
+        | undefined
+    >(undefined)
+    const [images, setImages] = useState<(string | File)[]>([])
+    const [isChange, setIsChange] = useState(false)
     const {
         data: categories,
         isError: isErrorCategories,
@@ -32,14 +50,83 @@ export const ProductPage = () => {
         isLoading: isLoadingUser,
     } = useGetUsers(data?.post.user || 0)
 
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<Post>({
+        defaultValues: {
+            title: data?.post.title,
+            price: data?.post.price,
+            category: data?.post.category,
+            description: data?.post.description,
+        },
+    })
+
+    useEffect(() => {
+        if (data) {
+            const imagesFilter = data?.images?.map(
+                (image: { image: string }) => `${SERVER_API}${image.image}`,
+            )
+            setImages(imagesFilter)
+            setTitleValue(data.post.title)
+            setPriceValue(+data.post.price + ' ₽')
+            setPickCategory(
+                categories?.find((item) => item.value === data?.post.category),
+            )
+            setDescriptionValue(data.post.description)
+        }
+    }, [data, categories])
+
+    useEffect(() => {
+        register('category', {
+            required:
+                !pickCategory && isChange
+                    ? { value: true, message: 'Это поле обязательное' }
+                    : undefined,
+        })
+    }, [pickCategory, register, isChange])
+
+    useEffect(() => {
+        register('title', {
+            required:
+                !titleValue && isChange
+                    ? { value: true, message: 'Это поле обязательное' }
+                    : undefined,
+        })
+    }, [titleValue, register, isChange])
+
+    useEffect(() => {
+        register('price', {
+            required:
+                !priceValue && isChange
+                    ? { value: true, message: 'Это поле обязательное' }
+                    : undefined,
+        })
+    }, [priceValue, register, isChange])
+
+    useEffect(() => {
+        register('description', {
+            required:
+                !descriptionValue && isChange
+                    ? { value: true, message: 'Это поле обязательное' }
+                    : undefined,
+        })
+    }, [descriptionValue, register, isChange])
+
+    // {...register('title', {
+    //     required: isChange
+    //         ? 'Это поле обязательное'
+    //         : false,
+    // })}
+
+    // console.log(pickCategory)
+
     if (isLoading || isLoadingCategories) return <p>Загрузка...</p>
     if (isError || isErrorCategories) return <p>Ошибка загрузки</p>
 
     const category = categories?.find(
         (item) => item.value === data?.post.category,
-    )
-    const images = data?.images?.map(
-        (image: { image: string }) => `${SERVER_API}${image.image}`,
     )
 
     const handleAddFavorite = () => {
@@ -52,28 +139,151 @@ export const ProductPage = () => {
         }
     }
 
-    console.log(user?.username)
+    const handleChangePost = (data: Post) => {
+        if (isChange) {
+            setPriceValue(priceValue)
+            Promise.all(
+                images.map((item) => {
+                    if (typeof item === 'string') {
+                        const name = item.split('/')[item.split('/').length - 1]
+                        return fetch(item)
+                            .then((response) => response.blob())
+                            .then((blob) => {
+                                return new File([blob], name, {
+                                    type: blob.type,
+                                })
+                                // console.log(file)
+                            })
+                            .catch((error) => console.error(error))
+                    } else {
+                        return item
+                    }
+                }),
+            ).then((images) => {
+                // console.log(images)
+                const formatedData = {
+                    title: titleValue,
+                    price: priceValue,
+                    description: descriptionValue,
+                    category: pickCategory?.value,
+                }
+
+                const formData = new FormData()
+                formData.append('post', JSON.stringify(formatedData))
+
+                images.forEach((img) => {
+                    formData.append('images', img)
+                })
+
+                mutationUpdate.mutate(formData)
+                setIsChange(false)
+                setPriceValue((state) => {
+                    if (state.includes('₽')) {
+                        return state
+                    } else {
+                        return state + ' ₽'
+                    }
+                })
+            })
+        } else {
+            setIsChange(true)
+        }
+    }
+
+    console.log('rerender')
+    console.log(errors.title)
 
     return (
         <div className={styles.product}>
-            <ImageSlider images={images || []} />
-            <div className={styles.about}>
-                <h1 className={styles.title}>{data?.post.title}</h1>
+            <ImageSlider
+                images={images}
+                isChange={isChange}
+                setImages={setImages}
+            />
+            <form className={styles.about}>
+                <h1 className={styles.title}>
+                    <input
+                        className={classNames(styles.title, {
+                            [styles.change]: isChange,
+                        })}
+                        type="text"
+                        value={titleValue}
+                        onChange={(e) => {
+                            setTitleValue(e.target.value)
+                            // register('title').onChange(e);
+                        }}
+                        // placeholder={data?.post.title}
+                        disabled={!isChange}
+                    />
+                    {errors.title?.message}
+                </h1>
                 <h2 className={styles.price}>
-                    {parseInt(data?.post.price || '')} ₽
+                    <input
+                        className={classNames(styles.price, {
+                            [styles.change]: isChange,
+                        })}
+                        type="text"
+                        value={priceValue}
+                        onChange={(e) => {
+                            const value = e.target.value.replace(/\D/g, '')
+                            setPriceValue(value)
+                            // register('title').onChange(e);
+                        }}
+                        placeholder={`${parseInt(data?.post.price || '')} ₽`}
+                        disabled={!isChange}
+                        // {...register('price', {
+                        //     required: isChange
+                        //         ? 'Это поле обязательное'
+                        //         : false,
+                        // })}
+                    />
+                    {errors.price?.message}
                 </h2>
-                <Select
-                    placeholder={category?.label || ''}
-                    value={data?.post.category}
-                    className={styles.select}
-                    isSearchable={false}
-                    isDisabled={true}
-                />
+
+                {isChange ? (
+                    <Select
+                        options={categories}
+                        className={styles.select}
+                        onChange={(
+                            newValue: SingleValue<{
+                                value: number
+                                label: string
+                            }>,
+                        ) => {
+                            console.log(newValue)
+                            setPickCategory(newValue || undefined)
+                        }}
+                        value={pickCategory}
+                        // placeholder={category?.label || ''}
+                        // value={data?.post.category}
+                    />
+                ) : (
+                    <Select
+                        placeholder={category?.label || ''}
+                        value={data?.post.category}
+                        className={styles.select}
+                        isSearchable={false}
+                        isDisabled={!isChange}
+                    />
+                )}
+                {errors.category?.message}
+
                 <textarea
                     placeholder={data?.post.description}
-                    disabled
-                    className={styles.area}
+                    {...(isChange ? { disabled: false } : { disabled: true })}
+                    className={classNames(styles.area, {
+                        [styles.change]: isChange,
+                    })}
+                    value={descriptionValue}
+                    onChange={(e) => {
+                        setDescriptionValue(e.target.value)
+                    }}
+                    // {...register('description', {
+                    //     required: isChange ? 'Это поле обязательное' : false,
+                    // })}
                 />
+                {errors.description?.message}
+
                 <div className={styles.info}>
                     {/* <ReviewsCard /> */}
                     {isLoadingUser ? (
@@ -129,15 +339,30 @@ export const ProductPage = () => {
                     </div>
                 </div>
                 <div className={styles.action}>
-                    <Button className={styles.button} size="big">
-                        НАПИСАТЬ
-                    </Button>
+                    {data?.post.is_owner ? (
+                        <Button
+                            type="submit"
+                            onClick={handleSubmit(handleChangePost)}
+                            className={styles.button}
+                            size="big"
+                        >
+                            {isChange ? 'СОХРАНИТЬ' : 'ИЗМЕНИТЬ'}
+                        </Button>
+                    ) : (
+                        <Button
+                            onClick={(e) => e.preventDefault()}
+                            className={styles.button}
+                            size="big"
+                        >
+                            НАПИСАТЬ
+                        </Button>
+                    )}
                     <FavoriteIcon
                         onClick={handleAddFavorite}
                         isFavorite={data?.post.is_favorite || false}
                     />
                 </div>
-            </div>
+            </form>
         </div>
     )
 }

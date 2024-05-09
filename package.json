@@ -12,6 +12,7 @@
     "dependencies": {
         "@tanstack/react-query": "^5.28.4",
         "@tanstack/react-query-devtools": "^5.28.4",
+        "@types/react-dropzone": "^5.1.0",
         "@types/react-select": "^5.0.1",
         "axios": "^1.6.8",
         "classnames": "^2.5.1",

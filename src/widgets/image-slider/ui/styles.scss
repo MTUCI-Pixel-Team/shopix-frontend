@@ -13,6 +13,15 @@
     }
 }
 
+.slider-change {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
 li.slick-active {
     filter: brightness(2);
 }

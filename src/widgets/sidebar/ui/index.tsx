@@ -61,15 +61,6 @@ export const Sidebar = ({
         setQureyParams({ sort_by: '-created_at' })
     }
 
-    // const GivePosts = async (requestInformation: RequestInformation) => {
-    //     console.log(requestInformation)
-    //     Request.get('posts/', {
-    //         params: { ...requestInformation },
-    //         paramsSerializer: (params: RequestInformation) =>
-    //             qs.stringify(params, { arrayFormat: 'repeat' }),
-    //     })
-    // }
-
     const installFilters = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const requestInformation = {
@@ -81,15 +72,11 @@ export const Sidebar = ({
             page: 1,
         }
 
-        console.log(requestInformation)
-        console.log(sort)
-
         const formData = new FormData(event.currentTarget)
 
         Array.from(formData.entries()).map(([key, value]) => {
             console.log(key, value)
             if (!key.includes('filter')) {
-                // Преобразуйте значение как нужно
                 // @ts-expect-error - не знаю как это исправить
                 requestInformation[key] = value
             } else {

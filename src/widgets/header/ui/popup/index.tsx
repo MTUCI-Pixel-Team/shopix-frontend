@@ -94,6 +94,7 @@ export const Popup: FC<PopupProps> = ({
                     <Link
                         onClick={() => setIsPopup(false)}
                         to={paths.favorites}
+                        className={styles.link}
                     >
                         Избранное
                     </Link>

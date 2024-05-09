@@ -32,7 +32,12 @@ export const Filters = ({
                                     id={String(i)}
                                     name={`filter-${String(i + 1)}`}
                                 />
-                                <label htmlFor={String(i)}>{item.label}</label>
+                                <label
+                                    htmlFor={String(i)}
+                                    className={styles.filter__label}
+                                >
+                                    {item.label}
+                                </label>
                             </div>
                         ),
                     )}

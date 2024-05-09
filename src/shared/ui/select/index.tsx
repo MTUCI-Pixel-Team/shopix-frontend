@@ -42,6 +42,7 @@ export function Select<
                     fontSize: `${fontSize}px`,
                     height: `${height}px`,
                     fontWeight: '400',
+                    cursor: 'pointer',
                 }),
                 menu: (baseStyles) => ({
                     ...baseStyles,

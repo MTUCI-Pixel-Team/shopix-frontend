@@ -37,15 +37,8 @@ export const useGetProducts = (queryParams = {}) => {
         },
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
-<<<<<<< HEAD
             const nextPage = lastPage.next?.split('page=')[1].split('&')[0]
 
-=======
-            // http://147.45.40.23:8000/api/posts/?max_price=500000&min_price=0.16&page=2&search=&sort_by=created_at
-            // const nextPage = lastPage.next?.split('?page=')[1]
-            const nextPage = lastPage.next?.split('page=')[1].split('&')[0]
-            console.log(lastPage, '-----------------------')
->>>>>>> d39a001 (fix)
             return nextPage
         },
         select: (data) => {

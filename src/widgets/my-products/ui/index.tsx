@@ -26,14 +26,15 @@ export const MyProducts = ({ type }: { type: string }) => {
     const mutationDelete = useDeleteProduct()
     const [isPopup, setIsPopup] = useState(false)
     const [deletedInfo, setDeletedInfo] = useState<IProduct | null>(null)
+    const [once, setOnce] = useState(true)
 
     const isEmpty = data?.pages[0].results.length === 0
 
     useEffect(() => {
-        if (deletedInfo && mutation.isSuccess) {
+        if (deletedInfo && mutationDelete.isSuccess) {
             setIsPopup(false)
         }
-    }, [mutation.isSuccess, deletedInfo])
+    }, [mutationDelete.isSuccess, deletedInfo])
 
     if (isEmpty && !isFetching) {
         return <EmptyElement className={styles.empty} />
@@ -144,6 +145,7 @@ export const MyProducts = ({ type }: { type: string }) => {
                                                         onClick={(e) => {
                                                             e.preventDefault()
                                                             e.stopPropagation()
+                                                            // setOnce(false)
                                                             const obj = {
                                                                 id: product.id,
                                                                 status: 'active',

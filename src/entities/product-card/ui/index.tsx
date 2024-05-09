@@ -27,8 +27,6 @@ export const ProductCard: FC<ProductCardProps> = ({
         minute: 'numeric',
     })
 
-    console.log(inactive)
-
     return (
         <Link
             style={style}

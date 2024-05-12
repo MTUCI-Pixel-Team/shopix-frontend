@@ -1,4 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { useNavigate } from 'react-router-dom'
+import { IProduct } from '@/entities/product-card'
 import { Request } from '@/shared/api'
 import { Categories } from '../model'
 
@@ -26,9 +28,15 @@ export const useGetCategories = () => {
 }
 
 export const useMutationAddCard = () => {
+    const navigate = useNavigate()
     return useMutation({
-        mutationFn: (data: FormData) => {
+        mutationFn: (data) => {
             return Request.postWithToken('posts/', data)
+        },
+        onSuccess: (data) => {
+            console.log('Карточка успешно добавлена')
+            const id = data?.post?.id || ''
+            navigate(`/product/${id}`)
         },
     })
 }

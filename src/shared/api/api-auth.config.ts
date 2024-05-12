@@ -9,7 +9,7 @@ import {
 } from '../config/storage'
 
 export const instance = axios.create({
-    // к запросу будет приуепляться cookies
+    // к запросу будет прикрелп cookies
     withCredentials: true,
     headers: {
         'Content-Type': 'multipart/form-data',

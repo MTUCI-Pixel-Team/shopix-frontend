@@ -9,7 +9,7 @@ export const useGetAddress = (text: string) => {
 
             const apiKey = import.meta.env.VITE_YANDEX_API_KEY
             return axios.get(
-                `https://suggest-maps.yandex.ru/v1/suggest?apikey=${apiKey}&text=${text}&print_address=1`,
+                `https://suggest-maps.yandex.ru/v1/suggest?text=${text}&highlight=0&apikey=${apiKey}&print_address=1&types=geo`,
             )
         },
         retry: 2,

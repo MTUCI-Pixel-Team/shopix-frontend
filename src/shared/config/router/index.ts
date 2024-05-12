@@ -1,3 +1,5 @@
+import { verify } from 'crypto'
+
 export const paths = {
     home: '',
     product: '/product/:id',
@@ -7,4 +9,5 @@ export const paths = {
     auth: '/auth',
     login: 'login',
     register: 'register',
+    verify: 'verify',
 }

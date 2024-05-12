@@ -6,13 +6,13 @@ import styles from './styles.module.scss'
 
 interface NavigationProps {
     setIsPopup: (arg: boolean) => void
-    name: string
+    username: string
     image?: string
 }
 
 export const Navigation: FC<NavigationProps> = ({
     setIsPopup,
-    name = 'Guest',
+    username = 'Guest',
     image,
 }) => {
     const navigate = useNavigate()
@@ -24,6 +24,8 @@ export const Navigation: FC<NavigationProps> = ({
             navigate(paths.auth)
         }
     }
+
+    console.log(username)
 
     return (
         <div className={styles.nav}>
@@ -60,7 +62,7 @@ export const Navigation: FC<NavigationProps> = ({
                 {image ? (
                     <img src={image} alt="profile" />
                 ) : (
-                    name.slice(0, 1).toUpperCase()
+                    username.slice(0, 1).toUpperCase()
                 )}
                 {/* <img src="/public/images/profile.png" alt="profile" /> */}
             </div>

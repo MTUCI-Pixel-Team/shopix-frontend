@@ -44,22 +44,19 @@ a {
     --shadow: 0px 0px 8px 0px rgba(0, 186, 255, 0.5);
 }
 
-/* Стилизация скроллбара для WebKit браузеров */
 ::-webkit-scrollbar {
     width: 8px;
 }
 
-/* Трек (полоса прокрутки) */
 ::-webkit-scrollbar-track {
     background-color: var(--second-primary);
 }
 
-/* Ползунок скроллбара */
 ::-webkit-scrollbar-thumb {
     background-color: var(--accent);
+    border-radius: 16px;
 }
 
-/* Ползунок скроллбара при наведении */
 ::-webkit-scrollbar-thumb:hover {
     background: #00aaff;
 }

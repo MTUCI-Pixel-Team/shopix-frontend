@@ -5,6 +5,7 @@ import { LoginPage } from '@/pages/login'
 import { MyProductsPage } from '@/pages/my-products'
 import { ProductPage } from '@/pages/product'
 import { RegisterPage } from '@/pages/register'
+import { VerifyPage } from '@/pages/verify'
 import { LayoutHeader } from '@/widgets/header'
 import { Layout, LayoutAuth } from '@/widgets/layout'
 import { AuthCheck } from '@/entities/auth-check'
@@ -50,6 +51,7 @@ export const router = createBrowserRouter([
             { path: '', element: <Navigate to={paths.login} /> },
             { path: paths.login, element: <LoginPage /> },
             { path: paths.register, element: <RegisterPage /> },
+            { path: paths.verify + '/:id', element: <VerifyPage /> },
         ],
     },
 ])

@@ -2,6 +2,10 @@
     width: 300px;
     height: 25px;
     position: relative;
+    cursor: grab;
+    &:active {
+            cursor: grabbing;
+        }
 }
 
 .example-thumb {

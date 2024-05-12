@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios'
+import qs from 'qs'
 import { SERVER_API } from '../config/constants'
 import { instance } from './api-auth.config'
 // interface RequestSettings {
@@ -7,20 +8,25 @@ import { instance } from './api-auth.config'
 export class Request {
     static url: string = `${SERVER_API}/api/`
 
-    static async get(
+    static async get<T>(
         url: string,
         params?: {
             headers?: {
                 [key: string]: string
             }
             params?: {
-                [key: string]: string
+                [key: string]: string | string[] | number | null
             }
+            [key: string]: any
         },
     ) {
         try {
             console.log(this.url + url, params)
-            const response = await axios.get(this.url + url, params)
+            const response = await axios.get<T>(this.url + url, {
+                ...params,
+                paramsSerializer: (params) =>
+                    qs.stringify(params, { arrayFormat: 'repeat' }),
+            })
             return response.data
         } catch (error) {
             if (error instanceof AxiosError) {
@@ -45,7 +51,7 @@ export class Request {
         }
     }
 
-    static async getWithToken(
+    static async getWithToken<T>(
         url: string,
         params?: {
             headers?: {
@@ -57,8 +63,10 @@ export class Request {
         },
     ) {
         try {
-            const response = await instance.get(this.url + url, {
+            const response = await instance.get<T>(this.url + url, {
                 ...params,
+                paramsSerializer: (params) =>
+                    qs.stringify(params, { arrayFormat: 'repeat' }),
             })
             return response.data
         } catch (error) {
@@ -79,9 +87,26 @@ export class Request {
         }
     }
 
-    static async deleteWithToken(url: string) {
+    static async deleteWithToken<T>(url: string) {
         try {
-            const response = await instance.delete(this.url + url)
+            const response = await instance.delete<T>(this.url + url)
+            return response.data
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                throw new Error(error.message)
+            }
+        }
+    }
+
+    static async putWithToken<T>(url: string, data: T) {
+        console.log(data)
+        console.log(this.url + url)
+        try {
+            const response = await instance.put<T>(this.url + url, data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
             return response.data
         } catch (error) {
             if (error instanceof AxiosError) {

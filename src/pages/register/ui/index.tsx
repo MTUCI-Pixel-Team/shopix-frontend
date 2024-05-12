@@ -13,18 +13,22 @@ export const RegisterPage = () => {
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors },
     } = useForm<RegisterModel>({
         defaultValues: {
             email: '',
             password: '',
             username: '',
+            passwordRetry: '',
         },
     })
 
+    const password = watch('password')
+
     const getAuth = (data: RegisterModel) => {
-        console.log(data)
-        mutation.mutate(data)
+        const dataNew = { ...data, is_active: true }
+        mutation.mutate(dataNew)
     }
 
     console.log(mutation)
@@ -72,9 +76,30 @@ export const RegisterPage = () => {
                     <p className={styles.error}>{errors.password?.message}</p>
                 </div>
                 <div className={styles.input}>
-                    <label htmlFor="name">Введите имя</label>
+                    <label htmlFor="passwordRetry">Повторите пароль</label>
                     <Input
-                        placeholder="Имя"
+                        type="password"
+                        placeholder="Повторите пароль"
+                        {...register('passwordRetry', {
+                            required: 'Это поле обязательное',
+
+                            minLength: {
+                                value: 8,
+                                message: 'Минимальная длина пароля 8 символов',
+                            },
+                            validate: (value) =>
+                                value === password || 'Пароли не совпадают',
+                        })}
+                        id="passwordRetry"
+                    />
+                    <p className={styles.error}>
+                        {errors.passwordRetry?.message}
+                    </p>
+                </div>
+                <div className={styles.input}>
+                    <label htmlFor="name">Введите имя пользователя</label>
+                    <Input
+                        placeholder="Username"
                         {...register('username', {
                             required: 'Это поле обязательное',
                         })}

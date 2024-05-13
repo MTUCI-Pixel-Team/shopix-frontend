@@ -43,7 +43,7 @@ export const ImagesDrop: FC<ImagesDropProps> = ({
             }
         },
     })
-    console.log(images)
+    // console.log(images)
 
     return (
         <div

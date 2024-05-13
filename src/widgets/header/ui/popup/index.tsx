@@ -32,8 +32,8 @@ export const Popup: FC<PopupProps> = ({
 
     useEffect(() => {
         if (!isError && !isLoading && data) {
-            console.log('sgsdg')
-            console.log(data)
+            // console.log('sgsdg')
+            // console.log(data)
             setUsername(data?.username)
         }
     }, [isError, isLoading, setUsername, data])

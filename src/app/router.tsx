@@ -4,6 +4,7 @@ import { HomePage } from '@/pages/home'
 import { LoginPage } from '@/pages/login'
 import { MyProductsPage } from '@/pages/my-products'
 import { ProductPage } from '@/pages/product'
+import { Profile } from '@/pages/profile'
 import { RegisterPage } from '@/pages/register'
 import { VerifyPage } from '@/pages/verify'
 import { LayoutHeader } from '@/widgets/header'
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
                         <Favorites />
                     </AuthCheck>
                 ),
+            },
+            {
+                path: paths.profile,
+                element: <Profile />,
             },
         ],
     },

@@ -25,7 +25,7 @@ export const Navigation: FC<NavigationProps> = ({
         }
     }
 
-    console.log(username)
+    // console.log(username)
 
     return (
         <div className={styles.nav}>

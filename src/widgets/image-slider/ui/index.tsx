@@ -9,10 +9,12 @@ export const ImageSlider = ({
     images,
     setImages,
     isChange,
+    errorMessage,
 }: {
     images: (string | File)[]
     isChange: boolean
     setImages: (images: (File | string)[]) => void
+    errorMessage: string
 }) => {
     const settings = {
         customPaging: function (i: number) {
@@ -73,11 +75,14 @@ export const ImageSlider = ({
     return (
         <div className={'slider'}>
             {isChange ? (
-                <ImagesDrop
-                    className={'slider-change'}
-                    images={images}
-                    setImages={setImages}
-                />
+                <>
+                    <ImagesDrop
+                        className={'slider-change'}
+                        images={images}
+                        setImages={setImages}
+                    />
+                    {errorMessage}
+                </>
             ) : (
                 <Slider {...settings}>
                     {images.map((image, index) => (

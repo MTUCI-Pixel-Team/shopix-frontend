@@ -80,7 +80,7 @@
     overflow: auto;
     height: 100%;
     width: 100%;
-    display: grid;
+    display: flex;
     // grid-template-columns: repeat(auto-fill, clamp(100px, 20vw, 200px));
     gap: 8px;
 }

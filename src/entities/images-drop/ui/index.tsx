@@ -1,3 +1,4 @@
+import imageCompression from 'browser-image-compression'
 import classNames from 'classnames'
 import { FC, HTMLAttributes, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -19,13 +20,30 @@ export const ImagesDrop: FC<ImagesDropProps> = ({
         setImages(images.filter((_, i) => i !== index))
     }
     const { getRootProps, getInputProps } = useDropzone({
-        onDrop: (acceptedFiles) => {
+        onDrop: async (acceptedFiles) => {
             const type = acceptedFiles[0].type
+            const options = {
+                maxSizeMB: 1,
+                useWebWorker: true,
+            }
+
             if (type.includes('image')) {
-                setImages([...images, ...acceptedFiles])
+                const compressedFileBlob = await imageCompression(
+                    acceptedFiles[0],
+                    options,
+                )
+                const convertedToFile = new File(
+                    [compressedFileBlob],
+                    compressedFileBlob.name,
+                    {
+                        type: compressedFileBlob.type,
+                    },
+                )
+                setImages([...images, convertedToFile])
             }
         },
     })
+    console.log(images)
 
     return (
         <div

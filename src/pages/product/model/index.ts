@@ -3,6 +3,19 @@ export interface IProductOnce {
     images: Image[]
 }
 
+export interface IEditProduct {
+    title: string
+    description: string
+    price: string
+    address: string
+    category: number
+    status: string
+    created_at: string
+    updated_at: string
+    id: number
+    images: Image[]
+}
+
 export interface Post {
     title: string
     description: string

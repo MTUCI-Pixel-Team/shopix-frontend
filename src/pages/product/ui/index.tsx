@@ -18,7 +18,7 @@ import { Button } from '@/shared/ui/button'
 import { Select } from '@/shared/ui/select'
 import { ReviewsCardSkeleton } from '@/shared/ui/skeleton'
 import { useGetProduct, useUpdateProduct } from '../api'
-import { Post } from '../model'
+import { IEditProduct, Post } from '../model'
 import styles from './styles.module.scss'
 
 export const ProductPage = () => {
@@ -54,12 +54,13 @@ export const ProductPage = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<Post>({
+    } = useForm<IEditProduct>({
         defaultValues: {
             title: data?.post.title,
             price: data?.post.price,
             category: data?.post.category,
             description: data?.post.description,
+            images: data?.images,
         },
     })
 
@@ -114,6 +115,15 @@ export const ProductPage = () => {
         })
     }, [descriptionValue, register, isChange])
 
+    useEffect(() => {
+        register('images', {
+            required:
+                !images && isChange
+                    ? { value: true, message: 'Это поле обязательное' }
+                    : undefined,
+        })
+    }, [images, register, isChange])
+
     // {...register('title', {
     //     required: isChange
     //         ? 'Это поле обязательное'
@@ -163,7 +173,7 @@ export const ProductPage = () => {
                 // console.log(images)
                 const formatedData = {
                     title: titleValue,
-                    price: priceValue,
+                    price: parseInt(priceValue.replace(/\D/gi, '')),
                     description: descriptionValue,
                     category: pickCategory?.value,
                 }
@@ -178,11 +188,7 @@ export const ProductPage = () => {
                 mutationUpdate.mutate(formData)
                 setIsChange(false)
                 setPriceValue((state) => {
-                    if (state.includes('₽')) {
-                        return state
-                    } else {
-                        return state + ' ₽'
-                    }
+                    return state.replace(/₽/gi, '') + ' ₽'
                 })
             })
         } else {
@@ -199,8 +205,10 @@ export const ProductPage = () => {
                 images={images}
                 isChange={isChange}
                 setImages={setImages}
+                errorMessage={errors.images?.message}
             />
             <form className={styles.about}>
+                {errors.images?.message}
                 <h1 className={styles.title}>
                     <input
                         className={classNames(styles.title, {

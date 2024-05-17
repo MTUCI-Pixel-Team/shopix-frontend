@@ -1,3 +1,5 @@
 export const Logo = () => {
-    return <img src="/public/images/logo.svg" alt="logo" />
+    return (
+        <img src={import.meta.env.VITE_PUBLIC_URL + '/logo.svg'} alt="logo" />
+    )
 }

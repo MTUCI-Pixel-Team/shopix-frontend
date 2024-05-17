@@ -1,4 +1,4 @@
-import { FC, Fragment, MouseEvent, ReactNode, useEffect, useState } from 'react'
+import { FC, MouseEvent, ReactNode, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 
 interface MoreIconProps {

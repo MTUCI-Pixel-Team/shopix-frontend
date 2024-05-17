@@ -3,8 +3,9 @@ import { Select } from '@/shared/ui/select'
 import styles from './styles.module.scss'
 
 interface SortProps {
+    value: { value: string; label: string } | undefined
     options: { value: string; label: string }[]
-    onChange: (e: { value: string }) => void
+    onChange: (value: { value: string; label: string } | null) => void
 }
 
 export const Sort: FC<SortProps> = ({ options, ...props }) => {

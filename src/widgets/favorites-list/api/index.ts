@@ -1,5 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Request } from '@/shared/api'
+import { IFavoriteProductResponse } from '../model'
 
 export const useGetFavorites = () => {
     const {
@@ -11,16 +12,16 @@ export const useGetFavorites = () => {
         isFetchingNextPage,
         refetch,
         status,
-    } = useInfiniteQuery({
+    } = useInfiniteQuery<IFavoriteProductResponse>({
         queryKey: ['posts/favorites'],
         queryFn: async ({ pageParam }) => {
             console.log(pageParam)
-            const result = await Request.getWithToken('posts/favorites/', {
+            const result = (await Request.getWithToken('posts/favorites/', {
                 params: {
                     page: `${pageParam}`,
                 },
-            })
-            console.log(result)
+            })) as IFavoriteProductResponse
+
             return result
         },
         initialPageParam: 1,

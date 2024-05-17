@@ -20,7 +20,17 @@ export const ImageSlider = ({
         customPaging: function (i: number) {
             return (
                 <a className={'dot'}>
-                    <img src={images[i]} />
+                    <img
+                        src={
+                            typeof images[i] === 'string'
+                                ? (images[i] as string)
+                                : images[i] instanceof File
+                                  ? (URL.createObjectURL(
+                                        images[i] as File,
+                                    ) as string)
+                                  : undefined
+                        }
+                    />
                 </a>
             )
         },

@@ -1,5 +1,3 @@
-import { verify } from 'crypto'
-
 export const paths = {
     home: '',
     product: '/product/:id',

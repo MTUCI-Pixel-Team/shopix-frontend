@@ -1,9 +1,7 @@
 import cn from 'classnames'
-import { FC, HTMLAttributes, ReactNode, useEffect, useRef } from 'react'
+import { FC, HTMLAttributes, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ReviewsCard } from '@/entities/reviews-card'
-import { useGetMe } from '@/entities/reviews-card/api'
-import { useInfo } from '@/entities/reviews-card/model'
+import { ReviewsCard, useGetMe } from '@/entities/reviews-card'
 import { paths } from '@/shared/config/router'
 import { ReviewsUserSkeleton } from '@/shared/ui/skeleton'
 import styles from './styles.module.scss'
@@ -32,8 +30,6 @@ export const Popup: FC<PopupProps> = ({
 
     useEffect(() => {
         if (!isError && !isLoading && data) {
-            console.log('sgsdg')
-            console.log(data)
             setUsername(data?.username)
         }
     }, [isError, isLoading, setUsername, data])

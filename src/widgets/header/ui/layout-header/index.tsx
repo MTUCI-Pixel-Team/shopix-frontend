@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ReviewsCard, useInfo } from '@/entities/reviews-card'
 import { getToken } from '@/shared/config/storage'
 import { Logo } from '..'
 import { Navigation } from '../navigation'

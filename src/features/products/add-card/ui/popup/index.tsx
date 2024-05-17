@@ -21,7 +21,7 @@ export const PopupAddProduct = ({
     const { data, isLoading, isError, error } = useGetCategories()
     const mutate = useMutationAddCard()
 
-    const [images, setImages] = useState<File[]>([])
+    const [images, setImages] = useState<(File | string)[]>([])
     const [address, setAddress] = useState<string>('')
     const [selectedOption, setSelectedOption] = useState<
         | {
@@ -88,6 +88,8 @@ export const PopupAddProduct = ({
         images.forEach((img) => {
             formData.append('images', img)
         })
+
+        //@ts-expect-error Я не понимаю, как это типизировать, помогите
         mutate.mutate(formData)
     }
 

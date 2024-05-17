@@ -26,7 +26,7 @@ export const LayoutAuth = () => {
                 </div>
                 <Link className={styles.img} to="/">
                     <img
-                        src="/public/images/auth.png"
+                        src={import.meta.env.VITE_PUBLIC_URL + '/auth.png'}
                         alt=""
                         className={styles.auth__img}
                     />

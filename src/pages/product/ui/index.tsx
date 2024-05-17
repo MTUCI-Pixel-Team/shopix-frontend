@@ -1,4 +1,3 @@
-import { title } from 'process'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,15 +9,14 @@ import {
     useAddFavorite,
     useRemoveFavorite,
 } from '@/features/card/favorites'
-import { useGetCategories } from '@/features/products/filters/api'
-import { ReviewsCard } from '@/entities/reviews-card'
-import { useGetUsers } from '@/entities/reviews-card/api'
+import { useGetCategories } from '@/features/products/filters'
+import { ReviewsCard, useGetUsers } from '@/entities/reviews-card'
 import { SERVER_API } from '@/shared/config/constants'
 import { Button } from '@/shared/ui/button'
 import { Select } from '@/shared/ui/select'
 import { ReviewsCardSkeleton } from '@/shared/ui/skeleton'
 import { useGetProduct, useUpdateProduct } from '../api'
-import { Post } from '../model'
+import { IEditProduct } from '../model'
 import styles from './styles.module.scss'
 
 export const ProductPage = () => {
@@ -54,12 +52,13 @@ export const ProductPage = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<Post>({
+    } = useForm<IEditProduct>({
         defaultValues: {
             title: data?.post.title,
             price: data?.post.price,
             category: data?.post.category,
             description: data?.post.description,
+            images: data?.images,
         },
     })
 
@@ -114,13 +113,14 @@ export const ProductPage = () => {
         })
     }, [descriptionValue, register, isChange])
 
-    // {...register('title', {
-    //     required: isChange
-    //         ? 'Это поле обязательное'
-    //         : false,
-    // })}
-
-    // console.log(pickCategory)
+    useEffect(() => {
+        register('images', {
+            required:
+                !images && isChange
+                    ? { value: true, message: 'Это поле обязательное' }
+                    : undefined,
+        })
+    }, [images, register, isChange])
 
     if (isLoading || isLoadingCategories) return <p>Загрузка...</p>
     if (isError || isErrorCategories) return <p>Ошибка загрузки</p>
@@ -139,7 +139,7 @@ export const ProductPage = () => {
         }
     }
 
-    const handleChangePost = (data: Post) => {
+    const handleChangePost = () => {
         if (isChange) {
             setPriceValue(priceValue)
             Promise.all(
@@ -152,7 +152,6 @@ export const ProductPage = () => {
                                 return new File([blob], name, {
                                     type: blob.type,
                                 })
-                                // console.log(file)
                             })
                             .catch((error) => console.error(error))
                     } else {
@@ -163,7 +162,7 @@ export const ProductPage = () => {
                 // console.log(images)
                 const formatedData = {
                     title: titleValue,
-                    price: priceValue,
+                    price: parseInt(priceValue.replace(/\D/gi, '')),
                     description: descriptionValue,
                     category: pickCategory?.value,
                 }
@@ -172,17 +171,15 @@ export const ProductPage = () => {
                 formData.append('post', JSON.stringify(formatedData))
 
                 images.forEach((img) => {
+                    //@ts-expect-error Я не понимаю, как это типизировать, помогите
                     formData.append('images', img)
                 })
 
+                //@ts-expect-error Я не понимаю, как это типизировать, помогите
                 mutationUpdate.mutate(formData)
                 setIsChange(false)
                 setPriceValue((state) => {
-                    if (state.includes('₽')) {
-                        return state
-                    } else {
-                        return state + ' ₽'
-                    }
+                    return state.replace(/₽/gi, '') + ' ₽'
                 })
             })
         } else {
@@ -199,8 +196,10 @@ export const ProductPage = () => {
                 images={images}
                 isChange={isChange}
                 setImages={setImages}
+                errorMessage={errors.images?.message || ''}
             />
             <form className={styles.about}>
+                {errors.images?.message}
                 <h1 className={styles.title}>
                     <input
                         className={classNames(styles.title, {

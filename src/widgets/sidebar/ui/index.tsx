@@ -1,41 +1,20 @@
-import qs from 'qs'
-import { useEffect, useRef, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import { Filters } from '@/features/products/filters'
 import { Price } from '@/features/products/price'
 import { Search } from '@/features/products/search'
 import { Sort } from '@/features/products/sort'
-import { useProducts } from '@/entities/product-card'
-import { Request } from '@/shared/api'
 import { Button } from '@/shared/ui/button'
 import styles from './styles.module.scss'
 
-interface RequestInformation {
-    search: string
-    sort_by: string
-    category: string[]
-    min_price: number | null
-    max_price: number | null
-    page: number
-}
-
 export const Sidebar = ({
-    qureyParams,
     setQureyParams,
-    setSearchForPrice,
-    setCategoryForPrice,
-    setOnce,
     maxPrice,
     minPrice,
 }: {
-    qureyParams: object
-    setQureyParams: (obj: object) => void
-    setCategoryForPrice: (state: boolean) => void
-    setOnce: (state: boolean) => void
+    setQureyParams: (obj: { sort_by: string }) => void
     maxPrice: number
     minPrice: number
 }) => {
-    // const minPrice = useProducts((state) => state.minPrice)
-    // const maxPrice = useProducts((state) => state.maxPrice)
     const ref = useRef<HTMLFormElement>(null)
     const [price, setPrice] = useState<number[]>([0, 0])
     const [sort, setSort] = useState<string>('')
@@ -57,16 +36,16 @@ export const Sidebar = ({
         { value: '-title', label: 'По алфавиту (Я ➡️ А)' },
     ]
 
-    const resetForm = (event) => {
+    const resetForm = (event: FormEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        ref?.current.reset()
+        ref?.current?.reset()
         setPrice([minPrice, maxPrice])
         setSearch('')
         setSort('created_at')
         setQureyParams({ sort_by: '-created_at' })
     }
 
-    const installFilters = (event: React.FormEvent<HTMLFormElement>) => {
+    const installFilters = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const requestInformation = {
             search: search,
@@ -101,21 +80,18 @@ export const Sidebar = ({
             <div className={styles.sort}>
                 <h2>Сортировать:</h2>
                 <Sort
-                    onChange={(e) => {
-                        setSort(e.value)
+                    onChange={(e: { value: string; label: string } | null) => {
+                        if (e) {
+                            setSort(e.value)
+                        }
                     }}
                     value={options.find((option) => option.value === sort)}
-                    // value={sort}
                     options={options}
                 />
             </div>
             <div className={styles.filters}>
                 <h2>Фильтры: </h2>
-                <Filters
-                    filters={filters}
-                    setFilters={setFilters}
-                    setCategoryForPrice={setCategoryForPrice}
-                />
+                <Filters filters={filters} setFilters={setFilters} />
             </div>
             <div className={styles.price}>
                 <h2>Цена: </h2>

@@ -9,16 +9,28 @@ export const ImageSlider = ({
     images,
     setImages,
     isChange,
+    errorMessage,
 }: {
     images: (string | File)[]
     isChange: boolean
     setImages: (images: (File | string)[]) => void
+    errorMessage: string
 }) => {
     const settings = {
         customPaging: function (i: number) {
             return (
                 <a className={'dot'}>
-                    <img src={images[i]} />
+                    <img
+                        src={
+                            typeof images[i] === 'string'
+                                ? (images[i] as string)
+                                : images[i] instanceof File
+                                  ? (URL.createObjectURL(
+                                        images[i] as File,
+                                    ) as string)
+                                  : undefined
+                        }
+                    />
                 </a>
             )
         },
@@ -73,11 +85,14 @@ export const ImageSlider = ({
     return (
         <div className={'slider'}>
             {isChange ? (
-                <ImagesDrop
-                    className={'slider-change'}
-                    images={images}
-                    setImages={setImages}
-                />
+                <>
+                    <ImagesDrop
+                        className={'slider-change'}
+                        images={images}
+                        setImages={setImages}
+                    />
+                    {errorMessage}
+                </>
             ) : (
                 <Slider {...settings}>
                     {images.map((image, index) => (

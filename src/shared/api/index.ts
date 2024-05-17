@@ -33,6 +33,7 @@ export class Request {
                 throw new Error(error.message)
             }
         }
+        // sds
     }
 
     static async post<T>(url: string, data: T) {
@@ -46,7 +47,11 @@ export class Request {
         } catch (error) {
             if (error instanceof AxiosError) {
                 console.log(error)
-                throw new Error(error.response?.data?.message || error.message)
+                throw new Error(
+                    error.response?.data?.message ||
+                        error.response?.data.non_field_errors[0] ||
+                        error.message,
+                )
             }
         }
     }

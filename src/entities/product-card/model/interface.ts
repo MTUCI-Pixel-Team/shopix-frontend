@@ -11,3 +11,12 @@ export interface IProduct {
     id: number
     first_image: string
 }
+
+export interface IProductResponse {
+    count: number
+    next: string
+    previous: string
+    results: IProduct[]
+    min_price: number
+    max_price: number
+}

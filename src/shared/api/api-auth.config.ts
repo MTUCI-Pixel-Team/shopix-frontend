@@ -53,13 +53,11 @@ instance.interceptors.response.use(
                     return instance.request(originalRequest)
                 })
                 .catch((error) => {
-                    if (
-                        error instanceof AxiosError &&
-                        error.response?.data.code === 'token_not_valid'
-                    ) {
+                    console.log(error)
+                    if (error instanceof AxiosError) {
+                        window.location.href = paths.auth
                         console.log(error, '-----------------')
                         removeTokens()
-                        window.location.href = paths.auth
                     }
                 })
         }

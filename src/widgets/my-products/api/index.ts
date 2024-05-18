@@ -32,8 +32,7 @@ export const useGetMyProducts = (type: string) => {
         },
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
-            const nextPage = lastPage.next?.split('?page=')[1]
-
+            const nextPage = lastPage.next?.split('page=')[1].split('&')[0]
             return nextPage
         },
     })

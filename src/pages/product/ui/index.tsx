@@ -122,6 +122,16 @@ export const ProductPage = () => {
         })
     }, [images, register, isChange])
 
+    useEffect(() => {
+        if (mutationUpdate.isSuccess && isChange) {
+            mutationUpdate.reset()
+            setIsChange(false)
+            setPriceValue((state) => {
+                return state.replace(/₽/gi, '') + ' ₽'
+            })
+        }
+    }, [mutationUpdate, isChange])
+
     if (isLoading || isLoadingCategories) return <p>Загрузка...</p>
     if (isError || isErrorCategories) return <p>Ошибка загрузки</p>
 
@@ -177,10 +187,10 @@ export const ProductPage = () => {
 
                 //@ts-expect-error Я не понимаю, как это типизировать, помогите
                 mutationUpdate.mutate(formData)
-                setIsChange(false)
-                setPriceValue((state) => {
-                    return state.replace(/₽/gi, '') + ' ₽'
-                })
+                // setIsChange(false)
+                // setPriceValue((state) => {
+                //     return state.replace(/₽/gi, '') + ' ₽'
+                // })
             })
         } else {
             setIsChange(true)
@@ -356,10 +366,28 @@ export const ProductPage = () => {
                             НАПИСАТЬ
                         </Button>
                     )}
-                    <FavoriteIcon
-                        onClick={handleAddFavorite}
-                        isFavorite={data?.post.is_favorite || false}
-                    />
+                    {!data?.post.is_owner ? (
+                        <FavoriteIcon
+                            onClick={handleAddFavorite}
+                            isFavorite={data?.post.is_favorite || false}
+                        />
+                    ) : null}
+                    <div className={styles.status}>
+                        {data?.post.status === 'active' ? (
+                            <p className={styles.active}>Активное</p>
+                        ) : (
+                            <p className={styles.inactive}>Неактивное</p>
+                        )}
+                    </div>
+                    {mutationUpdate.isError && (
+                        <p className={styles.error}>
+                            Произошла ошибка при обновлении{' '}
+                            {mutationUpdate.error.message}
+                        </p>
+                    )}
+                    {mutationUpdate.isPending && (
+                        <p className={styles.loading}>Загрузка...</p>
+                    )}
                 </div>
             </form>
         </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Fragment } from 'react/jsx-runtime'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { v4 as uuidv4 } from 'uuid'
@@ -28,12 +28,6 @@ export const MyProducts = ({ type }: { type: string }) => {
     const [deletedInfo, setDeletedInfo] = useState<IProduct | null>(null)
 
     const isEmpty = data?.pages[0].results.length === 0
-
-    useEffect(() => {
-        if (deletedInfo && mutationDelete.isSuccess) {
-            setIsPopup(false)
-        }
-    }, [mutationDelete.isSuccess, deletedInfo])
 
     if (isEmpty && !isFetching) {
         return <EmptyElement className={styles.empty} />

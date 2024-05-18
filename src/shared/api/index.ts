@@ -5,6 +5,7 @@ import { instance } from './api-auth.config'
 // interface RequestSettings {
 //     params?: {}
 // }
+
 export class Request {
     static url: string = `${SERVER_API}/api/`
 
@@ -30,10 +31,13 @@ export class Request {
             return response.data
         } catch (error) {
             if (error instanceof AxiosError) {
-                throw new Error(error.message)
+                throw new Error(
+                    error.response?.data?.message ||
+                        error.response?.data.non_field_errors[0] ||
+                        error.message,
+                )
             }
         }
-        // sds
     }
 
     static async post<T>(url: string, data: T) {
@@ -46,7 +50,6 @@ export class Request {
             return response.data
         } catch (error) {
             if (error instanceof AxiosError) {
-                console.log(error)
                 throw new Error(
                     error.response?.data?.message ||
                         error.response?.data.non_field_errors[0] ||
@@ -76,7 +79,11 @@ export class Request {
             return response.data
         } catch (error) {
             if (error instanceof AxiosError) {
-                throw new Error(error.message)
+                throw new Error(
+                    error.response?.data?.message ||
+                        error.response?.data.non_field_errors[0] ||
+                        error.message,
+                )
             }
         }
     }
@@ -87,7 +94,11 @@ export class Request {
             return response.data
         } catch (error) {
             if (error instanceof AxiosError) {
-                throw new Error(error.message)
+                throw new Error(
+                    error.response?.data?.message ||
+                        error.response?.data.non_field_errors[0] ||
+                        error.message,
+                )
             }
         }
     }
@@ -98,7 +109,11 @@ export class Request {
             return response.data
         } catch (error) {
             if (error instanceof AxiosError) {
-                throw new Error(error.message)
+                throw new Error(
+                    error.response?.data?.message ||
+                        error.response?.data.non_field_errors[0] ||
+                        error.message,
+                )
             }
         }
     }
@@ -115,7 +130,11 @@ export class Request {
             return response.data
         } catch (error) {
             if (error instanceof AxiosError) {
-                throw new Error(error.message)
+                throw new Error(
+                    error.response?.data?.message ||
+                        error.response?.data.non_field_errors[0] ||
+                        error.message,
+                )
             }
         }
     }

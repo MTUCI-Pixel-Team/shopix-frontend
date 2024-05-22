@@ -60,7 +60,9 @@ export const ProductCard: FC<ProductCardProps> = ({
                             </p>
                             <p className={styles.time}>{time}</p>
                         </div>
-                        <div className={styles.action}>{action}</div>
+                        {!product?.is_owner && (
+                            <div className={styles.action}>{action}</div>
+                        )}
                     </div>
                 </>
             )}

@@ -75,6 +75,7 @@ export const Popup: FC<PopupProps> = ({
                         username={data?.username || 'Guest'}
                         stars={data?.rating || 0}
                         image={data?.avatar || ''}
+                        userId={data?.id || null}
                     />
                 )}
             </div>
@@ -103,7 +104,16 @@ export const Popup: FC<PopupProps> = ({
             </ul>
             <hr />
             <ul className={styles.info}>
-                <li>Настройки</li>
+                <li>
+                    <Link
+                        onClick={console.log(data)}
+                        // поправить на {`${paths.profile}/${data?.id}`} или что-то подобное
+                        to={`profile/${data?.id}`}
+                        className={styles.link}
+                    >
+                        Настройки
+                    </Link>
+                </li>
                 <li onClick={exit} className={styles.exit}>
                     Выйти
                 </li>

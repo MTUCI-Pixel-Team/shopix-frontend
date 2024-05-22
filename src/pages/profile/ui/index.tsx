@@ -1,11 +1,12 @@
 import cn from 'classnames'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ProfileCard } from '@/entities/profile-card'
 import { useGetUsers } from '@/entities/reviews-card/api'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { ReviewsCardSkeleton } from '@/shared/ui/skeleton'
+import { useProfileChanges } from '../api'
 import styles from './styles.module.scss'
 
 export const Profile = () => {
@@ -16,6 +17,10 @@ export const Profile = () => {
         isError: isErrorUser,
         isLoading: isLoadingUser,
     } = useGetUsers(Number(id))
+
+    const navigate = useNavigate()
+
+    const redactionData = useProfileChanges()
 
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -34,6 +39,10 @@ export const Profile = () => {
             setDefaultPassword('')
         }
     }, [user])
+
+    useEffect(() => {
+        navigate(`/profile/${id}`)
+    }, [])
 
     const emailEditHandler = () => {
         setEditEmail(!editEmail)
@@ -55,6 +64,14 @@ export const Profile = () => {
         console.log(formObject)
     }
 
+    const changeProfile = () => {
+        redactionData.mutate({
+            email: email,
+            password: password,
+            username: username,
+        })
+    }
+
     return (
         <div className={styles.profile}>
             {isLoadingUser ? (
@@ -69,7 +86,12 @@ export const Profile = () => {
                         image={user?.avatar || ''}
                         stars={user?.rating || 0}
                     />
-                    <Button className={styles.close_profile}>ЗАКРЫТЬ</Button>
+                    <Button
+                        className={styles.close_profile}
+                        onClick={() => navigate('/me/products')}
+                    >
+                        ЗАКРЫТЬ
+                    </Button>
                 </div>
             )}
             <div className={styles.wrapper}>
@@ -146,7 +168,13 @@ export const Profile = () => {
                             </Button>
                         </div>
                     </div>
-                    <Button className={styles.save_changes} size="medium">
+                    <Button
+                        onClick={() => {
+                            changeProfile()
+                        }}
+                        className={styles.save_changes}
+                        size="medium"
+                    >
                         СОХРАНИТЬ
                     </Button>
                 </form>

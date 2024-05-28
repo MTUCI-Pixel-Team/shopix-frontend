@@ -63,3 +63,45 @@ export const useGetProducts = (queryParams = {}) => {
         status,
     }
 }
+
+export const useGetUserProducts = (id: string) => {
+    const {
+        data,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        refetch,
+        status,
+    } = useInfiniteQuery({
+        queryKey: ['users/posts', id],
+        queryFn: async ({ pageParam }) => {
+            const params = {
+                id,
+                page: String(pageParam).split('&')[0],
+            }
+            // console.log(params)
+
+            return await Request.get('posts', {
+                params,
+            })
+        },
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => {
+            const nextPage = lastPage.next?.split('page=')[1].split('&')[0]
+
+            return nextPage
+        },
+    })
+    return {
+        data,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        refetch,
+        status,
+    }
+}

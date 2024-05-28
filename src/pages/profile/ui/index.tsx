@@ -204,10 +204,10 @@ export const Profile = () => {
                 </div>
             ) : (
                 <div className={styles.wrapper}>
-                    {' '}
                     <ActiveInactive type={type} setType={setType} />
-                    {console.log(id, typeof id)}
-                    <MyProducts type={type} />
+                    {/* {console.log(id, typeof id)} */}
+                    {/* <MyProducts type={type} /> */}
+                    <UserProducts userId={id || ''} />
                 </div>
             )}
         </div>

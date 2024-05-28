@@ -17,7 +17,8 @@ import { ProductCardSkeleton } from '@/shared/ui/skeleton'
 import { useDeleteProduct, useUpdateProduct } from '..'
 import styles from './styles.module.scss'
 
-export const UserProducts = (userId: string) => {
+export const UserProducts = ({ userId }: { userId: string }) => {
+    const [type, setType] = useState<string>('active')
     const {
         data,
         fetchNextPage,
@@ -53,7 +54,6 @@ export const UserProducts = (userId: string) => {
             />
         )
     }
-    console.log(type)
 
     return (
         <>

@@ -83,7 +83,7 @@ export const useGetUserProducts = (id: string) => {
             }
             // console.log(params)
 
-            return await Request.get('posts', {
+            return await Request.get(`users/posts/${id}`, {
                 params,
             })
         },

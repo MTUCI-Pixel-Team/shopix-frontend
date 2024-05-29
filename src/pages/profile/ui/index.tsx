@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { UserProducts } from '@/widgets/user-products'
 import { ActiveInactive } from '@/entities/active-inactive'
+import { ImagesDrop } from '@/entities/images-drop'
 import { ProfileCard } from '@/entities/profile-card'
 import { useGetUsers } from '@/entities/profile-card'
 import { Button } from '@/shared/ui/button'
@@ -26,6 +27,7 @@ export const Profile = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [username, setName] = useState('')
+    const [avatar, setAvatar] = useState<File[]>([])
     const [editEmail, setEditEmail] = useState(false)
     const [editPassword, setEditPassword] = useState(false)
 
@@ -55,13 +57,26 @@ export const Profile = () => {
         }
     }
 
-    const changeProfile = () => {
-        redactionData.mutate({
+    const changeProfile = (event) => {
+        event.preventDefault()
+        const formData = new FormData()
+        formData.append('avatar', avatar[0])
+        const changeData = {
             email: email,
             password: password,
             username: username,
             rating: user?.rating ? user?.rating : 0,
-        })
+            formAvatar: formData,
+        }
+        console.log(
+            changeData.email,
+            changeData.password,
+            changeData.username,
+            changeData.rating,
+            changeData.formAvatar.get('avatar'),
+        )
+
+        redactionData.mutate(changeData)
     }
 
     return (
@@ -94,7 +109,7 @@ export const Profile = () => {
                     </div>
                     <form
                         onSubmit={() => {
-                            changeProfile()
+                            changeProfile(event)
                         }}
                     >
                         <div className={styles.inputs}>
@@ -128,6 +143,17 @@ export const Profile = () => {
                                 clickFunction={() => {}}
                                 editButton={false}
                             />
+                            <div className={styles.avatar}>
+                                <label htmlFor="profile__avatar">
+                                    Ваш аватар
+                                </label>
+                                <ImagesDrop
+                                    id="profile__avatar"
+                                    isAvatar={true}
+                                    images={avatar}
+                                    setImages={setAvatar}
+                                />
+                            </div>
                         </div>
                         <Button className={styles.save_changes} size="medium">
                             СОХРАНИТЬ

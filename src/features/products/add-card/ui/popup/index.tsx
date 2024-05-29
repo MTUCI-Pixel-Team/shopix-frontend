@@ -70,7 +70,6 @@ export const PopupAddProduct = ({
     }, [address, register])
 
     const onSubmit = (data: FormAddCard) => {
-        console.log(address)
         const formatedData = {
             title: data.title,
             description: data.description,

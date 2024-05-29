@@ -7,6 +7,7 @@ import styles from './styles.module.scss'
 interface ImagesDropProps extends HTMLAttributes<HTMLDivElement> {
     images: (File | string)[]
     setImages: (images: (File | string)[]) => void
+    isAvatar: boolean
 }
 
 export const ImagesDrop: FC<ImagesDropProps> = ({
@@ -14,6 +15,7 @@ export const ImagesDrop: FC<ImagesDropProps> = ({
     setImages,
     className,
     children,
+    isAvatar = false,
     ...props
 }) => {
     const handelDeletePhoto = (index: number) => {
@@ -39,7 +41,9 @@ export const ImagesDrop: FC<ImagesDropProps> = ({
                         type: compressedFileBlob.type,
                     },
                 )
-                setImages([...images, convertedToFile])
+                if ((isAvatar && images.length === 0) || !isAvatar) {
+                    setImages([...images, convertedToFile])
+                }
             }
         },
     })
@@ -63,7 +67,7 @@ export const ImagesDrop: FC<ImagesDropProps> = ({
                 </div>
             ))}
             <div className={styles['add-photo']}>
-                <label>
+                <label style={{ cursor: 'pointer' }}>
                     <svg
                         className={styles.icon}
                         xmlns="http://www.w3.org/2000/svg"

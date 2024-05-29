@@ -8,8 +8,27 @@ export const useProfileChanges = () => {
             password: string
             username: string
             rating: number
+            formAvatar: FormData | undefined
         }) => {
-            if (data.password !== '') {
+            if (
+                data.password !== '' &&
+                typeof data.formAvatar !== 'undefined'
+            ) {
+                return Request.patchWithToken(`users/me/`, {
+                    email: data.email,
+                    password: data.password,
+                    username: data.username,
+                    rating: 0,
+                    avatar: data.formAvatar.get('avatar'),
+                })
+            } else if (typeof data.formAvatar !== 'undefined') {
+                return Request.patchWithToken(`users/me/`, {
+                    email: data.email,
+                    username: data.username,
+                    rating: 0,
+                    avatar: data.formAvatar.get('avatar'),
+                })
+            } else if (data.password !== '') {
                 return Request.patchWithToken(`users/me/`, {
                     email: data.email,
                     password: data.password,

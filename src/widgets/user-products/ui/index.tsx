@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Fragment } from 'react/jsx-runtime'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { useParams } from 'react-router-dom'
 import { v4 as uuidv4 } from 'uuid'
 import { MoreIcon } from '@/entities/more'
 import {
@@ -17,8 +16,13 @@ import { ProductCardSkeleton } from '@/shared/ui/skeleton'
 import { useDeleteProduct, useUpdateProduct } from '..'
 import styles from './styles.module.scss'
 
-export const UserProducts = ({ userId }: { userId: string }) => {
-    const [type, setType] = useState<string>('active')
+export const UserProducts = ({
+    userId,
+    type,
+}: {
+    userId: string
+    type: string
+}) => {
     const {
         data,
         fetchNextPage,
@@ -27,7 +31,7 @@ export const UserProducts = ({ userId }: { userId: string }) => {
         isFetchingNextPage,
         error,
         isFetching,
-    } = useGetUserProducts(userId)
+    } = useGetUserProducts(userId, type)
     const mutation = useUpdateProduct()
     const mutationDelete = useDeleteProduct()
     const [isPopup, setIsPopup] = useState(false)
@@ -54,6 +58,7 @@ export const UserProducts = ({ userId }: { userId: string }) => {
             />
         )
     }
+    console.log(type)
 
     return (
         <>

@@ -64,7 +64,7 @@ export const useGetProducts = (queryParams = {}) => {
     }
 }
 
-export const useGetUserProducts = (id: string) => {
+export const useGetUserProducts = (id: string, type: string) => {
     const {
         data,
         error,
@@ -75,11 +75,12 @@ export const useGetUserProducts = (id: string) => {
         refetch,
         status,
     } = useInfiniteQuery({
-        queryKey: ['users/posts', id],
+        queryKey: ['users/posts', id, type],
         queryFn: async ({ pageParam }) => {
             const params = {
                 id,
                 page: String(pageParam).split('&')[0],
+                status: type,
             }
             // console.log(params)
 

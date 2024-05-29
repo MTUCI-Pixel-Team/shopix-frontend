@@ -1,26 +1,18 @@
-import cn from 'classnames'
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { MyProducts } from '@/widgets/my-products'
+import { useParams } from 'react-router-dom'
 import { UserProducts } from '@/widgets/user-products'
 import { ActiveInactive } from '@/entities/active-inactive'
-import { useGetUserProducts } from '@/entities/product-card'
 import { ProfileCard } from '@/entities/profile-card'
-import { useGetMe, useGetUsers } from '@/entities/profile-card/api'
+import { useGetUsers } from '@/entities/profile-card'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { ReviewsCardSkeleton } from '@/shared/ui/skeleton'
 import { useProfileChanges } from '../api'
+import { InputInFormProps } from '../model'
 import styles from './styles.module.scss'
 
 export const Profile = () => {
     const { id } = useParams()
-
-    // const {
-    //     data: userMe,
-    //     isError: isErrorUserMe,
-    //     isLoading: isLoadingUserMe,
-    // } = useGetMe()
 
     const {
         data: user,
@@ -50,10 +42,6 @@ export const Profile = () => {
         }
     }, [user])
 
-    // useEffect(() => {
-    //     navigate(`/profile/${id}`)
-    // }, [])
-
     const emailEditHandler = () => {
         setEditEmail(!editEmail)
         if (editEmail) {
@@ -67,18 +55,12 @@ export const Profile = () => {
         }
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        const formData = new FormData(event.currentTarget)
-        const formObject = Object.fromEntries(formData.entries())
-        console.log(formObject)
-    }
-
     const changeProfile = () => {
         redactionData.mutate({
             email: email,
             password: password,
             username: username,
+            rating: user?.rating ? user?.rating : 0,
         })
     }
 
@@ -97,17 +79,10 @@ export const Profile = () => {
                         stars={user?.rating || 0}
                     />
                     {user?.is_owner ? (
-                        <Button
-                            className={styles.close_profile}
-                            onClick={() => setSettings(!settings)}
-                            style={{
-                                backgroundColor: settings
-                                    ? 'var(--second-primary)'
-                                    : 'var(--accent)',
-                            }}
-                        >
-                            {settings ? 'ЗАКРЫТЬ' : 'НАСТРОЙКИ'}
-                        </Button>
+                        <OpenSettings
+                            settings={settings}
+                            setSettings={setSettings}
+                        />
                     ) : null}
                 </div>
             )}
@@ -117,87 +92,44 @@ export const Profile = () => {
                     <div className={styles.block}>
                         <p className={styles.active}>Настройки</p>
                     </div>
-                    <form onSubmit={handleSubmit}>
+                    <form
+                        onSubmit={() => {
+                            changeProfile()
+                        }}
+                    >
                         <div className={styles.inputs}>
-                            <div className={styles.input}>
-                                <label htmlFor="profile__email">
-                                    Ваш email
-                                </label>
-                                <Input
-                                    className={styles.button_isactive}
-                                    type="email"
-                                    id="profile__email"
-                                    value={email}
-                                    disabled={!editEmail}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                />
-                                <Button
-                                    className={styles.edit_button}
-                                    type="button"
-                                    size="small"
-                                    onClick={emailEditHandler}
-                                    style={{
-                                        backgroundColor: editEmail
-                                            ? 'var(--second-primary)'
-                                            : 'var(--accent)',
-                                    }}
-                                >
-                                    {editEmail ? 'ОТМЕНИТЬ' : 'ИЗМЕНИТЬ'}
-                                </Button>
-                            </div>
-                            <div className={styles.input}>
-                                <label htmlFor="profile__password">
-                                    Ваш пароль
-                                </label>
-                                <Input
-                                    className={styles.button_isactive}
-                                    type="password"
-                                    id="profile__password"
-                                    placeholder="***********"
-                                    value={password}
-                                    disabled={!editPassword}
-                                    onChange={(e) =>
-                                        setPassword(e.target.value)
-                                    }
-                                />
-                                <Button
-                                    className={styles.edit_button}
-                                    type="button"
-                                    size="small"
-                                    onClick={passwordEditHandler}
-                                    style={{
-                                        backgroundColor: editPassword
-                                            ? 'var(--second-primary)'
-                                            : 'var(--accent)',
-                                    }}
-                                >
-                                    {editPassword ? 'ОТМЕНИТЬ' : 'ИЗМЕНИТЬ'}
-                                </Button>
-                            </div>
-                            <div className={styles.input}>
-                                <label htmlFor="profile__name">Ваше имя</label>
-                                <Input
-                                    type="text"
-                                    id="profile__name"
-                                    value={username}
-                                    onChange={(e) => setName(e.target.value)}
-                                />
-                                <Button
-                                    style={{ opacity: 0 }}
-                                    disabled
-                                    size="small"
-                                >
-                                    ИЗМЕНИТЬ
-                                </Button>
-                            </div>
+                            <InputInForm
+                                labelText="Ваш email"
+                                type="email"
+                                inputId="profile__email"
+                                value={email}
+                                status={!editEmail}
+                                functionChange={setEmail}
+                                clickFunction={emailEditHandler}
+                                editButton={editEmail}
+                            />
+                            <InputInForm
+                                labelText="Ваш пароль"
+                                type="password"
+                                inputId="profile__password"
+                                value={password}
+                                status={!editPassword}
+                                functionChange={setPassword}
+                                clickFunction={passwordEditHandler}
+                                editButton={editPassword}
+                            />
+                            <InputInForm
+                                labelText="Ваше имя"
+                                type="text"
+                                inputId="profile__name"
+                                value={username}
+                                status={false}
+                                functionChange={setName}
+                                clickFunction={() => {}}
+                                editButton={false}
+                            />
                         </div>
-                        <Button
-                            onClick={() => {
-                                changeProfile()
-                            }}
-                            className={styles.save_changes}
-                            size="medium"
-                        >
+                        <Button className={styles.save_changes} size="medium">
                             СОХРАНИТЬ
                         </Button>
                     </form>
@@ -205,11 +137,74 @@ export const Profile = () => {
             ) : (
                 <div className={styles.wrapper}>
                     <ActiveInactive type={type} setType={setType} />
-                    {/* {console.log(id, typeof id)} */}
-                    {/* <MyProducts type={type} /> */}
-                    <UserProducts userId={id || ''} />
+                    <UserProducts type={type} userId={id || ''} />
                 </div>
             )}
+        </div>
+    )
+}
+
+const OpenSettings = ({
+    settings,
+    setSettings,
+}: {
+    settings: boolean
+    setSettings: (setting: boolean) => void
+}) => {
+    return (
+        <Button
+            className={styles.close_profile}
+            onClick={() => setSettings(!settings)}
+            style={{
+                backgroundColor: settings
+                    ? 'var(--second-primary)'
+                    : 'var(--accent)',
+            }}
+        >
+            {settings ? 'ЗАКРЫТЬ' : 'НАСТРОЙКИ'}
+        </Button>
+    )
+}
+
+const InputInForm: React.FC<InputInFormProps> = ({
+    labelText,
+    type,
+    inputId,
+    value,
+    status,
+    functionChange,
+    clickFunction,
+    editButton,
+}) => {
+    return (
+        <div className={styles.input}>
+            <label htmlFor={inputId}>{labelText}</label>
+            <Input
+                className={styles.button_isactive}
+                type={type}
+                id={inputId}
+                value={value}
+                disabled={status}
+                onChange={(e) => functionChange(e.target.value)}
+                placeholder={type === 'password' ? '***********' : ''}
+            />
+            <Button
+                className={styles.edit_button}
+                type="button"
+                size="small"
+                onClick={clickFunction}
+                style={
+                    inputId === 'profile__name'
+                        ? { opacity: 0 }
+                        : {
+                              backgroundColor: editButton
+                                  ? 'var(--second-primary)'
+                                  : 'var(--accent)',
+                          }
+                }
+            >
+                {editButton ? 'ОТМЕНИТЬ' : 'ИЗМЕНИТЬ'}
+            </Button>
         </div>
     )
 }

@@ -5,6 +5,7 @@ import { ActiveInactive } from '@/entities/active-inactive'
 import { ImagesDrop } from '@/entities/images-drop'
 import { ProfileCard } from '@/entities/profile-card'
 import { useGetUsers } from '@/entities/profile-card'
+import { SERVER_API } from '@/shared/config/constants'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { ReviewsCardSkeleton } from '@/shared/ui/skeleton'
@@ -21,7 +22,7 @@ export const Profile = () => {
         isLoading: isLoadingUser,
     } = useGetUsers(Number(id))
 
-    const redactionData = useProfileChanges()
+    const redactionData = useProfileChanges(user?.id || 0)
 
     const [type, setType] = useState<string>('active')
     const [email, setEmail] = useState('')
@@ -57,27 +58,28 @@ export const Profile = () => {
         }
     }
 
-    const changeProfile = (event) => {
-        event.preventDefault()
+    const changeProfile = (event: Event | undefined) => {
+        event?.preventDefault()
         const formData = new FormData()
         formData.append('avatar', avatar[0])
-        const changeData = {
+        const changeData: {
+            email: string
+            password: string
+            username: string
+            rating: number
+            formAvatar: FormData
+        } = {
             email: email,
             password: password,
             username: username,
             rating: user?.rating ? user?.rating : 0,
             formAvatar: formData,
         }
-        console.log(
-            changeData.email,
-            changeData.password,
-            changeData.username,
-            changeData.rating,
-            changeData.formAvatar.get('avatar'),
-        )
 
         redactionData.mutate(changeData)
     }
+
+    console.log(user)
 
     return (
         <div className={styles.profile}>
@@ -90,7 +92,7 @@ export const Profile = () => {
                     <ProfileCard
                         className={styles.profile__info}
                         username={user?.username || ''}
-                        image={user?.avatar || ''}
+                        image={`${SERVER_API}${user?.avatar}` || ''}
                         stars={user?.rating || 0}
                     />
                     {user?.is_owner ? (

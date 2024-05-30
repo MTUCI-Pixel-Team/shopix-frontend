@@ -7,7 +7,7 @@ import styles from './styles.module.scss'
 interface ImagesDropProps extends HTMLAttributes<HTMLDivElement> {
     images: (File | string)[]
     setImages: (images: (File | string)[]) => void
-    isAvatar: boolean
+    isAvatar?: boolean
 }
 
 export const ImagesDrop: FC<ImagesDropProps> = ({

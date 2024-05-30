@@ -72,8 +72,8 @@
 }
 
 .avatar {
-    width: 237px;
-    height: 242px;
+    width: 474px;
+    height: 270px;
     display: flex;
     flex-direction: column;
     cursor: pointer;
@@ -119,4 +119,8 @@
 .edit_button {
     transition: background 0.5s linear;
     cursor: pointer;
+}
+
+.submit_message {
+    color: var(--accent);
 }

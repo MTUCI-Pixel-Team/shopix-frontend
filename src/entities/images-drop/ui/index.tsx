@@ -6,6 +6,7 @@ import styles from './styles.module.scss'
 
 interface ImagesDropProps extends HTMLAttributes<HTMLDivElement> {
     images: (File | string)[]
+    currentAvatar?: string | null
     setImages: (images: (File | string)[]) => void
     isAvatar?: boolean
 }
@@ -13,6 +14,7 @@ interface ImagesDropProps extends HTMLAttributes<HTMLDivElement> {
 export const ImagesDrop: FC<ImagesDropProps> = ({
     images,
     setImages,
+    currentAvatar,
     className,
     children,
     isAvatar = false,
@@ -41,13 +43,16 @@ export const ImagesDrop: FC<ImagesDropProps> = ({
                         type: compressedFileBlob.type,
                     },
                 )
-                if ((isAvatar && images.length === 0) || !isAvatar) {
+                if (isAvatar) {
+                    setImages([convertedToFile])
+                }
+                if (!isAvatar) {
                     setImages([...images, convertedToFile])
                 }
             }
         },
     })
-    // console.log(images)
+    console.log(images)
 
     return (
         <div
@@ -56,38 +61,63 @@ export const ImagesDrop: FC<ImagesDropProps> = ({
             })}
             {...props}
         >
-            {images.map((img, index) => (
-                <div className={styles.wrapper} key={index}>
-                    <Card
-                        className={styles.card}
-                        handelDeletePhoto={handelDeletePhoto}
-                        img={img}
-                        cardId={index}
+            {!isAvatar
+                ? images.map((img, index) => (
+                      <div className={styles.wrapper} key={index}>
+                          <Card
+                              className={styles.card}
+                              handelDeletePhoto={handelDeletePhoto}
+                              img={img}
+                              cardId={index}
+                          />
+                      </div>
+                  ))
+                : null}
+            <div
+                style={{
+                    backgroundImage: isAvatar
+                        ? `url(${
+                              typeof images[0] === 'string'
+                                  ? images[0]
+                                  : URL.createObjectURL(images[0] || new Blob())
+                          })`
+                        : 'none',
+
+                    // opacity: isAvatar ? 0.6 : 1,
+                }}
+                className={styles['add-photo']}
+            >
+                <div
+                    className={styles.wrapperCard}
+                    style={{
+                        backgroundColor:
+                            isAvatar && images.length > 0
+                                ? 'rgba(0, 0, 0, 0.6)'
+                                : 'var(--second-primary)',
+                    }}
+                >
+                    <label style={{ cursor: 'pointer' }}>
+                        <svg
+                            className={styles.icon}
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="84"
+                            height="76"
+                            viewBox="0 0 84 76"
+                            fill="none"
+                        >
+                            <path
+                                d="M8.66634 8.66658H21.1663L29.4997 0.333252H54.4997L62.833 8.66658H75.333C77.5432 8.66658 79.6628 9.54456 81.2256 11.1074C82.7884 12.6702 83.6664 14.7898 83.6664 16.9999V66.9999C83.6664 69.2101 82.7884 71.3297 81.2256 72.8925C79.6628 74.4553 77.5432 75.3333 75.333 75.3333H8.66634C6.4562 75.3333 4.33659 74.4553 2.77378 72.8925C1.21098 71.3297 0.333008 69.2101 0.333008 66.9999V16.9999C0.333008 14.7898 1.21098 12.6702 2.77378 11.1074C4.33659 9.54456 6.4562 8.66658 8.66634 8.66658ZM41.9997 21.1666C36.4743 21.1666 31.1753 23.3615 27.2683 27.2685C23.3613 31.1755 21.1663 36.4746 21.1663 41.9999C21.1663 47.5253 23.3613 52.8243 27.2683 56.7313C31.1753 60.6383 36.4743 62.8332 41.9997 62.8332C47.525 62.8332 52.8241 60.6383 56.7311 56.7313C60.6381 52.8243 62.833 47.5253 62.833 41.9999C62.833 36.4746 60.6381 31.1755 56.7311 27.2685C52.8241 23.3615 47.525 21.1666 41.9997 21.1666ZM41.9997 29.4999C45.3149 29.4999 48.4943 30.8169 50.8385 33.1611C53.1827 35.5053 54.4997 38.6847 54.4997 41.9999C54.4997 45.3151 53.1827 48.4945 50.8385 50.8388C48.4943 53.183 45.3149 54.4999 41.9997 54.4999C38.6845 54.4999 35.505 53.183 33.1608 50.8388C30.8166 48.4945 29.4997 45.3151 29.4997 41.9999C29.4997 38.6847 30.8166 35.5053 33.1608 33.1611C35.505 30.8169 38.6845 29.4999 41.9997 29.4999Z"
+                                fill="white"
+                            />
+                        </svg>
+                    </label>
+                    <input
+                        {...getInputProps()}
+                        className={styles['photo-input']}
+                        type="file"
+                        id="file"
                     />
                 </div>
-            ))}
-            <div className={styles['add-photo']}>
-                <label style={{ cursor: 'pointer' }}>
-                    <svg
-                        className={styles.icon}
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="84"
-                        height="76"
-                        viewBox="0 0 84 76"
-                        fill="none"
-                    >
-                        <path
-                            d="M8.66634 8.66658H21.1663L29.4997 0.333252H54.4997L62.833 8.66658H75.333C77.5432 8.66658 79.6628 9.54456 81.2256 11.1074C82.7884 12.6702 83.6664 14.7898 83.6664 16.9999V66.9999C83.6664 69.2101 82.7884 71.3297 81.2256 72.8925C79.6628 74.4553 77.5432 75.3333 75.333 75.3333H8.66634C6.4562 75.3333 4.33659 74.4553 2.77378 72.8925C1.21098 71.3297 0.333008 69.2101 0.333008 66.9999V16.9999C0.333008 14.7898 1.21098 12.6702 2.77378 11.1074C4.33659 9.54456 6.4562 8.66658 8.66634 8.66658ZM41.9997 21.1666C36.4743 21.1666 31.1753 23.3615 27.2683 27.2685C23.3613 31.1755 21.1663 36.4746 21.1663 41.9999C21.1663 47.5253 23.3613 52.8243 27.2683 56.7313C31.1753 60.6383 36.4743 62.8332 41.9997 62.8332C47.525 62.8332 52.8241 60.6383 56.7311 56.7313C60.6381 52.8243 62.833 47.5253 62.833 41.9999C62.833 36.4746 60.6381 31.1755 56.7311 27.2685C52.8241 23.3615 47.525 21.1666 41.9997 21.1666ZM41.9997 29.4999C45.3149 29.4999 48.4943 30.8169 50.8385 33.1611C53.1827 35.5053 54.4997 38.6847 54.4997 41.9999C54.4997 45.3151 53.1827 48.4945 50.8385 50.8388C48.4943 53.183 45.3149 54.4999 41.9997 54.4999C38.6845 54.4999 35.505 53.183 33.1608 50.8388C30.8166 48.4945 29.4997 45.3151 29.4997 41.9999C29.4997 38.6847 30.8166 35.5053 33.1608 33.1611C35.505 30.8169 38.6845 29.4999 41.9997 29.4999Z"
-                            fill="white"
-                        />
-                    </svg>
-                </label>
-                <input
-                    {...getInputProps()}
-                    className={styles['photo-input']}
-                    type="file"
-                    id="file"
-                />
             </div>
             {children}
         </div>

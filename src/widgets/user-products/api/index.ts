@@ -22,7 +22,7 @@ import {
     useMutation,
     useQueryClient,
 } from '@tanstack/react-query'
-import { post } from 'node_modules/axios/index.d.cts'
+import { IProductResponse } from '@/entities/product-card'
 import { Request } from '@/shared/api'
 
 export const useGetMyProducts = (type: string) => {
@@ -36,18 +36,31 @@ export const useGetMyProducts = (type: string) => {
         isError,
         refetch,
         status,
-    } = useInfiniteQuery({
+    } = useInfiniteQuery<IProductResponse>({
         queryKey: ['me/posts/', type],
         queryFn: async ({ pageParam }) => {
             console.log(pageParam)
-            const result = await Request.getWithToken('users/me/posts/', {
-                params: {
-                    page: `${pageParam}`,
-                    status: type,
+            const emptyProducts = {
+                count: 0,
+                next: '',
+                previous: '',
+                results: [],
+            }
+
+            const result = await Request.getWithToken<IProductResponse>(
+                'users/me/posts/',
+                {
+                    params: {
+                        page: `${pageParam}`,
+                        status: type,
+                    },
                 },
-            })
-            console.log(result)
-            return result
+            )
+            if (result) {
+                return result
+            }
+
+            return emptyProducts
         },
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
@@ -80,8 +93,10 @@ export const useUpdateProduct = () => {
             return result
         },
         onSettled: () => {
-            queryClient.invalidateQueries(['me/posts/', 'active'])
-            queryClient.invalidateQueries(['me/posts/', 'inactive'])
+            queryClient.invalidateQueries({ queryKey: ['me/posts/', 'active'] })
+            queryClient.invalidateQueries({
+                queryKey: ['me/posts/', 'inactive'],
+            })
         },
     })
     return mutation
@@ -95,8 +110,10 @@ export const useDeleteProduct = () => {
             return result
         },
         onSettled: () => {
-            queryClient.invalidateQueries(['me/posts/', 'active'])
-            queryClient.invalidateQueries(['me/posts/', 'inactive'])
+            queryClient.invalidateQueries({ queryKey: ['me/posts/', 'active'] })
+            queryClient.invalidateQueries({
+                queryKey: ['me/posts/', 'inactive'],
+            })
         },
     })
     return mutation

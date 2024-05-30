@@ -20,6 +20,7 @@ export const useGetMe = () => {
         queryKey: ['me'],
         queryFn: async () => {
             const result = await Request.getWithToken<IUsers>('users/me')
+
             return result
         },
     })

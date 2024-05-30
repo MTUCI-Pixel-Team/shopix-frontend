@@ -35,7 +35,7 @@ export const ProfileCard: FC<ProfileCardProps> = ({
     // if (isError) {
     //     return <div>{error?.message}</div>
     // }
-
+    console.log(image)
     return (
         <div {...props} className={styles.card}>
             <div className={styles.avatar}>

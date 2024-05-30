@@ -7,7 +7,7 @@ interface ReviewsCardProps extends HTMLAttributes<HTMLDivElement> {
     username: string
     image: string | null
     stars: number
-    userId: string | null
+    userId?: string | null
 }
 
 export const ReviewsCard: FC<ReviewsCardProps> = ({

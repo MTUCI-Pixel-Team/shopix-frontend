@@ -55,8 +55,8 @@ export const useGetProducts = (queryParams = {}) => {
         select: (data) => {
             console.log(data)
 
-            setMinPrice(data.pages[0].min_price)
-            setMaxPrice(data.pages[0].max_price)
+            setMinPrice(data.pages[0].min_price || 0)
+            setMaxPrice(data.pages[0].max_price || 0)
             return data
         },
     })
@@ -76,15 +76,24 @@ export const useGetUserProducts = (id: string, type: string) => {
     const {
         data,
         error,
+        isError,
         fetchNextPage,
         hasNextPage,
         isFetching,
         isFetchingNextPage,
         refetch,
         status,
-    } = useInfiniteQuery({
+    } = useInfiniteQuery<IProductResponse>({
         queryKey: ['users/posts', id, type],
         queryFn: async ({ pageParam }) => {
+            const emptyProducts = {
+                count: 0,
+                next: '',
+                previous: '',
+                results: [],
+                min_price: 0,
+                max_price: 0,
+            }
             const params = {
                 id,
                 page: String(pageParam).split('&')[0],
@@ -92,9 +101,11 @@ export const useGetUserProducts = (id: string, type: string) => {
             }
             // console.log(params)
 
-            return await Request.get(`users/posts/${id}`, {
-                params,
-            })
+            return (
+                (await Request.get(`users/posts/${id}`, {
+                    params,
+                })) || emptyProducts
+            )
         },
         initialPageParam: 1,
         getNextPageParam: (lastPage) => {
@@ -108,6 +119,7 @@ export const useGetUserProducts = (id: string, type: string) => {
         error,
         fetchNextPage,
         hasNextPage,
+        isError,
         isFetching,
         isFetchingNextPage,
         refetch,

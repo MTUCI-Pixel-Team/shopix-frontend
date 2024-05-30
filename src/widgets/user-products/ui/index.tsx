@@ -36,7 +36,6 @@ export const UserProducts = ({
     const mutationDelete = useDeleteProduct()
     const [isPopup, setIsPopup] = useState(false)
     const [deletedInfo, setDeletedInfo] = useState<IProduct | null>(null)
-    const [once, setOnce] = useState(true)
 
     const isEmpty = data?.pages[0].results.length === 0
 

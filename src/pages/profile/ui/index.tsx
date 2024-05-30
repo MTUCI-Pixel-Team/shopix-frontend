@@ -28,7 +28,7 @@ export const Profile = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [username, setName] = useState('')
-    const [avatar, setAvatar] = useState<File[]>([])
+    const [avatar, setAvatar] = useState<(File | string)[]>([])
     const [editEmail, setEditEmail] = useState(false)
     const [editPassword, setEditPassword] = useState(false)
     const [wasFirstRedaction, setWasIsFirstRedaction] = useState(false)
@@ -42,7 +42,12 @@ export const Profile = () => {
             setEmail(user.email)
             setName(user.username)
             setDefaultEmail(user.email)
+            // setAvatar(user?.avatar || [])
             setDefaultPassword('')
+            if (user.avatar) {
+                setAvatar([`${SERVER_API}${user.avatar}`])
+            }
+            console.log(user.avatar)
         }
     }, [user])
 
@@ -96,7 +101,9 @@ export const Profile = () => {
                     <ProfileCard
                         className={styles.profile__info}
                         username={user?.username || ''}
-                        image={`${SERVER_API}${user?.avatar}` || ''}
+                        image={
+                            user?.avatar ? `${SERVER_API}${user?.avatar}` : ''
+                        }
                         stars={user?.rating || 0}
                     />
                     {user?.is_owner ? (
@@ -156,6 +163,7 @@ export const Profile = () => {
                                 <ImagesDrop
                                     id="profile__avatar"
                                     isAvatar={true}
+                                    currentAvatar={user?.avatar || null}
                                     images={avatar}
                                     setImages={setAvatar}
                                 />

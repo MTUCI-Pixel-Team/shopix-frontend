@@ -10,4 +10,14 @@ export interface IProduct {
     is_favorite?: boolean
     id: number
     first_image: string
+    is_owner?: boolean
+}
+
+export interface IProductResponse {
+    count: number
+    next: string
+    previous: string
+    results: IProduct[]
+    min_price: number
+    max_price: number
 }

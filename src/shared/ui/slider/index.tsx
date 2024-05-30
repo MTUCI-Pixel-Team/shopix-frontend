@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import ReactSlider from 'react-slider'
 import { ReactSliderProps } from 'react-slider'
 import './styles.scss'
@@ -17,8 +17,6 @@ export const Slider: FC<SliderProps> = ({
     className,
     ...props
 }) => {
-    // const [value, setValue] = useState<number[]>(weight)
-
     const handleChange = (event: number[]) => {
         console.log(event)
         setSlider(event)
@@ -39,7 +37,6 @@ export const Slider: FC<SliderProps> = ({
             }}
             ariaValuetext={(state) => `Thumb value ${state.valueNow}`}
             pearling
-            // minDistance={minDistance}
             {...props}
         />
     )

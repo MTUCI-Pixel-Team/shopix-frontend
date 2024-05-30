@@ -10,9 +10,9 @@ export const HomePage = () => {
     const [maxPrice, setMaxPrice] = useState<number>(0)
     const [minPrice, setMinPrice] = useState<number>(0)
     const [once, setOnce] = useState<boolean>(true)
-    const [searchForPrice, setSearchForPrice] = useState<boolean>(false)
-    const [categoryForPrice, setCategoryForPrice] = useState<boolean>(false)
-    const [filters, setFilters] = useState({ sort_by: '-created_at' })
+    const [filters, setFilters] = useState<{ sort_by: string }>({
+        sort_by: '-created_at',
+    })
     const {
         data,
         error,
@@ -20,7 +20,6 @@ export const HomePage = () => {
         hasNextPage,
         isFetching,
         isFetchingNextPage,
-        refetch,
         status,
     } = useGetProducts(filters)
 
@@ -30,7 +29,7 @@ export const HomePage = () => {
             setMinPrice(data.pages[0].min_price)
             setOnce(false)
         }
-    }, [data])
+    }, [data, once])
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll)
@@ -47,11 +46,11 @@ export const HomePage = () => {
             setScroll(false)
         }
     }
-    console.log('rerender')
 
     return (
         <div onScroll={handleScroll} className={styles.home}>
             <ProductsList
+                isLoading={isFetching}
                 data={data}
                 error={error}
                 fetchNextPage={fetchNextPage}
@@ -60,16 +59,10 @@ export const HomePage = () => {
                 isFetchingNextPage={isFetchingNextPage}
                 status={status}
             />
-            {/* <div className={styles.products}>
-            </div> */}
             <Sidebar
-                qureyParams={filters}
                 setQureyParams={setFilters}
-                setOnce={setOnce}
                 maxPrice={maxPrice}
                 minPrice={minPrice}
-                setSearchForPrice={setSearchForPrice}
-                setCategoryForPrice={setCategoryForPrice}
             />
             <UpButton
                 style={{ display: scroll ? 'flex' : 'none' }}

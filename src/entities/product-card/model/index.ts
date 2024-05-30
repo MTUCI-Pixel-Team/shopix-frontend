@@ -1,4 +1,4 @@
-import { IProduct } from './interface'
+import { IProduct, IProductResponse } from './interface'
 import { useProducts } from './product.store'
 
-export { useProducts, type IProduct }
+export { useProducts, type IProduct, type IProductResponse }

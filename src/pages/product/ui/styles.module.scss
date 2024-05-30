@@ -108,3 +108,13 @@
     padding: 4px;
     border: 2px dashed var(--accent);
 }
+
+.active,
+.loading {
+    color: var(--accent);
+}
+
+.inactive,
+.error {
+    color: var(--second-primary);
+}

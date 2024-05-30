@@ -1,4 +1,3 @@
-import { title } from 'process'
 import classNames from 'classnames'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -10,15 +9,14 @@ import {
     useAddFavorite,
     useRemoveFavorite,
 } from '@/features/card/favorites'
-import { useGetCategories } from '@/features/products/filters/api'
-import { ReviewsCard } from '@/entities/reviews-card'
-import { useGetUsers } from '@/entities/reviews-card/api'
+import { useGetCategories } from '@/features/products/filters'
+import { ReviewsCard, useGetUsers } from '@/entities/reviews-card'
 import { SERVER_API } from '@/shared/config/constants'
 import { Button } from '@/shared/ui/button'
 import { Select } from '@/shared/ui/select'
 import { ReviewsCardSkeleton } from '@/shared/ui/skeleton'
 import { useGetProduct, useUpdateProduct } from '../api'
-import { IEditProduct, Post } from '../model'
+import { IEditProduct } from '../model'
 import styles from './styles.module.scss'
 
 export const ProductPage = () => {
@@ -124,13 +122,15 @@ export const ProductPage = () => {
         })
     }, [images, register, isChange])
 
-    // {...register('title', {
-    //     required: isChange
-    //         ? 'Это поле обязательное'
-    //         : false,
-    // })}
-
-    // console.log(pickCategory)
+    useEffect(() => {
+        if (mutationUpdate.isSuccess && isChange) {
+            mutationUpdate.reset()
+            setIsChange(false)
+            setPriceValue((state) => {
+                return state.replace(/₽/gi, '') + ' ₽'
+            })
+        }
+    }, [mutationUpdate, isChange])
 
     if (isLoading || isLoadingCategories) return <p>Загрузка...</p>
     if (isError || isErrorCategories) return <p>Ошибка загрузки</p>
@@ -149,7 +149,7 @@ export const ProductPage = () => {
         }
     }
 
-    const handleChangePost = (data: Post) => {
+    const handleChangePost = () => {
         if (isChange) {
             setPriceValue(priceValue)
             Promise.all(
@@ -162,7 +162,6 @@ export const ProductPage = () => {
                                 return new File([blob], name, {
                                     type: blob.type,
                                 })
-                                // console.log(file)
                             })
                             .catch((error) => console.error(error))
                     } else {
@@ -182,14 +181,16 @@ export const ProductPage = () => {
                 formData.append('post', JSON.stringify(formatedData))
 
                 images.forEach((img) => {
+                    //@ts-expect-error Я не понимаю, как это типизировать, помогите
                     formData.append('images', img)
                 })
 
+                //@ts-expect-error Я не понимаю, как это типизировать, помогите
                 mutationUpdate.mutate(formData)
-                setIsChange(false)
-                setPriceValue((state) => {
-                    return state.replace(/₽/gi, '') + ' ₽'
-                })
+                // setIsChange(false)
+                // setPriceValue((state) => {
+                //     return state.replace(/₽/gi, '') + ' ₽'
+                // })
             })
         } else {
             setIsChange(true)
@@ -205,7 +206,7 @@ export const ProductPage = () => {
                 images={images}
                 isChange={isChange}
                 setImages={setImages}
-                errorMessage={errors.images?.message}
+                errorMessage={errors.images?.message || ''}
             />
             <form className={styles.about}>
                 {errors.images?.message}
@@ -365,10 +366,28 @@ export const ProductPage = () => {
                             НАПИСАТЬ
                         </Button>
                     )}
-                    <FavoriteIcon
-                        onClick={handleAddFavorite}
-                        isFavorite={data?.post.is_favorite || false}
-                    />
+                    {!data?.post.is_owner ? (
+                        <FavoriteIcon
+                            onClick={handleAddFavorite}
+                            isFavorite={data?.post.is_favorite || false}
+                        />
+                    ) : null}
+                    <div className={styles.status}>
+                        {data?.post.status === 'active' ? (
+                            <p className={styles.active}>Активное</p>
+                        ) : (
+                            <p className={styles.inactive}>Неактивное</p>
+                        )}
+                    </div>
+                    {mutationUpdate.isError && (
+                        <p className={styles.error}>
+                            Произошла ошибка при обновлении{' '}
+                            {mutationUpdate.error.message}
+                        </p>
+                    )}
+                    {mutationUpdate.isPending && (
+                        <p className={styles.loading}>Загрузка...</p>
+                    )}
                 </div>
             </form>
         </div>

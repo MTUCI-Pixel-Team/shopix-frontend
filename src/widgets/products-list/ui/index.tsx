@@ -6,7 +6,7 @@ import {
     useAddFavorite,
     useRemoveFavorite,
 } from '@/features/card/favorites'
-import { ProductCard } from '@/entities/product-card'
+import { IProductResponse, ProductCard } from '@/entities/product-card'
 import { IProduct } from '@/entities/product-card'
 import { EmptyElement } from '@/shared/ui/empty'
 import { ErrorElement } from '@/shared/ui/error'
@@ -14,7 +14,7 @@ import { ProductCardSkeleton } from '@/shared/ui/skeleton'
 
 interface ProductsListProps {
     isLoading: boolean
-    data: any
+    data: { pages: IProductResponse[] } | undefined
     error: Error | null
     isFetching: boolean
     fetchNextPage: () => void

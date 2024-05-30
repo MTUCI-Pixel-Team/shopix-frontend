@@ -30,7 +30,7 @@ export const LoginPage = () => {
                 formData.append(key, data[key])
             }
         }
-        // @ts-expect-error Тут мне даже copilot написал, что это очень сложно типизировать
+        // @ts-expect-error Я не понимаю, как это типизировать, помогите
         mutation.mutate(formData)
     }
 

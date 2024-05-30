@@ -75,13 +75,14 @@ export const ImagesDrop: FC<ImagesDropProps> = ({
                 : null}
             <div
                 style={{
-                    backgroundImage: isAvatar
-                        ? `url(${
-                              typeof images[0] === 'string'
-                                  ? images[0]
-                                  : URL.createObjectURL(images[0] || new Blob())
-                          })`
-                        : 'none',
+                    backgroundImage:
+                        isAvatar && images.length > 0
+                            ? `url(${
+                                  typeof images[0] === 'string'
+                                      ? images[0]
+                                      : URL.createObjectURL(images[0])
+                              })`
+                            : 'none',
 
                     // opacity: isAvatar ? 0.6 : 1,
                 }}

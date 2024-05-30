@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { UserProducts } from '@/widgets/user-products'
@@ -42,14 +43,16 @@ export const Profile = () => {
             setEmail(user.email)
             setName(user.username)
             setDefaultEmail(user.email)
-            // setAvatar(user?.avatar || [])
             setDefaultPassword('')
             if (user.avatar) {
+                // setAvatar([new File([], `${SERVER_API}${user.avatar}`)])
                 setAvatar([`${SERVER_API}${user.avatar}`])
             }
             console.log(user.avatar)
         }
     }, [user])
+
+    console.log(avatar)
 
     const emailEditHandler = () => {
         setEditEmail(!editEmail)
@@ -64,12 +67,27 @@ export const Profile = () => {
         }
     }
 
-    const changeProfile = (event: Event | undefined) => {
+    const changeProfile = async (event: Event | undefined) => {
         event?.preventDefault()
         if (!wasFirstRedaction) {
             setWasIsFirstRedaction(true)
         }
         const formData = new FormData()
+        if (typeof avatar[0] === 'string') {
+            console.log(avatar[0])
+            const response = await axios.get(avatar[0], {
+                responseType: 'blob',
+            })
+            console.log(response.data)
+            const file = new File([response.data], avatar[0], {
+                type: response.data.type,
+            })
+            console.log(file)
+            formData.append('avatar', file)
+        } else {
+            console.log(avatar[0])
+            formData.append('avatar', avatar[0])
+        }
         formData.append('avatar', avatar[0])
         const changeData: {
             email: string

@@ -7,7 +7,7 @@ interface ReviewsCardProps extends HTMLAttributes<HTMLDivElement> {
     username: string
     image: string | null
     stars: number
-    userId?: string | null
+    userId: string | null
 }
 
 export const ReviewsCard: FC<ReviewsCardProps> = ({
@@ -45,7 +45,7 @@ export const ReviewsCard: FC<ReviewsCardProps> = ({
             <div
                 className={styles.avatar}
                 onClick={() => {
-                    navigate(`profile/${userId}`)
+                    navigate(`/profile/${userId}`)
                 }}
             >
                 {image ? (

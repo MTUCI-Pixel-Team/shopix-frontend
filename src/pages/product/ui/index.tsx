@@ -302,7 +302,8 @@ export const ProductPage = () => {
                     ) : (
                         <ReviewsCard
                             username={user?.username || ''}
-                            image={user?.avatar || ''}
+                            image={`${SERVER_API}${user?.avatar}` || ''}
+                            userId={user?.id || null}
                             stars={user?.rating || 0}
                         />
                     )}

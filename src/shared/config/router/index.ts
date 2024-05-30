@@ -8,4 +8,5 @@ export const paths = {
     login: 'login',
     register: 'register',
     verify: 'verify',
+    profile: 'profile/:id',
 }

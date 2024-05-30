@@ -15,9 +15,9 @@ export interface IProduct {
 
 export interface IProductResponse {
     count: number
-    next: string
-    previous: string
+    next: string | null
+    previous: string | null
     results: IProduct[]
-    min_price: number
-    max_price: number
+    min_price?: number
+    max_price?: number
 }

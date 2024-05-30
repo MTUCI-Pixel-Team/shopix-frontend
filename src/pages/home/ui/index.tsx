@@ -25,8 +25,8 @@ export const HomePage = () => {
 
     useEffect(() => {
         if (data && once) {
-            setMaxPrice(data.pages[0].max_price)
-            setMinPrice(data.pages[0].min_price)
+            setMaxPrice(data.pages[0].max_price || 0)
+            setMinPrice(data.pages[0].min_price || 0)
             setOnce(false)
         }
     }, [data, once])

@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import { FC, HTMLAttributes, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ReviewsCard, useGetMe } from '@/entities/reviews-card'
+import { ReviewsCard, useGetMe, useInfo } from '@/entities/reviews-card'
 import { paths } from '@/shared/config/router'
 import { ReviewsUserSkeleton } from '@/shared/ui/skeleton'
 import styles from './styles.module.scss'
@@ -20,10 +20,12 @@ export const Popup: FC<PopupProps> = ({
 }) => {
     const navigate = useNavigate()
     const popupRef = useRef<HTMLDivElement | null>(null)
+    const setImage = useInfo((state) => state.setImage)
     const { data, isError, isLoading, error } = useGetMe()
 
     const exit = () => {
         localStorage.removeItem('token')
+        setImage('')
         setUsername('Guest')
         navigate(paths.auth)
     }
@@ -71,6 +73,7 @@ export const Popup: FC<PopupProps> = ({
                         username={data?.username || 'Guest'}
                         stars={data?.rating || 0}
                         image={data?.avatar || ''}
+                        userId={data?.id || null}
                     />
                 )}
             </div>
@@ -99,7 +102,15 @@ export const Popup: FC<PopupProps> = ({
             </ul>
             <hr />
             <ul className={styles.info}>
-                <li>Настройки</li>
+                <li>
+                    <Link
+                        // поправить на {`${paths.profile}/${data?.id}`} или что-то подобное
+                        to={`profile/${data?.id}`}
+                        className={styles.link}
+                    >
+                        Настройки
+                    </Link>
+                </li>
                 <li onClick={exit} className={styles.exit}>
                     Выйти
                 </li>

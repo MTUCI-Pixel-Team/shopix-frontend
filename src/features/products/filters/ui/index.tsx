@@ -13,7 +13,7 @@ export const Filters = ({
     // setCategoryForPrice: (state: boolean) => void
 }) => {
     const { data, error, isLoading } = useGetCategories()
-    console.log(data)
+    // console.log(data)
     return (
         <div className={styles.filters}>
             {isLoading && <p>Загрузка...</p>}

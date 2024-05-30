@@ -1,4 +1,5 @@
 import { FC, HTMLAttributes } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Stars } from '@/shared/ui/stars'
 import styles from './styles.module.scss'
 
@@ -6,12 +7,14 @@ interface ReviewsCardProps extends HTMLAttributes<HTMLDivElement> {
     username: string
     image: string | null
     stars: number
+    userId: string | null
 }
 
 export const ReviewsCard: FC<ReviewsCardProps> = ({
     image,
     username,
     stars,
+    userId,
     ...props
 }) => {
     // const { data, isError, isLoading, error } = useGetMe()
@@ -35,9 +38,16 @@ export const ReviewsCard: FC<ReviewsCardProps> = ({
     //     return <div>{error?.message}</div>
     // }
 
+    const navigate = useNavigate()
+
     return (
         <div {...props} className={styles.card}>
-            <div className={styles.avatar}>
+            <div
+                className={styles.avatar}
+                onClick={() => {
+                    navigate(`/profile/${userId}`)
+                }}
+            >
                 {image ? (
                     <img src={image} alt="logo" />
                 ) : username ? (

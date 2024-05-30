@@ -1,4 +1,5 @@
 .add-photo {
+    background-position: center center;
     width: clamp(100px, 20vw, 200px);
     height: clamp(100px, 20vw, 200px);
     background-color: var(--second-primary);
@@ -68,6 +69,7 @@
     background-color: var(--second-primary);
     border-radius: 16px;
     object-fit: cover;
+    opacity: 1;
     img {
         width: 100%;
         height: 100%;
@@ -83,4 +85,17 @@
     display: flex;
     // grid-template-columns: repeat(auto-fill, clamp(100px, 20vw, 200px));
     gap: 8px;
+}
+
+.wrapperCard {
+    background-color: var(--second-primary);
+    // opacity: 0.7;
+    border-radius: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
 }

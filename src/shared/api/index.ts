@@ -138,4 +138,14 @@ export class Request {
             }
         }
     }
+    static async patchWithToken<T>(url: string, data: T) {
+        try {
+            const response = await instance.patch<T>(this.url + url, data)
+            return response.data
+        } catch (error) {
+            if (error instanceof AxiosError) {
+                throw new Error(error.message)
+            }
+        }
+    }
 }

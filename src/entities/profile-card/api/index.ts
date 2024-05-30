@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { Request } from '@/shared/api'
-import { useInfo } from '../model'
+import { getToken } from '@/shared/config/storage'
 
 interface IUsers {
+    id: number
     email: string
     username: string
     rating: number
@@ -11,19 +12,15 @@ interface IUsers {
     created_at: string
     updated_at: string
     is_active: boolean
-    id: string
+    is_owner: boolean
 }
 
 export const useGetMe = () => {
-    const setImage = useInfo((state) => state.setImage)
-
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ['me'],
         queryFn: async () => {
             const result = await Request.getWithToken<IUsers>('users/me')
-            if (result?.avatar) {
-                setImage(result.avatar)
-            }
+
             return result
         },
     })
@@ -39,8 +36,14 @@ export const useGetUsers = (id: number) => {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ['users', id],
         queryFn: async () => {
-            const result = await Request.get<IUsers>(`users/${id}`)
-            return result
+            const token = getToken()
+            if (token) {
+                const result = await Request.getWithToken<IUsers>(`users/${id}`)
+                return result
+            } else {
+                const result = await Request.get<IUsers>(`users/${id}`)
+                return result
+            }
         },
     })
     return {

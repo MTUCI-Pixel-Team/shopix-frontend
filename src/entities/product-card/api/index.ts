@@ -55,8 +55,8 @@ export const useGetProducts = (queryParams = {}) => {
         select: (data) => {
             console.log(data)
 
-            setMinPrice(data.pages[0].min_price)
-            setMaxPrice(data.pages[0].max_price)
+            setMinPrice(data.pages[0].min_price || 0)
+            setMaxPrice(data.pages[0].max_price || 0)
             return data
         },
     })
@@ -65,6 +65,61 @@ export const useGetProducts = (queryParams = {}) => {
         error,
         fetchNextPage,
         hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        refetch,
+        status,
+    }
+}
+
+export const useGetUserProducts = (id: string, type: string) => {
+    const {
+        data,
+        error,
+        isError,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        refetch,
+        status,
+    } = useInfiniteQuery<IProductResponse>({
+        queryKey: ['users/posts', id, type],
+        queryFn: async ({ pageParam }) => {
+            const emptyProducts = {
+                count: 0,
+                next: '',
+                previous: '',
+                results: [],
+                min_price: 0,
+                max_price: 0,
+            }
+            const params = {
+                id,
+                page: String(pageParam).split('&')[0],
+                status: type,
+            }
+            // console.log(params)
+
+            return (
+                (await Request.get(`users/posts/${id}`, {
+                    params,
+                })) || emptyProducts
+            )
+        },
+        initialPageParam: 1,
+        getNextPageParam: (lastPage) => {
+            const nextPage = lastPage.next?.split('page=')[1].split('&')[0]
+
+            return nextPage
+        },
+    })
+    return {
+        data,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isError,
         isFetching,
         isFetchingNextPage,
         refetch,

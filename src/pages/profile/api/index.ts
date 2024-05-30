@@ -50,5 +50,5 @@ export const useProfileChanges = (id: number) => {
             queryClient.invalidateQueries({ queryKey: ['me'] })
         },
     })
-    return profileChanges
+    return { Success: profileChanges.isSuccess, ...profileChanges }
 }

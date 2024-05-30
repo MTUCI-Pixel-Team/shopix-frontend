@@ -31,6 +31,7 @@ export const Profile = () => {
     const [avatar, setAvatar] = useState<File[]>([])
     const [editEmail, setEditEmail] = useState(false)
     const [editPassword, setEditPassword] = useState(false)
+    const [wasFirstRedaction, setWasIsFirstRedaction] = useState(false)
 
     const [defaultEmail, setDefaultEmail] = useState('')
     const [defaultPassword, setDefaultPassword] = useState('')
@@ -60,6 +61,9 @@ export const Profile = () => {
 
     const changeProfile = (event: Event | undefined) => {
         event?.preventDefault()
+        if (!wasFirstRedaction) {
+            setWasIsFirstRedaction(true)
+        }
         const formData = new FormData()
         formData.append('avatar', avatar[0])
         const changeData: {
@@ -155,6 +159,12 @@ export const Profile = () => {
                                     images={avatar}
                                     setImages={setAvatar}
                                 />
+                                <p className={styles.submit_message}>
+                                    {!redactionData.isSuccess &&
+                                    wasFirstRedaction
+                                        ? 'Загрузка...'
+                                        : ''}
+                                </p>
                             </div>
                         </div>
                         <Button className={styles.save_changes} size="medium">

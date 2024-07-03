@@ -12,6 +12,12 @@
     }
 }
 
+.light {
+    path {
+        fill: var(--primary);
+    }
+}
+
 .active {
     path {
         fill: var(--accent);

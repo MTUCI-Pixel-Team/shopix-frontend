@@ -4,10 +4,12 @@ import { Stars } from '@/shared/ui/stars'
 import styles from './styles.module.scss'
 
 interface ReviewsCardProps extends HTMLAttributes<HTMLDivElement> {
-    username: string
+    username: string | undefined
     image: string | null
-    stars: number
+    stars?: number | null
+    withoutStars?: boolean
     userId: string | null
+    setIsPopup?: (arg: boolean) => void
 }
 
 export const ReviewsCard: FC<ReviewsCardProps> = ({
@@ -15,39 +17,22 @@ export const ReviewsCard: FC<ReviewsCardProps> = ({
     username,
     stars,
     userId,
+    withoutStars = false,
+    setIsPopup,
     ...props
 }) => {
-    // const { data, isError, isLoading, error } = useGetMe()
-
-    // const username = useInfo((state) => state.username)
-    // const image = useInfo((state) => state.image)
-    // const stars = useInfo((state) => state.stars)
-    // const setUsername = useInfo((state) => state.setUsername)
-
-    // useEffect(() => {
-    //     if (!isError && !isLoading) {
-    //         setUsername(data.username)
-    //     }
-    // }, [isError, isLoading, setUsername, data])
-
-    // if (isLoading) {
-    //     return <ReviewsCardSkeleton />
-    // }
-
-    // if (isError) {
-    //     return <div>{error?.message}</div>
-    // }
-
     const navigate = useNavigate()
 
     return (
-        <div {...props} className={styles.card}>
-            <div
-                className={styles.avatar}
-                onClick={() => {
-                    navigate(`/profile/${userId}`)
-                }}
-            >
+        <div
+            {...props}
+            className={styles.card}
+            onClick={() => {
+                navigate(`/profile/${userId}`)
+                setIsPopup && setIsPopup(false)
+            }}
+        >
+            <div className={styles.avatar}>
                 {image ? (
                     <img src={image} alt="logo" />
                 ) : username ? (
@@ -58,10 +43,12 @@ export const ReviewsCard: FC<ReviewsCardProps> = ({
             </div>
             <div className={styles.info}>
                 <div className={styles.name}>{username}</div>
-                <div className={styles.reviews}>
-                    <div className={styles.rating}>{stars}</div>
-                    <Stars fill={stars} />
-                </div>
+                {!withoutStars ? (
+                    <div className={styles.reviews}>
+                        <div className={styles.rating}>{stars}</div>
+                        <Stars fillStars={(stars || 0) - 1} />
+                    </div>
+                ) : null}
             </div>
         </div>
     )

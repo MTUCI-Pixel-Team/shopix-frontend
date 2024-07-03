@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { FC } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { paths } from '@/shared/config/router'
@@ -28,10 +29,10 @@ export const Navigation: FC<NavigationProps> = ({
     // console.log(username)
 
     return (
-        <div className={styles.nav}>
-            <nav>
-                <ul className={styles.links}>
-                    <li>
+        <motion.div className={styles.nav}>
+            <motion.nav>
+                <motion.ul className={styles.links}>
+                    <motion.li>
                         <NavLink
                             to="/"
                             className={({ isActive }) => {
@@ -43,8 +44,8 @@ export const Navigation: FC<NavigationProps> = ({
                         >
                             Главная
                         </NavLink>
-                    </li>
-                    <li>
+                    </motion.li>
+                    <motion.li>
                         <NavLink
                             to={paths.chats}
                             className={({ isActive }) =>
@@ -55,17 +56,17 @@ export const Navigation: FC<NavigationProps> = ({
                         >
                             Чаты <span className={styles.chats}>6</span>
                         </NavLink>
-                    </li>
-                </ul>
-            </nav>
-            <div onClick={handlePopup} className={styles.logo}>
+                    </motion.li>
+                </motion.ul>
+            </motion.nav>
+            <motion.div onClick={handlePopup} className={styles.logo}>
                 {image ? (
                     <img src={image} alt="profile" />
                 ) : (
                     username.slice(0, 1).toUpperCase()
                 )}
                 {/* <img src="/public/images/profile.png" alt="profile" /> */}
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     )
 }

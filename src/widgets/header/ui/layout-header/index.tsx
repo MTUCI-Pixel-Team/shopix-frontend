@@ -1,6 +1,7 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useInfo } from '@/entities/reviews-card'
+import { useGetMe, useInfo } from '@/entities/reviews-card'
 import { getToken } from '@/shared/config/storage'
 import { Logo } from '..'
 import { Navigation } from '../navigation'
@@ -10,26 +11,49 @@ import styles from './styles.module.scss'
 export const LayoutHeader = () => {
     const [isPopup, setIsPopup] = useState<boolean>(false)
     const [username, setUsername] = useState<string>('Guest')
+
+    useGetMe() // делаем запрос для того чтобы подгрузилась картинка в Navigation
+
     const image = useInfo((state) => state.image)
 
+    const pageVariants = {
+        initial: { opacity: 0, y: '-100px' },
+        in: { opacity: 1, y: 0 },
+        out: { opacity: 0, y: '-100px' },
+    }
+
     return (
-        <div className={styles.header}>
-            <Link to="/">
-                <Logo />
-            </Link>
-            <Navigation
-                setIsPopup={setIsPopup}
-                username={username}
-                image={image}
-            />
-            {getToken() && (
-                <Popup
-                    isPopup={isPopup}
+        <AnimatePresence>
+            <motion.div
+                className={styles.header}
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={{
+                    type: 'spring',
+                    duration: 0.5,
+                }}
+            >
+                <Link to="/">
+                    <Logo />
+                </Link>
+                <Navigation
                     setIsPopup={setIsPopup}
-                    className={styles.popup}
-                    setUsername={setUsername}
+                    username={username}
+                    image={image}
                 />
-            )}
-        </div>
+                <AnimatePresence>
+                    {getToken() && isPopup && (
+                        <Popup
+                            isPopup={isPopup}
+                            setIsPopup={setIsPopup}
+                            className={styles.popup}
+                            setUsername={setUsername}
+                        />
+                    )}
+                </AnimatePresence>
+            </motion.div>
+        </AnimatePresence>
     )
 }

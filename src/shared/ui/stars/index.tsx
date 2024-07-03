@@ -2,27 +2,40 @@ import cn from 'classnames'
 import { FC, useState } from 'react'
 import styles from './styles.module.scss'
 
-interface StarsProps {
-    fill?: number
+interface StarsProps extends React.SVGProps<SVGSVGElement> {
+    fillStars?: number
     size?: 'small' | 'medium' | 'big'
     edit?: boolean
+    light?: boolean
+    setPickedStars?: (stars: number | null) => void
 }
 
 export const Stars: FC<StarsProps> = ({
-    fill = 0,
+    fillStars = 0,
     size = 'small',
     edit = false,
+    className,
+    light = false,
+    setPickedStars,
     ...props
 }) => {
     const [hoveredIndexStar, setHoveredIndexStar] = useState<number | null>(
-        null,
+        fillStars >= 0 ? fillStars : null,
     )
 
     const starSize = size === 'small' ? 16 : size === 'medium' ? 24 : 40
 
     const hoverOnStar = (index: number | null) => {
-        if (edit) {
+        if (edit && setHoveredIndexStar) {
             setHoveredIndexStar(index)
+        }
+    }
+
+    const clickOnStar = (index: number) => {
+        if (edit && setPickedStars) {
+            console.log(index)
+
+            setPickedStars(index)
         }
     }
 
@@ -31,20 +44,27 @@ export const Stars: FC<StarsProps> = ({
             {[...Array(5)].map((_, index) => (
                 <svg
                     key={index}
-                    className={cn(styles.star, {
-                        [styles.active]:
-                            (hoveredIndexStar !== null &&
-                                index <= hoveredIndexStar) ||
-                            (!edit && index < fill),
-                    })}
+                    className={cn(
+                        className,
+                        styles.star,
+                        {
+                            [styles.light]: light,
+                        },
+                        {
+                            [styles.active]:
+                                (hoveredIndexStar !== null &&
+                                    index <= hoveredIndexStar) ||
+                                (!edit && index < fillStars),
+                        },
+                    )}
                     style={{ cursor: edit ? 'pointer' : 'default' }}
                     onMouseEnter={() => hoverOnStar(index)}
-                    onMouseLeave={() => hoverOnStar(null)}
+                    onMouseLeave={() => hoverOnStar(fillStars)}
+                    onClick={() => clickOnStar(index)}
                     xmlns="http://www.w3.org/2000/svg"
                     width={starSize}
                     height={starSize}
                     viewBox="0 0 16 16"
-                    fill="none"
                     {...props}
                 >
                     <g clipPath="url(#clip0_269_780)">

@@ -1,4 +1,5 @@
-import SelectLib, { GroupBase, Props } from 'react-select'
+import { motion } from 'framer-motion'
+import SelectLib, { GroupBase, Props, components } from 'react-select'
 import './style.scss'
 
 export function Select<
@@ -33,6 +34,7 @@ export function Select<
             isSearchable={isSearchable}
             defaultValue={defaultValue}
             options={options}
+            components={{ MenuList }}
             styles={{
                 control: (baseStyles) => ({
                     ...baseStyles,
@@ -41,6 +43,7 @@ export function Select<
                     border: 'none',
                     fontSize: `${fontSize}px`,
                     height: `${height}px`,
+
                     fontWeight: '400',
                     cursor: 'pointer',
                 }),
@@ -55,6 +58,7 @@ export function Select<
                     borderRadius: '16px',
                     fontSize: `${fontSize}px`,
                     fontWeight: '400',
+
                     background: state.isSelected
                         ? 'var(--accent)'
                         : state.isFocused
@@ -101,5 +105,20 @@ export function Select<
             })}
             {...props}
         />
+    )
+}
+
+const MenuList = (props) => {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+        >
+            <components.MenuList {...props}>
+                {props.children}
+            </components.MenuList>
+        </motion.div>
     )
 }

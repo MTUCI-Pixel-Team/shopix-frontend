@@ -3,9 +3,11 @@ import { Favorites } from '@/pages/favorites'
 import { HomePage } from '@/pages/home'
 import { LoginPage } from '@/pages/login'
 import { MyProductsPage } from '@/pages/my-products'
+import { MyReviewsPage } from '@/pages/my-reviews/ui'
 import { ProductPage } from '@/pages/product'
 import { Profile } from '@/pages/profile'
 import { RegisterPage } from '@/pages/register'
+import { ReviewsPage } from '@/pages/reviews'
 import { VerifyPage } from '@/pages/verify'
 import { LayoutHeader } from '@/widgets/header'
 import { Layout, LayoutAuth } from '@/widgets/layout'
@@ -46,6 +48,14 @@ export const router = createBrowserRouter([
             {
                 path: paths.profile,
                 element: <Profile />,
+            },
+            {
+                path: paths.myReviews,
+                element: <MyReviewsPage />,
+            },
+            {
+                path: paths.reviews,
+                element: <ReviewsPage />,
             },
         ],
     },

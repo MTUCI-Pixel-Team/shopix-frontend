@@ -4,17 +4,20 @@ import 'slick-carousel/slick/slick-theme.css'
 import Slider from 'react-slick'
 import './styles.scss'
 import { ImagesDrop } from '@/entities/images-drop'
+import Skeleton from 'react-loading-skeleton'
 
 export const ImageSlider = ({
     images,
     setImages,
     isChange,
     errorMessage,
+    isLoading,
 }: {
     images: (string | File)[]
     isChange: boolean
     setImages: (images: (File | string)[]) => void
     errorMessage: string
+    isLoading?: boolean
 }) => {
     const settings = {
         customPaging: function (i: number) {
@@ -84,7 +87,15 @@ export const ImageSlider = ({
 
     return (
         <div className={'slider'}>
-            {isChange ? (
+            {isLoading ? (
+                <Skeleton
+                    width={'100%'}
+                    style={{ position: 'relative', top: '-2px', left: '0' }}
+                    height={'100%'}
+                    borderRadius={'16px'}
+                    baseColor="var(--second-primary)"
+                />
+            ) : isChange ? (
                 <>
                     <ImagesDrop
                         className={'slider-change'}

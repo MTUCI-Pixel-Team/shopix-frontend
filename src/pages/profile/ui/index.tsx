@@ -1,6 +1,7 @@
 import axios from 'axios'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { UserProducts } from '@/widgets/user-products'
 import { ActiveInactive } from '@/entities/active-inactive'
 import { ImagesDrop } from '@/entities/images-drop'
@@ -25,7 +26,7 @@ export const Profile = () => {
 
     const redactionData = useProfileChanges(user?.id || 0)
 
-    const [type, setType] = useState<string>('active')
+    // const [type, setType] = useState<string>('active')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [username, setName] = useState('')
@@ -36,7 +37,19 @@ export const Profile = () => {
 
     const [defaultEmail, setDefaultEmail] = useState('')
     const [defaultPassword, setDefaultPassword] = useState('')
-    const [settings, setSettings] = useState(false)
+    // const [settings, setSettings] = useState(false)
+
+    const navigate = useNavigate()
+    const location = useLocation()
+    const [type, setType] = useState<string>(
+        new URLSearchParams(location.search).get('type') || 'active',
+    )
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search)
+        params.set('type', type)
+        navigate(`?${params.toString()}`, { replace: true })
+    }, [type, navigate, location.search])
 
     useEffect(() => {
         if (user) {
@@ -108,103 +121,133 @@ export const Profile = () => {
 
     console.log(user)
 
-    return (
-        <div className={styles.profile}>
-            {isLoadingUser ? (
-                <ReviewsCardSkeleton />
-            ) : isErrorUser ? (
-                <p>Ошибка</p>
-            ) : (
-                <div className={styles.left_block}>
-                    <ProfileCard
-                        className={styles.profile__info}
-                        username={user?.username || ''}
-                        image={
-                            user?.avatar ? `${SERVER_API}${user?.avatar}` : ''
-                        }
-                        stars={user?.rating || 0}
-                    />
-                    {user?.is_owner ? (
-                        <OpenSettings
-                            settings={settings}
-                            setSettings={setSettings}
-                        />
-                    ) : null}
-                </div>
-            )}
+    const pageVariants = {
+        initial: { opacity: 0, scale: 0.6 },
+        in: { opacity: 1, scale: 1 },
+        out: { opacity: 0, scale: 0.6 },
+    }
 
-            {settings ? (
-                <div className={styles.wrapper}>
-                    <div className={styles.block}>
-                        <p className={styles.active}>Настройки</p>
+    return (
+        <AnimatePresence>
+            <motion.div
+                className={styles.profile}
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={{
+                    type: 'tween',
+                    ease: 'anticipate',
+                    duration: 0.5,
+                }}
+            >
+                {isErrorUser ? (
+                    <p>Ошибка</p>
+                ) : (
+                    <div className={styles.left_block}>
+                        <ProfileCard
+                            isLoading={isLoadingUser}
+                            className={styles.profile__info}
+                            username={user?.username || ''}
+                            image={
+                                user?.avatar
+                                    ? `${SERVER_API}${user?.avatar}`
+                                    : ''
+                            }
+                            stars={user?.rating || 0}
+                            date={user?.created_at || ''}
+                            countReviews={user?.count_reviews || 0}
+                            userId={user?.id || 0}
+                        />
+                        {user?.is_owner ? (
+                            <OpenSettings
+                                settings={type === 'settings'}
+                                setSettings={setType}
+                            />
+                        ) : null}
                     </div>
-                    <form
-                        onSubmit={() => {
-                            changeProfile(event)
-                        }}
-                    >
-                        <div className={styles.inputs}>
-                            <InputInForm
-                                labelText="Ваш email"
-                                type="email"
-                                inputId="profile__email"
-                                value={email}
-                                status={!editEmail}
-                                functionChange={setEmail}
-                                clickFunction={emailEditHandler}
-                                editButton={editEmail}
-                            />
-                            <InputInForm
-                                labelText="Ваш пароль"
-                                type="password"
-                                inputId="profile__password"
-                                value={password}
-                                status={!editPassword}
-                                functionChange={setPassword}
-                                clickFunction={passwordEditHandler}
-                                editButton={editPassword}
-                            />
-                            <InputInForm
-                                labelText="Ваше имя"
-                                type="text"
-                                inputId="profile__name"
-                                value={username}
-                                status={false}
-                                functionChange={setName}
-                                clickFunction={() => {}}
-                                editButton={false}
-                            />
-                            <div className={styles.avatar}>
-                                <label htmlFor="profile__avatar">
-                                    Ваш аватар
-                                </label>
-                                <ImagesDrop
-                                    id="profile__avatar"
-                                    isAvatar={true}
-                                    currentAvatar={user?.avatar || null}
-                                    images={avatar}
-                                    setImages={setAvatar}
-                                />
-                                <p className={styles.submit_message}>
-                                    {!redactionData.isSuccess &&
-                                    wasFirstRedaction
-                                        ? 'Загрузка...'
-                                        : ''}
-                                </p>
-                            </div>
+                )}
+                {type === 'settings' && user?.is_owner ? (
+                    <div className={styles.wrapper}>
+                        <div className={styles.block}>
+                            <p className={styles.active}>Настройки</p>
                         </div>
-                        <Button className={styles.save_changes} size="medium">
-                            СОХРАНИТЬ
-                        </Button>
-                    </form>
-                </div>
-            ) : (
-                <div className={styles.wrapper}>
-                    <ActiveInactive type={type} setType={setType} />
-                    <UserProducts type={type} userId={id || ''} />
-                </div>
-            )}
-        </div>
+                        <form
+                            onSubmit={() => {
+                                changeProfile(event)
+                            }}
+                        >
+                            <div className={styles.inputs}>
+                                <InputInForm
+                                    labelText="Ваш email"
+                                    type="email"
+                                    inputId="profile__email"
+                                    value={email}
+                                    status={!editEmail}
+                                    functionChange={setEmail}
+                                    clickFunction={emailEditHandler}
+                                    editButton={editEmail}
+                                />
+                                <InputInForm
+                                    labelText="Ваш пароль"
+                                    type="password"
+                                    inputId="profile__password"
+                                    value={password}
+                                    status={!editPassword}
+                                    functionChange={setPassword}
+                                    clickFunction={passwordEditHandler}
+                                    editButton={editPassword}
+                                />
+                                <InputInForm
+                                    labelText="Ваше имя"
+                                    type="text"
+                                    inputId="profile__name"
+                                    value={username}
+                                    status={false}
+                                    functionChange={setName}
+                                    clickFunction={() => {}}
+                                    editButton={false}
+                                />
+                                <div className={styles.avatar}>
+                                    <label htmlFor="profile__avatar">
+                                        Ваш аватар
+                                    </label>
+                                    <ImagesDrop
+                                        id="profile__avatar"
+                                        isAvatar={true}
+                                        currentAvatar={user?.avatar || null}
+                                        images={avatar}
+                                        setImages={setAvatar}
+                                    />
+                                    <p className={styles.submit_message}>
+                                        {!redactionData.isSuccess &&
+                                        wasFirstRedaction
+                                            ? 'Загрузка...'
+                                            : ''}
+                                    </p>
+                                </div>
+                            </div>
+                            <Button
+                                className={styles.save_changes}
+                                size="medium"
+                            >
+                                СОХРАНИТЬ
+                            </Button>
+                        </form>
+                    </div>
+                ) : (
+                    <div className={styles.wrapper}>
+                        <ActiveInactive type={type} setType={setType} />
+                        <UserProducts
+                            isOwner={user?.is_owner || false}
+                            editable={false}
+                            type={type}
+                            userId={id || ''}
+                        />
+                    </div>
+                )}
+            </motion.div>
+        </AnimatePresence>
     )
 }
 
@@ -213,12 +256,14 @@ const OpenSettings = ({
     setSettings,
 }: {
     settings: boolean
-    setSettings: (setting: boolean) => void
+    setSettings: (setting: string) => void
 }) => {
     return (
         <Button
             className={styles.close_profile}
-            onClick={() => setSettings(!settings)}
+            onClick={() => {
+                setSettings(settings ? 'active' : 'settings')
+            }}
             style={{
                 backgroundColor: settings
                     ? 'var(--second-primary)'

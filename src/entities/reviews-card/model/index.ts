@@ -16,3 +16,15 @@ export const useInfo = create(
         ),
     ),
 )
+
+export interface IUsers {
+    email: string
+    username: string
+    rating: number
+    full_name: string | null
+    avatar: string | null
+    created_at: string
+    updated_at: string
+    is_active: boolean
+    id: string
+}

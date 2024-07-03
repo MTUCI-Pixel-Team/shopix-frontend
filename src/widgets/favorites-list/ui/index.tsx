@@ -34,6 +34,9 @@ export const FavoritesList = () => {
                     !isEmpty
                         ? {
                               display: 'grid',
+                              gridAutoRows: 'min-content',
+                              height: '100%',
+                              overflow: 'initial',
                               gridTemplateColumns:
                                   'repeat(auto-fill, minmax(283px, 1fr))',
                               gap: '20px',
@@ -46,6 +49,7 @@ export const FavoritesList = () => {
                     <Fragment key={uuidv4()}>
                         {item.results.map((product: IProduct) => (
                             <ProductCard
+                                loading={isFetching}
                                 action={
                                     <FavoriteIcon
                                         isFavorite={true}
@@ -64,11 +68,9 @@ export const FavoritesList = () => {
                     </Fragment>
                 ))}
                 {(isFetchingNextPage || (isFetching && !data)) &&
-                    new Array(12).fill(0).map((_, i) => (
-                        <ProductCard style={{ display: 'block' }} key={i}>
-                            <ProductCardSkeleton />
-                        </ProductCard>
-                    ))}
+                    new Array(12)
+                        .fill(0)
+                        .map((_, i) => <ProductCard loading={true} />)}
             </InfiniteScroll>
         </>
     )

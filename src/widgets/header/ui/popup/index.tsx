@@ -1,8 +1,14 @@
 import cn from 'classnames'
-import { FC, HTMLAttributes, useEffect, useRef } from 'react'
+import classNames from 'classnames'
+import { motion, MotionStyle } from 'framer-motion'
+import { FC, HTMLAttributes, useEffect, useRef, useState } from 'react'
+import ReactDOM from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import { ReviewsCard, useGetMe, useInfo } from '@/entities/reviews-card'
 import { paths } from '@/shared/config/router'
+import { removeTokens } from '@/shared/config/storage'
+import { Button } from '@/shared/ui/button'
+import { Popup as PopupFull } from '@/shared/ui/popup'
 import { ReviewsUserSkeleton } from '@/shared/ui/skeleton'
 import styles from './styles.module.scss'
 
@@ -15,16 +21,22 @@ interface PopupProps extends HTMLAttributes<HTMLDivElement> {
 export const Popup: FC<PopupProps> = ({
     setUsername,
     isPopup,
+    // setIsOnce,
     setIsPopup,
     className,
+    // isOnce,
 }) => {
     const navigate = useNavigate()
     const popupRef = useRef<HTMLDivElement | null>(null)
+    const [isExitPopup, setIsExitPopup] = useState<boolean>(false)
     const setImage = useInfo((state) => state.setImage)
     const { data, isError, isLoading, error } = useGetMe()
 
+    console.log(setIsPopup, '---------------')
+
     const exit = () => {
-        localStorage.removeItem('token')
+        setIsExitPopup(false)
+        removeTokens()
         setImage('')
         setUsername('Guest')
         navigate(paths.auth)
@@ -32,7 +44,7 @@ export const Popup: FC<PopupProps> = ({
 
     useEffect(() => {
         if (!isError && !isLoading && data) {
-            setUsername(data?.username)
+            setUsername(data?.username || 'Guest')
         }
     }, [isError, isLoading, setUsername, data])
 
@@ -40,7 +52,8 @@ export const Popup: FC<PopupProps> = ({
         const handleClickOutside = (event: MouseEvent) => {
             if (
                 popupRef.current &&
-                !popupRef.current.contains(event.target as Node)
+                !popupRef.current.contains(event.target as Node) &&
+                !isExitPopup
             ) {
                 setIsPopup(false)
             }
@@ -55,13 +68,30 @@ export const Popup: FC<PopupProps> = ({
         return () => {
             document.removeEventListener('mousedown', handleClickOutside)
         }
-    }, [isPopup, setIsPopup])
+    }, [isPopup, setIsPopup, isExitPopup])
 
-    return (
-        <div
+    const header = document.querySelector('._header_r9bw5_1')
+    const headerRect = header && header.getBoundingClientRect()
+    let style: MotionStyle = {}
+    if (headerRect) {
+        style = {
+            position: 'fixed',
+            top: `-1px`,
+            right: `${window.innerWidth - headerRect.right - 8}px`, // Выравниваем по правому краю header
+        }
+    }
+
+    console.log(isExitPopup)
+
+    return ReactDOM.createPortal(
+        <motion.div
             ref={popupRef}
+            style={style}
             className={cn(styles.popup, className)}
-            style={{ display: isPopup ? 'block' : 'none' }}
+            initial={{ translateY: -100, opacity: 0 }}
+            animate={{ translateY: 0, opacity: 1 }}
+            exit={{ translateY: -100, opacity: 0 }}
+            transition={{ duration: 0.35, type: 'spring' }}
         >
             <div className={styles.card}>
                 {isLoading ? (
@@ -74,12 +104,21 @@ export const Popup: FC<PopupProps> = ({
                         stars={data?.rating || 0}
                         image={data?.avatar || ''}
                         userId={data?.id || null}
+                        setIsPopup={setIsPopup}
                     />
                 )}
             </div>
             <hr />
             <ul className={styles.info}>
-                <li>Мои отзывы</li>
+                <li>
+                    <Link
+                        className={styles.link}
+                        onClick={() => setIsPopup(false)}
+                        to={paths.myReviews}
+                    >
+                        Мои отзывы
+                    </Link>
+                </li>
                 <li>
                     <Link
                         onClick={() => setIsPopup(false)}
@@ -98,23 +137,61 @@ export const Popup: FC<PopupProps> = ({
                         Избранное
                     </Link>
                 </li>
-                <li>Мои чаты</li>
+                <li>
+                    <Link
+                        onClick={() => setIsPopup(false)}
+                        to={paths.chats}
+                        className={styles.link}
+                    >
+                        Мои чаты
+                    </Link>
+                </li>
             </ul>
             <hr />
             <ul className={styles.info}>
                 <li>
                     <Link
                         // поправить на {`${paths.profile}/${data?.id}`} или что-то подобное
-                        to={`profile/${data?.id}`}
+                        onClick={() => setIsPopup(false)}
+                        to={`profile/${data?.id}?type=settings`}
                         className={styles.link}
                     >
                         Настройки
                     </Link>
                 </li>
-                <li onClick={exit} className={styles.exit}>
+                <li
+                    onClick={() => setIsExitPopup(true)}
+                    className={classNames(styles.exit, styles.link)}
+                >
                     Выйти
                 </li>
             </ul>
-        </div>
+            {isExitPopup ? (
+                <PopupFull
+                    onClick={() => {
+                        setIsExitPopup(false)
+                    }}
+                >
+                    <div
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                        }}
+                        className={styles['exit-popup']}
+                    >
+                        <h3>Вы уверены, что хотите выйти?</h3>
+                        <div className={styles.buttons}>
+                            <Button onClick={() => setIsExitPopup(false)}>
+                                Нет
+                            </Button>
+                            <Button className={styles.yes} onClick={exit}>
+                                Да
+                            </Button>
+                        </div>
+                    </div>
+                </PopupFull>
+            ) : null}
+        </motion.div>,
+        document.body,
     )
 }

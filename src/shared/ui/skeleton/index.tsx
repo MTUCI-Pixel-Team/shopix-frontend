@@ -1,4 +1,5 @@
 import ContentLoader from 'react-content-loader'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export const ReviewsUserSkeleton = () => (
     <ContentLoader

@@ -1,10 +1,36 @@
 import cn from 'classnames'
-import { FC, HTMLAttributes } from 'react'
+import { FC, HTMLAttributes, useEffect, useState } from 'react'
 import styles from './styles.module.scss'
 
 interface UpButtonProps extends HTMLAttributes<HTMLDivElement> {}
 
 export const UpButton: FC<UpButtonProps> = ({ className, ...props }) => {
+    // useEffect(() => {
+    //     window.addEventListener('scroll', handleScroll)
+
+    //     return () => {
+    //         window.removeEventListener('scroll', handleScroll)
+    //     }
+    // }, [])
+
+    const [scroll, setScroll] = useState(false)
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll)
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+    }, [])
+
+    const handleScroll = () => {
+        if (window.scrollY > 750) {
+            setScroll(true)
+        } else {
+            setScroll(false)
+        }
+    }
+
     const handleClick = () => {
         window.scrollTo({
             top: 0,
@@ -17,6 +43,7 @@ export const UpButton: FC<UpButtonProps> = ({ className, ...props }) => {
             {...props}
             onClick={handleClick}
             className={cn(styles.up, className)}
+            style={{ display: scroll ? 'flex' : 'none' }}
         >
             <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -45,6 +45,7 @@ export const PopupAddProduct = ({
             price: '',
             address: '',
         },
+        mode: 'onChange',
     })
 
     useEffect(() => {
@@ -104,7 +105,7 @@ export const PopupAddProduct = ({
     console.log(address)
 
     return (
-        <Popup onClick={handleClose}>
+        <Popup onClick={handleClose} closeAvailable={false}>
             <div className={styles.popup}>
                 <h2 className={styles.title}>Создание объявления</h2>
                 <form
@@ -189,6 +190,9 @@ export const PopupAddProduct = ({
                             type="number"
                             {...register('price', {
                                 required: 'Это поле обязательное',
+                                validate: (value) =>
+                                    +value >= 0 ||
+                                    'Цена должна быть положительной',
                             })}
                         />
                         <p className={styles.error}>{errors.price?.message}</p>

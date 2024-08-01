@@ -1,5 +1,4 @@
 .popup {
-    display: none;
     padding: 16px;
     z-index: 90;
     position: absolute;
@@ -43,4 +42,8 @@
             fill: var(--accent);
         }
     }
+}
+
+.more {
+    width: 100%;
 }

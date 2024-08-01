@@ -1,19 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { Request } from '@/shared/api'
 import { getToken } from '@/shared/config/storage'
-
-interface IUsers {
-    id: number
-    email: string
-    username: string
-    rating: number
-    full_name: string | null
-    avatar: string | null
-    created_at: string
-    updated_at: string
-    is_active: boolean
-    is_owner: boolean
-}
+import { IUsers } from '../model'
 
 export const useGetMe = () => {
     const { data, isLoading, isError, error } = useQuery({
@@ -39,10 +27,16 @@ export const useGetUsers = (id: number) => {
             const token = getToken()
             if (token) {
                 const result = await Request.getWithToken<IUsers>(`users/${id}`)
-                return result
+                return {
+                    ...result,
+                    rating: parseFloat(result?.rating.toFixed(1) || '0'),
+                }
             } else {
                 const result = await Request.get<IUsers>(`users/${id}`)
-                return result
+                return {
+                    ...result,
+                    rating: parseFloat(result?.rating.toFixed(1) || '0'),
+                }
             }
         },
     })

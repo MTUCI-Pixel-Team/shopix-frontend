@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { paths } from '@/shared/config/router'
@@ -36,58 +37,80 @@ export const LoginPage = () => {
 
     console.log(mutation, 'error')
 
+    const pageVariants = {
+        initial: { opacity: 0 },
+        in: { opacity: 1 },
+        out: { opacity: 0 },
+    }
+
     return (
-        <div className={styles.login}>
-            <h1 className={styles.title}>Авторизация</h1>
-            <form
-                className={styles.form}
-                onSubmit={handleSubmit(getAuth)}
-                action=""
+        <AnimatePresence>
+            <motion.div
+                className={styles.login}
+                initial="initial"
+                animate="in"
+                exit="out"
+                variants={pageVariants}
+                transition={{
+                    type: 'tween',
+                    ease: 'anticipate',
+                    duration: 0.5,
+                }}
             >
-                <div className={styles.input}>
-                    <label htmlFor="email">Введите email</label>
-                    <Input
-                        placeholder="Email"
-                        {...register('email', {
-                            required: 'Это поле обязательное',
+                <h1 className={styles.title}>Авторизация</h1>
+                <form
+                    className={styles.form}
+                    onSubmit={handleSubmit(getAuth)}
+                    action=""
+                >
+                    <div className={styles.input}>
+                        <label htmlFor="email">Введите email</label>
+                        <Input
+                            placeholder="Email"
+                            {...register('email', {
+                                required: 'Это поле обязательное',
 
-                            pattern: {
-                                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                                message: 'Введите корректный email',
-                            },
-                        })}
-                        id="email"
-                    />
-                    <p className={styles.error}>{errors.email?.message}</p>
-                </div>
-                <div className={styles.input}>
-                    <label htmlFor="password">Введите пароль</label>
-                    <Input
-                        type="password"
-                        placeholder="Пароль"
-                        {...register('password', {
-                            required: 'Это поле обязательное',
+                                pattern: {
+                                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                                    message: 'Введите корректный email',
+                                },
+                            })}
+                            id="email"
+                        />
+                        <p className={styles.error}>{errors.email?.message}</p>
+                    </div>
+                    <div className={styles.input}>
+                        <label htmlFor="password">Введите пароль</label>
+                        <Input
+                            type="password"
+                            placeholder="Пароль"
+                            {...register('password', {
+                                required: 'Это поле обязательное',
 
-                            minLength: {
-                                value: 8,
-                                message: 'Минимальная длина пароля 8 символов',
-                            },
-                        })}
-                        id="password"
-                    />
-                    <p className={styles.error}>{errors.password?.message}</p>
+                                minLength: {
+                                    value: 8,
+                                    message:
+                                        'Минимальная длина пароля 8 символов',
+                                },
+                            })}
+                            id="password"
+                        />
+                        <p className={styles.error}>
+                            {errors.password?.message}
+                        </p>
+                    </div>
+                    <p className={styles.error}>{mutation.error?.message}</p>
+                    <Button size="big" className={styles.button} type="submit">
+                        Авторизоваться
+                    </Button>
+                </form>
+                <div className={styles.without}>
+                    <p>Нет аккаунта?</p>
+                    <Link to={`${paths.auth}/${paths.register}`}>
+                        Зарегистрируйтесь
+                    </Link>
                 </div>
-                <p className={styles.error}>{mutation.error?.message}</p>
-                <Button size="big" className={styles.button} type="submit">
-                    Авторизоваться
-                </Button>
-            </form>
-            <div className={styles.without}>
-                <p>Нет аккаунта?</p>
-                <Link to={`${paths.auth}/${paths.register}`}>
-                    Зарегистрируйтесь
-                </Link>
-            </div>
-        </div>
+            </motion.div>
+        </AnimatePresence>
     )
 }

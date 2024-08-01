@@ -4,6 +4,7 @@ const cookies = new Cookies()
 
 export const getToken = () => localStorage.getItem('token')
 export const removeTokens = () => {
+    console.log('hello')
     localStorage.removeItem('token')
     cookies.remove('refreshToken')
 }

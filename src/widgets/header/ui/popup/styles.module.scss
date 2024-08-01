@@ -42,3 +42,27 @@
 .exit {
     color: var(--gray);
 }
+
+.exit-popup {
+    // width: 35vw;
+    padding: 48px;
+    border-radius: 16px;
+    color: var(--white-color);
+    background: var(--primary);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+}
+
+.yes {
+    background-color: var(--second-primary);
+}

@@ -9,4 +9,6 @@ export const paths = {
     register: 'register',
     verify: 'verify',
     profile: 'profile/:id',
+    reviews: 'reviews/:id',
+    myReviews: 'me/reviews',
 }

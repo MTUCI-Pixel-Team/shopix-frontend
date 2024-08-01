@@ -8,7 +8,6 @@ import { Button } from '@/shared/ui/button'
 import { EmptyElement } from '@/shared/ui/empty'
 import { ErrorElement } from '@/shared/ui/error'
 import { Popup } from '@/shared/ui/popup'
-import { ProductCardSkeleton } from '@/shared/ui/skeleton'
 import { useDeleteProduct, useGetMyProducts, useUpdateProduct } from '..'
 import styles from './styles.module.scss'
 
@@ -54,6 +53,8 @@ export const MyProducts = ({ type }: { type: string }) => {
                     !isEmpty
                         ? {
                               display: 'grid',
+                              height: '100%',
+                              overflow: 'initial',
                               gridTemplateColumns:
                                   'repeat(auto-fill, minmax(283px, 1fr))',
                               gap: '20px',
@@ -66,6 +67,7 @@ export const MyProducts = ({ type }: { type: string }) => {
                     <Fragment key={uuidv4()}>
                         {item.results.map((product: IProduct) => (
                             <ProductCard
+                                loading={isFetching}
                                 inactive={type === 'inactive'}
                                 action={
                                     type === 'active' ? (
@@ -251,11 +253,9 @@ export const MyProducts = ({ type }: { type: string }) => {
                 )}
 
                 {(isFetchingNextPage || (isFetching && !data)) &&
-                    new Array(12).fill(0).map((_, i) => (
-                        <ProductCard style={{ display: 'block' }} key={i}>
-                            <ProductCardSkeleton />
-                        </ProductCard>
-                    ))}
+                    new Array(12)
+                        .fill(0)
+                        .map(() => <ProductCard loading={true} />)}
             </InfiniteScroll>
         </>
     )

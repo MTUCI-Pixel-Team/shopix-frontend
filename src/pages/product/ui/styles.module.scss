@@ -47,15 +47,20 @@
     margin-top: 16px;
 }
 
+.user {
+    max-width: 230px;
+    flex-grow: 2;
+}
+
 .address {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
+    height: 100%;
+    justify-content: space-around;
+    flex-grow: 1;
 }
 
 .view {
-    width: 100%;
     display: flex;
     justify-content: space-between;
     gap: 8px;
@@ -63,27 +68,32 @@
 }
 
 .views {
-    display: flex;
     gap: 4px;
     align-items: center;
+    justify-content: flex-end;
+}
+
+.wrapper-area {
+    flex: 1;
+    margin-top: 16px;
+    width: 100%;
+    height: 60%;
+    border-radius: 16px;
 }
 
 .area {
     &::-webkit-scrollbar-track {
         border-radius: 0 16px 16px 0;
     }
-    flex: 1;
+    padding: 8px;
+    border: 1px solid var(--second-primary);
     font-size: 20px;
     font-weight: 400;
-    margin-top: 16px;
     width: 100%;
-    height: 60%;
-    border: none;
+    height: 100%;
     background: none;
     resize: none;
-    border: 1px solid var(--second-primary);
     border-radius: 16px;
-    padding: 8px;
     &::placeholder {
         color: var(--black);
     }
@@ -93,6 +103,11 @@
     align-self: start;
     padding: 0 60px;
     justify-self: flex-start;
+    &-cancel {
+        background-color: var(--second-primary);
+        color: var(--white-color);
+        padding: 0 20px;
+    }
 }
 
 .action {
@@ -109,6 +124,10 @@
     border: 2px dashed var(--accent);
 }
 
+.time,
+.views {
+    width: 100%;
+}
 .active,
 .loading {
     color: var(--accent);

@@ -20,6 +20,7 @@ export const useGetProducts = (queryParams = {}) => {
     } = useInfiniteQuery<IProductResponse>({
         queryKey: ['posts', queryParams],
         queryFn: async ({ pageParam }) => {
+            console.log(queryParams)
             const emptyProducts = {
                 count: 0,
                 next: '',

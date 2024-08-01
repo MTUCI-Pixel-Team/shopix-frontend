@@ -3,7 +3,7 @@ import { FC, SVGProps } from 'react'
 import styles from './styles.module.scss'
 
 interface FavoriteIconProps extends SVGProps<SVGSVGElement> {
-    isFavorite: boolean
+    isFavorite: boolean | undefined
 }
 
 export const FavoriteIcon: FC<FavoriteIconProps> = ({

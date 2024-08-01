@@ -2,11 +2,9 @@ import { useEffect, useState } from 'react'
 import { ProductsList } from '@/widgets/products-list'
 import { Sidebar } from '@/widgets/sidebar'
 import { useGetProducts } from '@/entities/product-card'
-import { UpButton } from '@/shared/ui/up'
 import styles from './styles.module.scss'
 
 export const HomePage = () => {
-    const [scroll, setScroll] = useState(false)
     const [maxPrice, setMaxPrice] = useState<number>(0)
     const [minPrice, setMinPrice] = useState<number>(0)
     const [once, setOnce] = useState<boolean>(true)
@@ -31,24 +29,8 @@ export const HomePage = () => {
         }
     }, [data, once])
 
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll)
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll)
-        }
-    }, [])
-
-    const handleScroll = () => {
-        if (window.scrollY > 750) {
-            setScroll(true)
-        } else {
-            setScroll(false)
-        }
-    }
-
     return (
-        <div onScroll={handleScroll} className={styles.home}>
+        <div className={styles.home}>
             <ProductsList
                 isLoading={isFetching}
                 data={data}
@@ -63,10 +45,6 @@ export const HomePage = () => {
                 setQureyParams={setFilters}
                 maxPrice={maxPrice}
                 minPrice={minPrice}
-            />
-            <UpButton
-                style={{ display: scroll ? 'flex' : 'none' }}
-                className={styles.up}
             />
         </div>
     )

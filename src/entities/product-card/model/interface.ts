@@ -11,6 +11,7 @@ export interface IProduct {
     id: number
     first_image: string
     is_owner?: boolean
+    user?: number
 }
 
 export interface IProductResponse {

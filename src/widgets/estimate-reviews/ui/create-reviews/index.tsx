@@ -1,18 +1,22 @@
 import classNames from 'classnames'
-import React, { FC } from 'react'
+import React, { FC, useEffect } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { ImagesDrop } from '@/entities/images-drop'
-import { ProductCard } from '@/entities/product-card'
-import { ReviewsCard } from '@/entities/reviews-card'
+import { IProduct, ProductCard } from '@/entities/product-card'
+import { ReviewsCard, useGetUsers } from '@/entities/reviews-card'
 import { Button } from '@/shared/ui/button'
 import { Popup } from '@/shared/ui/popup'
 import { Radio } from '@/shared/ui/radio'
 import { Stars } from '@/shared/ui/stars'
 import { Textarea } from '@/shared/ui/textarea'
+import { useCreateReview } from '../../api'
+import { ICreateReview } from '../../model'
 import styles from './styles.module.scss'
 
 interface CreateReviewProps extends React.HTMLAttributes<HTMLDivElement> {
     stars: number
     setPickedStars: (stars: number | null) => void
+    pickedProduct: IProduct | null
 }
 
 interface RadioOptions {
@@ -23,9 +27,20 @@ interface RadioOptions {
 export const CreateReview: FC<CreateReviewProps> = ({
     stars,
     setPickedStars,
+    pickedProduct,
     ...props
 }) => {
     const [images, setImages] = React.useState<(File | string)[]>([])
+    const [radioValue, setRadioValue] = React.useState<string>('1')
+    const { data, isLoading, isError } = useGetUsers(pickedProduct?.user)
+    const mutation = useCreateReview()
+    const form = useForm<ICreateReview>({
+        defaultValues: {
+            review: '',
+            result: '',
+            rating: stars + 1,
+        },
+    })
 
     const radioOptions: RadioOptions[] = [
         { label: 'Услуга оказана', value: '1' },
@@ -33,38 +48,66 @@ export const CreateReview: FC<CreateReviewProps> = ({
     ]
 
     const handleRadioChange = (value: string) => {
-        console.log(value)
+        console.log(value, '--------------')
+        setRadioValue(value)
     }
 
-    console.log(stars)
+    const handelSubmit = (data: ICreateReview) => {
+        const review = {
+            ...data,
+            result: radioOptions[+radioValue - 1].label,
+            listing: pickedProduct?.id,
+        }
+        const formData = new FormData()
+        formData.append('review', JSON.stringify(review))
+        images.forEach((image) => {
+            formData.append('images', image)
+        })
+
+        mutation.mutate(formData, {
+            onSuccess: () => {
+                setPickedStars(null)
+            },
+        })
+    }
+
+    useEffect(() => {
+        form.setValue('rating', stars + 1)
+    }, [stars, form])
+
+    console.log(pickedProduct)
 
     return (
         <Popup {...props}>
-            <div className={styles.review}>
+            <form
+                onSubmit={form.handleSubmit(handelSubmit)}
+                className={styles.review}
+            >
                 <div className={styles.grid}>
                     <div className={styles.left}>
                         <h1 className={styles.title}>Отзыв о пользователе</h1>
                         <div className={styles.user}>
-                            <ReviewsCard
-                                username="Hello"
-                                image={null}
-                                userId={'5'}
-                                stars={0}
-                            />
+                            {isLoading ? (
+                                <div>Загрузка...</div>
+                            ) : isError ? (
+                                <div>Ошибка</div>
+                            ) : (
+                                <ReviewsCard
+                                    username={data?.username || ''}
+                                    image={data?.avatar || ''}
+                                    userId={data?.id}
+                                    stars={data?.rating}
+                                />
+                            )}
                         </div>
                         <div className={styles.card}>
                             <p className={styles.subtitle}>Объявление:</p>
-                            <ProductCard
-                                product={{
-                                    title: 'Title',
-                                    price: '100',
-                                    first_image:
-                                        '/media/images/photo_2024-05-23_19-49-30.jpg',
-                                    id: 5,
-                                    created_at: '2021-09-01T00:00:00',
-                                    address: 'Address',
-                                }}
-                            />
+                            {pickedProduct && (
+                                <ProductCard
+                                    loading={false}
+                                    product={pickedProduct}
+                                />
+                            )}
                         </div>
                         <div className={styles.result}>
                             <p className={styles.subtitle}>
@@ -91,19 +134,52 @@ export const CreateReview: FC<CreateReviewProps> = ({
                         </div>
                         <div className={styles.text}>
                             <p className={styles.subtitle}>Отзыв:</p>
-                            <Textarea className={styles.area} />
+
+                            <Controller
+                                name="review"
+                                control={form.control}
+                                rules={{
+                                    required: 'Это поле обязательное',
+                                    maxLength: {
+                                        value: 5000,
+                                        message:
+                                            'Максимальная длина 5000 символов',
+                                    },
+                                }}
+                                render={({ field }) => (
+                                    <Textarea
+                                        className={styles.area}
+                                        id="review"
+                                        placeholder="Описание"
+                                        {...field}
+                                    />
+                                )}
+                            />
+
+                            <p className={styles.error}>
+                                {form.formState.errors.review?.message}
+                            </p>
                         </div>
                         <div className={styles.images}>
                             <p className={styles.subtitle}>
                                 Добавьте фотографии:
                             </p>
-                            <ImagesDrop images={images} setImages={setImages} />
+                            <ImagesDrop
+                                className={styles.drop}
+                                images={images}
+                                setImages={setImages}
+                            />
                         </div>
                     </div>
                 </div>
+
                 <div className={styles.buttons}>
-                    <Button size="big" className={styles.button}>
-                        Отправить
+                    <Button
+                        size="big"
+                        className={styles.button}
+                        disabled={mutation.isPending}
+                    >
+                        {mutation.isPending ? 'Отправка...' : 'Отправить'}
                     </Button>
                     <Button
                         size="big"
@@ -113,7 +189,7 @@ export const CreateReview: FC<CreateReviewProps> = ({
                         Отмена
                     </Button>
                 </div>
-            </div>
+            </form>
         </Popup>
     )
 }

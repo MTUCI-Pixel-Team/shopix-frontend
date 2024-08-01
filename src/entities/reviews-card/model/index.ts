@@ -5,13 +5,16 @@ export const useInfo = create(
     devtools(
         combine(
             {
-                username: 'Guest',
+                username: '',
                 image: '',
                 stars: 0,
+                id: '',
             },
             (set) => ({
                 setStars: (stars: number) => set({ stars }),
                 setImage: (image: string) => set({ image }),
+                setUsername: (username: string) => set({ username }),
+                setId: (id: string) => set({ id }),
             }),
         ),
     ),

@@ -1,8 +1,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { IProduct, IProductResponse } from '@/entities/product-card'
-import { IReviews } from '@/entities/review'
+import { IProduct } from '@/entities/product-card'
 import { SERVER_API } from '@/shared/config/constants'
 import { formatPrice } from '@/shared/lib'
 import { Stars } from '@/shared/ui/stars'
@@ -16,8 +15,8 @@ interface EstimateReviewsProps {
 export const EstimateReviews: FC<EstimateReviewsProps> = ({ products }) => {
     const navigate = useNavigate()
     const [pickedStars, setPickedStars] = useState<number | null>(null)
+    const [pickedProduct, setPickedProduct] = useState<IProduct | null>(null)
 
-    console.log(pickedStars)
     const subPageVariants = {
         initial: { opacity: 0 },
         in: { opacity: 1 },
@@ -45,6 +44,7 @@ export const EstimateReviews: FC<EstimateReviewsProps> = ({ products }) => {
                                     className={styles.info}
                                     onClick={() => {
                                         navigate(`/product/${product.id}`)
+                                        product
                                     }}
                                 >
                                     <div className={styles.image}>
@@ -69,7 +69,12 @@ export const EstimateReviews: FC<EstimateReviewsProps> = ({ products }) => {
                                         size="big"
                                         light={true}
                                         fillStars={-1}
-                                        setPickedStars={setPickedStars}
+                                        setPickedStars={(
+                                            stars: number | null,
+                                        ) => {
+                                            setPickedStars(stars)
+                                            setPickedProduct(product)
+                                        }}
                                     />
                                 </div>
                             </div>
@@ -81,6 +86,7 @@ export const EstimateReviews: FC<EstimateReviewsProps> = ({ products }) => {
 
                 {pickedStars !== null && pickedStars !== undefined && (
                     <CreateReview
+                        pickedProduct={pickedProduct}
                         setPickedStars={setPickedStars}
                         stars={pickedStars}
                     />

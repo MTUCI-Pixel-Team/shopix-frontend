@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid'
 import { FavoriteIcon, useRemoveFavorite } from '@/features/card/favorites'
 import { IProduct, ProductCard } from '@/entities/product-card'
 import { EmptyElement } from '@/shared/ui/empty'
-import { ProductCardSkeleton } from '@/shared/ui/skeleton'
 import { useGetFavorites } from '..'
 import styles from './styles.module.scss'
 
@@ -70,7 +69,7 @@ export const FavoritesList = () => {
                 {(isFetchingNextPage || (isFetching && !data)) &&
                     new Array(12)
                         .fill(0)
-                        .map((_, i) => <ProductCard loading={true} />)}
+                        .map(() => <ProductCard loading={true} />)}
             </InfiniteScroll>
         </>
     )

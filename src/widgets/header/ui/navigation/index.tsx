@@ -1,22 +1,20 @@
 import { motion } from 'framer-motion'
+import { User } from 'lucide-react'
 import { FC } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
+import { useInfo } from '@/entities/reviews-card'
 import { paths } from '@/shared/config/router'
 import { getToken } from '@/shared/config/storage'
 import styles from './styles.module.scss'
 
 interface NavigationProps {
     setIsPopup: (arg: boolean) => void
-    username: string
-    image?: string
 }
 
-export const Navigation: FC<NavigationProps> = ({
-    setIsPopup,
-    username = 'Guest',
-    image,
-}) => {
+export const Navigation: FC<NavigationProps> = ({ setIsPopup }) => {
     const navigate = useNavigate()
+    const { username, image } = useInfo((state) => state)
+
     const handlePopup = () => {
         const token = getToken()
         if (token) {
@@ -25,8 +23,6 @@ export const Navigation: FC<NavigationProps> = ({
             navigate(paths.auth)
         }
     }
-
-    // console.log(username)
 
     return (
         <motion.div className={styles.nav}>
@@ -62,10 +58,11 @@ export const Navigation: FC<NavigationProps> = ({
             <motion.div onClick={handlePopup} className={styles.logo}>
                 {image ? (
                     <img src={image} alt="profile" />
-                ) : (
+                ) : username ? (
                     username.slice(0, 1).toUpperCase()
+                ) : (
+                    <User size={'32px'} />
                 )}
-                {/* <img src="/public/images/profile.png" alt="profile" /> */}
             </motion.div>
         </motion.div>
     )

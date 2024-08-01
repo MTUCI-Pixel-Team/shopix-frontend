@@ -1,9 +1,14 @@
-export interface IReviewsResponse {
-    reviews: IReviews | undefined
-    user: IUsers | undefined
-}
+// export interface IReviewsResponse {
+//     reviews: IReviews | undefined
+//     user: IUsers | undefined
+// }
 
-export interface IReviews {
+// export interface IReviews {
+//     pageParams: string[]
+//     pages: IInfResponse[]
+// }
+
+export interface IReviewResponse {
     count: number
     next: '' | null
     previous: '' | null

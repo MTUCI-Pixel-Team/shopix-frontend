@@ -10,7 +10,6 @@ import { useGetUsers } from '@/entities/profile-card'
 import { SERVER_API } from '@/shared/config/constants'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
-import { ReviewsCardSkeleton } from '@/shared/ui/skeleton'
 import { useProfileChanges } from '../api'
 import { InputInFormProps } from '../model'
 import styles from './styles.module.scss'
@@ -53,9 +52,9 @@ export const Profile = () => {
 
     useEffect(() => {
         if (user) {
-            setEmail(user.email)
-            setName(user.username)
-            setDefaultEmail(user.email)
+            setEmail(user?.email || '')
+            setName(user?.username || '')
+            setDefaultEmail(user?.email || '')
             setDefaultPassword('')
             if (user.avatar) {
                 // setAvatar([new File([], `${SERVER_API}${user.avatar}`)])
@@ -240,7 +239,6 @@ export const Profile = () => {
                         <ActiveInactive type={type} setType={setType} />
                         <UserProducts
                             isOwner={user?.is_owner || false}
-                            editable={false}
                             type={type}
                             userId={id || ''}
                         />

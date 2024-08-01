@@ -1,3 +1,4 @@
+import { User } from 'lucide-react'
 import { FC, HTMLAttributes } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Stars } from '@/shared/ui/stars'
@@ -8,7 +9,7 @@ interface ReviewsCardProps extends HTMLAttributes<HTMLDivElement> {
     image: string | null
     stars?: number | null
     withoutStars?: boolean
-    userId: string | null
+    userId: string | null | undefined
     setIsPopup?: (arg: boolean) => void
 }
 
@@ -38,7 +39,7 @@ export const ReviewsCard: FC<ReviewsCardProps> = ({
                 ) : username ? (
                     username[0].toUpperCase()
                 ) : (
-                    'G'
+                    <User size={'32px'} />
                 )}
             </div>
             <div className={styles.info}>

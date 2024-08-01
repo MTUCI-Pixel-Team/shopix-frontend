@@ -13,40 +13,24 @@ import { ReviewsUserSkeleton } from '@/shared/ui/skeleton'
 import styles from './styles.module.scss'
 
 interface PopupProps extends HTMLAttributes<HTMLDivElement> {
-    setUsername: (arg: string) => void
     isPopup: boolean
     setIsPopup: (arg: boolean) => void
 }
 
-export const Popup: FC<PopupProps> = ({
-    setUsername,
-    isPopup,
-    // setIsOnce,
-    setIsPopup,
-    className,
-    // isOnce,
-}) => {
+export const Popup: FC<PopupProps> = ({ isPopup, setIsPopup, className }) => {
     const navigate = useNavigate()
     const popupRef = useRef<HTMLDivElement | null>(null)
     const [isExitPopup, setIsExitPopup] = useState<boolean>(false)
-    const setImage = useInfo((state) => state.setImage)
+    const { setImage, setUsername } = useInfo((state) => state)
     const { data, isError, isLoading, error } = useGetMe()
-
-    console.log(setIsPopup, '---------------')
 
     const exit = () => {
         setIsExitPopup(false)
         removeTokens()
         setImage('')
-        setUsername('Guest')
+        setUsername('')
         navigate(paths.auth)
     }
-
-    useEffect(() => {
-        if (!isError && !isLoading && data) {
-            setUsername(data?.username || 'Guest')
-        }
-    }, [isError, isLoading, setUsername, data])
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {

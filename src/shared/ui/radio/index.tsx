@@ -10,6 +10,7 @@ interface RadioOptions {
 interface RadioProps extends React.HTMLAttributes<HTMLDivElement> {
     options: RadioOptions[]
     name: string
+    value?: string
     handleRadioChange: (value: string) => void
 }
 
@@ -18,12 +19,14 @@ export const Radio: FC<RadioProps> = ({
     name,
     onChange,
     className,
+    handleRadioChange,
     ...props
 }) => {
     const [selectedValue, setSelectedValue] = useState(options[0].value)
 
-    const handleChange = (event) => {
+    const handleChange = (event: any) => {
         setSelectedValue(event.target.value)
+        handleRadioChange(event.target.value)
         if (onChange) {
             onChange(event.target.value)
         }

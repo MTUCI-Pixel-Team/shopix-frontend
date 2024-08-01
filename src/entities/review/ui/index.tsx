@@ -1,3 +1,4 @@
+import Skeleton from 'react-loading-skeleton'
 import { Link, useNavigate } from 'react-router-dom'
 import { SERVER_API } from '@/shared/config/constants'
 import { Stars } from '@/shared/ui/stars'
@@ -11,7 +12,11 @@ export const Review = ({ review }: { review: IReview }) => {
     const transformedDate = new Date(review.updated_at).toLocaleDateString()
 
     return isLoading ? (
-        <h2>Загрузка</h2>
+        <Skeleton
+            height={80}
+            baseColor="var(--second-primary)"
+            style={{ borderRadius: '16px' }}
+        />
     ) : isError ? (
         <h2>Ошибка</h2>
     ) : (

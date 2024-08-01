@@ -1,15 +1,14 @@
 import classNames from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ReactNode, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { EstimateReviews } from '@/widgets/estimate-reviews'
-import { Reviews } from '@/widgets/reviews'
 import { useGetProducts } from '@/entities/product-card'
-import { useGetMyReviews } from '../api'
+import { MeAppreciated } from '../appreciated-me'
+import { MyMarks } from '../my-marks/indx'
 import styles from './styles.module.scss'
 
 export const MyReviewsPage = () => {
-    const { data, isError, isLoading } = useGetMyReviews()
     const {
         data: products,
         isFetching: isLoadingProducts,
@@ -28,32 +27,30 @@ export const MyReviewsPage = () => {
         navigate(`?${params.toString()}`, { replace: true })
     }, [filter, navigate, location.search])
 
-    let infoBlock
+    let infoBlock = (
+        <>
+            <MyMarks />
+        </>
+    )
     switch (filter) {
         case 'on':
-            infoBlock = isLoading ? (
-                <h2>Загрузка</h2>
-            ) : isError ? (
-                <h2>Ошибка</h2>
-            ) : (
-                // чтобы отрабатывала анимацию: <></> - НЕ УДАЛЯТЬ!!!
+            infoBlock = (
                 <>
-                    <Reviews user={data?.user} reviews={data?.reviews} />
+                    <MyMarks />
                 </>
             )
             break
         case 'me':
-            infoBlock = isLoading ? (
-                <h2>Загрузка</h2>
-            ) : isError ? (
-                <h2>Ошибка</h2>
-            ) : (
-                <Reviews user={data?.user} reviews={data?.myReviews} />
+            infoBlock = (
+                <>
+                    <MeAppreciated />
+                </>
             )
             break
         case 'off':
             const allProducts =
                 products?.pages.flatMap((page) => page.results) ?? []
+            console.log(allProducts, '----------------------')
             infoBlock = isLoadingProducts ? (
                 <h2>Загрузка</h2>
             ) : errorProducts ? (
@@ -62,21 +59,18 @@ export const MyReviewsPage = () => {
                 <EstimateReviews products={allProducts} />
             )
             break
-        default:
-            infoBlock = isLoading ? (
-                <h2>Загрузка</h2>
-            ) : isError ? (
-                <h2>Ошибка</h2>
-            ) : (
-                <Reviews user={data?.user} reviews={data?.reviews} />
-            )
-            break
     }
 
     const pageVariants = {
         initial: { opacity: 0, y: '-100px' },
         in: { opacity: 1, y: 0 },
         out: { opacity: 0, y: '100px' },
+    }
+
+    const subPageVariants = {
+        initial: { opacity: 0 },
+        in: { opacity: 1 },
+        out: { opacity: 0 },
     }
 
     return (
@@ -120,7 +114,21 @@ export const MyReviewsPage = () => {
                         Ждут оценки
                     </li>
                 </ul>
-                {infoBlock}
+                <motion.div
+                    className={styles.content}
+                    initial="initial"
+                    animate="in"
+                    exit="out"
+                    variants={subPageVariants}
+                    transition={{
+                        type: 'tween',
+                        ease: 'anticipate',
+                        delay: 0.4,
+                        duration: 0.5,
+                    }}
+                >
+                    {infoBlock}
+                </motion.div>
             </motion.div>
         </AnimatePresence>
     )

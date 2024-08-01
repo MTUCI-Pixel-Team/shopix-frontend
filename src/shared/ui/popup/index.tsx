@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, HTMLMotionProps, motion } from 'framer-motion'
 import { FC, HTMLAttributes, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import styles from './styles.module.scss'
@@ -27,28 +27,30 @@ export const Popup: FC<PopupProps> = ({
         out: { opacity: 1 },
     }
 
+    const motionProps: HTMLMotionProps<'div'> = {
+        initial: 'initial',
+        animate: 'in',
+        exit: 'out',
+        variants: pageVariants,
+        className: styles.popup,
+        transition: {
+            type: 'tween',
+            ease: 'anticipate',
+            duration: 0.5,
+        },
+        onClick: (e) => {
+            e.stopPropagation()
+            if (closeAvailable) {
+                onClick && onClick(e)
+            }
+        },
+    }
+
     return ReactDOM.createPortal(
         <div>
             <AnimatePresence>
-                <motion.div
-                    initial="initial"
-                    animate="in"
-                    exit="out"
-                    variants={pageVariants}
-                    className={styles.popup}
-                    transition={{
-                        type: 'tween',
-                        ease: 'anticipate',
-                        duration: 0.5,
-                    }}
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        if (closeAvailable) {
-                            onClick && onClick(e)
-                        }
-                    }}
-                    {...props}
-                >
+                {/* @ts-ignore */}
+                <motion.div {...motionProps} {...props}>
                     {children}
                 </motion.div>
             </AnimatePresence>

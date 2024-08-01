@@ -1,30 +1,24 @@
 import { AnimatePresence, motion } from 'framer-motion'
-import InfiniteScroll from 'react-infinite-scroll-component'
 import { useParams } from 'react-router-dom'
 import { Reviews } from '@/widgets/reviews'
+import { useReviewsById } from '@/entities/review'
 import { ReviewsCard } from '@/entities/reviews-card'
 import { SERVER_API } from '@/shared/config/constants'
 import { Stars } from '@/shared/ui/stars'
-import { useGetUserById, useReviewsById } from '../api'
+import { useGetUserById } from '../api'
 import styles from './styles.module.scss'
 
 export const ReviewsPage = () => {
     const { id } = useParams()
-    const {
-        data: userData,
-        isLoading: userIsLoading,
-        isError: userIsError,
-    } = useGetUserById(id)
+    const { data: userData } = useGetUserById(id)
     const {
         data,
         error,
         fetchNextPage,
         hasNextPage,
-        isLoading,
         isFetchingNextPage,
         isFetching,
         status,
-        isError,
     } = useReviewsById(id)
 
     const pageVariants = {
@@ -64,7 +58,7 @@ export const ReviewsPage = () => {
                             {userData?.rating.toFixed(1)}
                         </p>
                         <Stars
-                            fillStars={(userData?.rating || 0) - 1}
+                            fillStars={Math.round(userData?.rating || 0)}
                             size="big"
                         />
                     </div>
@@ -85,23 +79,17 @@ export const ReviewsPage = () => {
                         hasMore={hasNextPage || false}
                     ></InfiniteScroll> */}
                 </div>
-                {isLoading ? (
-                    <h2>Загрузка</h2>
-                ) : isError ? (
-                    <h2>Ошибка</h2>
-                ) : (
-                    <Reviews
-                        isLoading={isLoading}
-                        data={data?.pages}
-                        error={error}
-                        fetchNextPage={fetchNextPage}
-                        hasNextPage={hasNextPage}
-                        isFetching={isFetching}
-                        isFetchingNextPage={isFetchingNextPage}
-                        status={status}
-                        user={userData}
-                    />
-                )}
+                <Reviews
+                    isLoading={isFetching}
+                    data={data?.pages}
+                    error={error}
+                    fetchNextPage={fetchNextPage}
+                    hasNextPage={hasNextPage}
+                    isFetching={isFetching}
+                    isFetchingNextPage={isFetchingNextPage}
+                    status={status}
+                    user={userData}
+                />
             </motion.div>
         </AnimatePresence>
     )

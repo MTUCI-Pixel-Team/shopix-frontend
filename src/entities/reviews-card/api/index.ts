@@ -4,7 +4,7 @@ import { getToken } from '@/shared/config/storage'
 import { IUsers, useInfo } from '../model'
 
 export const useGetMe = () => {
-    const setImage = useInfo((state) => state.setImage)
+    const { setImage, setUsername, setId } = useInfo((state) => state)
 
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ['me'],
@@ -14,9 +14,9 @@ export const useGetMe = () => {
 
             const result = await Request.getWithToken<IUsers>('users/me')
 
-            if (result?.avatar) {
-                setImage(result.avatar)
-            }
+            setImage(result?.avatar || '')
+            setUsername(result?.username || '')
+            setId(result?.id || '')
 
             return {
                 ...result,
@@ -32,7 +32,7 @@ export const useGetMe = () => {
     }
 }
 
-export const useGetUsers = (id: number) => {
+export const useGetUsers = (id: number | undefined) => {
     const { data, isLoading, isError, error } = useQuery({
         queryKey: ['users', id],
         queryFn: async () => {
@@ -42,6 +42,7 @@ export const useGetUsers = (id: number) => {
                 rating: parseFloat(result?.rating.toFixed(1) || '0'),
             }
         },
+        enabled: !!id,
     })
     return {
         data,

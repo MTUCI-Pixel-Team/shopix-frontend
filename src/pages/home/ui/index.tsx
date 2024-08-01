@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { ProductsList } from '@/widgets/products-list'
 import { Sidebar } from '@/widgets/sidebar'
 import { useGetProducts } from '@/entities/product-card'
-import { UpButton } from '@/shared/ui/up'
 import styles from './styles.module.scss'
 
 export const HomePage = () => {
@@ -47,7 +46,6 @@ export const HomePage = () => {
                 maxPrice={maxPrice}
                 minPrice={minPrice}
             />
-            {/* <UpButton /> */}
         </div>
     )
 }

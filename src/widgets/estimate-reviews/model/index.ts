@@ -7,3 +7,20 @@ export interface IEstimateReviews {
     updated_at: string
     is_active: boolean
 }
+
+export interface ICreateReviewRequest {
+    review: {
+        review: string
+        result: string
+        rating: number
+        listing: number
+    }
+    images: (File | string)[]
+}
+
+export interface ICreateReview {
+    review: string
+    result: string
+    rating: number
+    listing: number
+}

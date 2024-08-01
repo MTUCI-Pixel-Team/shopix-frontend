@@ -18,6 +18,11 @@
         transform: scale(1.02);
         box-shadow: var(--shadow);
     }
+    &:disabled {
+        background: var(--accent);
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
 }
 
 .small {

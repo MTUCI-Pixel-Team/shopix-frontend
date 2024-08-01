@@ -16,11 +16,9 @@ export const UserProducts = ({
     userId,
     type,
     isOwner,
-    editable = true,
 }: {
     userId: string
     type: string
-    editable?: boolean
     isOwner: boolean
 }) => {
     const { data, fetchNextPage, isError, hasNextPage, error, isFetching } =

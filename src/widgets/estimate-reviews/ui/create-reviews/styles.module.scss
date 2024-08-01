@@ -39,6 +39,10 @@
 //     gap: 16px;
 // }
 
+.error {
+    color: var(--second-primary);
+    font-size: 24px;
+}
 .radio {
     gap: 8px;
 }
@@ -71,6 +75,10 @@
 }
 .button {
     padding: 8px 16px;
+}
+
+.drop {
+    flex-wrap: wrap;
 }
 
 .cancel {

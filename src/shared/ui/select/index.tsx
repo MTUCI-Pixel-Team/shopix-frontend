@@ -108,7 +108,7 @@ export function Select<
     )
 }
 
-const MenuList = (props) => {
+const MenuList = (props: any) => {
     return (
         <motion.div
             initial={{ opacity: 0, y: -20 }}

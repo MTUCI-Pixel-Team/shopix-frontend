@@ -46,7 +46,6 @@ jobs:
                   tags: ${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:${{ github.sha }}
                   cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:latest
                   cache-to: type=inline
-                  target: production
 
             - name: Deploy to server
               uses: appleboy/ssh-action@master

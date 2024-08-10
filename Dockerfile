@@ -29,9 +29,6 @@ RUN rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 # Копирование собранного приложения из этапа сборки
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Конфигурация Nginx для работы с вашим приложением
-COPY nginx.conf /etc/nginx/nginx.conf
-
 # Объявление порта, на котором будет работать приложение
 EXPOSE 80
 

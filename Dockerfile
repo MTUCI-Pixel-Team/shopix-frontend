@@ -7,8 +7,8 @@ WORKDIR /app
 # Копирование package.json и package-lock.json
 COPY package*.json ./
 
-# Установка зависимостей
-RUN npm ci
+# Установка только продакшн-зависимостей
+RUN npm ci --production
 
 # Копирование исходного кода проекта
 COPY . .
@@ -16,17 +16,24 @@ COPY . .
 # Сборка проекта
 RUN npm run build
 
-# Этап 2: создание финального легковесного образа
-FROM node:20-alpine
+# Удаление dev-зависимостей и кеша npm, если они есть
+RUN npm prune --production && \
+    npm cache clean --force
 
-# Установка http-сервера для обслуживания собранного проекта
-RUN npm install -g serve
+# Этап 2: создание финального легковесного образа
+FROM nginx:alpine
+
+# Удаление лишних файлов, чтобы уменьшить размер образа
+RUN rm -rf /var/cache/apk/* /tmp/* /var/tmp/*
 
 # Копирование собранного приложения из этапа сборки
-COPY --from=build /app/dist /app/dist
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Конфигурация Nginx для работы с вашим приложением
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Объявление порта, на котором будет работать приложение
-EXPOSE 5000
+EXPOSE 80
 
-# Запуск приложения
-CMD ["serve", "-s", "/app/dist", "-l", "5000"]
+# Запуск Nginx
+CMD ["nginx", "-g", "daemon off;"]

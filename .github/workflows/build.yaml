@@ -58,7 +58,7 @@ jobs:
                       docker stop shopix-frontend || true
                       docker rm shopix-frontend || true
                       echo "Starting new container..."
-                      docker -H tcp://193.233.114.35:2375 run -d --name shopix-frontend -p 5000:5000 --restart unless-stopped -v shared-volume:/app/data ${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:${{ github.sha }}
+                      docker run -d --name shopix-frontend -p 5000:5000 --restart unless-stopped ${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:${{ github.sha }}
                       echo "Pruning Docker system..."
                       docker system prune -af
                       echo "Deployment completed."

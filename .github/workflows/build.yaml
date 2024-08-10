@@ -51,8 +51,14 @@ jobs:
                   username: ${{ secrets.SERVER_USER }}
                   password: ${{ secrets.SERVER_PASSWORD }}
                   script: |
+                      echo "Starting deployment..."
+                      echo "Pulling Docker image..."
                       docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:${{ github.sha }}
+                      echo "Stopping and removing old container..."
                       docker stop shopix-frontend || true
                       docker rm shopix-frontend || true
+                      echo "Starting new container..."
                       docker run -d --name shopix-frontend -p 5000:5000 --restart unless-stopped ${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:${{ github.sha }}
+                      echo "Pruning Docker system..."
                       docker system prune -af
+                      echo "Deployment completed."

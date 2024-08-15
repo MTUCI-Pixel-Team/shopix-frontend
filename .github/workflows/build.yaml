@@ -44,4 +44,4 @@ jobs:
           cd /home/deploy/projects
           docker-compose down
           docker-compose pull shopix
-          docker-compose up
+          docker-compose up -d

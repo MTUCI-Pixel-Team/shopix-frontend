@@ -1,67 +1,47 @@
-name: Build and deploy
+name: Deploy Shopix
 
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-    build-and-deploy:
-        runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: '20'
-                  cache: 'npm'
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-            - name: Install dependencies
-              run: npm ci
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-            - name: Build
-              run: npm run build
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: true
+        tags: |
+          ${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:${{ github.sha }}
+          ${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:latest
+        cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:latest
+        cache-to: type=inline
 
-            - name: Clean up node_modules
-              run: npm prune --production
-
-            - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v2
-
-            - name: Login to DockerHub
-              uses: docker/login-action@v2
-              with:
-                  username: ${{ secrets.DOCKER_HUB_USERNAME }}
-                  password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
-
-            - name: Build and push Docker image
-              uses: docker/build-push-action@v4
-              with:
-                  context: .
-                  push: true
-                  tags: ${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:${{ github.sha }}
-                  cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:latest
-                  cache-to: type=inline
-
-            - name: Deploy to server
-              uses: appleboy/ssh-action@master
-              with:
-                  host: ${{ secrets.SERVER_HOST }}
-                  username: ${{ secrets.SERVER_USER }}
-                  password: ${{ secrets.SERVER_PASSWORD }}
-                  script: |
-                      echo "Starting deployment..."
-                      echo "Pulling Docker image..."
-                      docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:${{ github.sha }}
-                      echo "Stopping and removing old container..."
-                      docker stop shopix-frontend || true
-                      docker rm shopix-frontend || true
-                      echo "Starting new container..."
-                      docker run -d --name shopix-frontend -p 5000:80 --restart unless-stopped ${{ secrets.DOCKER_HUB_USERNAME }}/shopix-frontend:${{ github.sha }}
-                      echo "Pruning Docker system..."
-                      docker system prune -af
-                      echo "Deployment completed."
+    - name: Deploy to Server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        password: ${{ secrets.SERVER_PASSWORD }}
+        script: |
+          cd /home/deploy/projects
+          docker-compose down
+          docker-compose pull shopix
+          docker-compose up -d

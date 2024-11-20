@@ -1,39 +1,69 @@
-
 # Shopix
-
-Shopix is ​​a modern and convenient platform for buying and selling goods. Developed using advanced React, TypeScript and Vite technologies, this project offers users a clean and functional interface.
 
 ![Logo](image.png)
 
-## Run Locally
+**Shopix** — это веб-приложение, повторяющее функционал популярного сервиса объявлений Avito. Проект включает все основные возможности оригинального сайта, за исключением чатов.
 
-Clone the project
+---
+
+## Функционал
+
+- **Публикация объявлений**: Добавление новых объявлений с подробным описанием, фотографиями и категориями.
+- **Просмотр и поиск**: Удобный просмотр всех объявлений с возможностью фильтрации и сортировки.
+- **Категории**: Разделение объявлений по категориям для быстрого поиска.
+- **Личный кабинет**: Управление объявлениями и профилем пользователя.
+- **Работа с изображениями**: Загрузка и обработка изображений для объявлений.
+- **Отзывы**: Пользователи могут оставить отзыв на продавца.
+- **Контейнеризация**: Приложение упаковано в Docker для удобного развертывания.
+
+---
+
+## Технологии
+
+- **Архитектура**: FSD (Feature-Sliced Design) для упорядоченного и масштабируемого кода.
+- **Фронтенд**:
+  - **React**: Основной фреймворк для построения пользовательского интерфейса.
+  - **TypeScript**: Типизация для повышения надежности разработки.
+  - **Zustand**: Управление состоянием приложения.
+  - **TanStack Query**: Работа с серверными данными (загрузка, кеширование, синхронизация).
+  - **React Hook Form**: Удобная работа с формами.
+  - **CSS Modules**: Локальная стилизация компонентов.
+- **CI/CD**:
+  - **GitHub Actions**: Автоматизация тестирования и деплоя.
+- **Контейнеризация**:
+  - **Docker**: Упаковка приложения для простого развертывания.
+
+---
+
+## Запуск лоакльно
+
+Сделайте клон репозитория
 
 ```bash
   git clone https://github.com/Tomato1337/shopix-frontend.git
 ```
 
-Go to the project directory
+Перейдите в дирректорию репозитория
 
 ```bash
   cd my-project
 ```
 
-Install dependencies
+Установите зависимости
 
 ```bash
   npm install
 ```
 
-Setting up API_KEY for Yandex Geodecoder.
-Create the .env file in the root directory and paste the key from here:
+Настройте API_KEY для Yandex Geodecoder.
+Создайте .env файл в корневой дирректории и вставьте туда ключ:
 https://developer.tech.yandex.ru/
 
 ```bash
   VITE_YANDEX_API_KEY=PASTE_HERE_API_KEY
 ```
 
-Start the server
+Запустите сервер
 
 ```bash
   npm run dev

@@ -23,20 +23,20 @@ jobs:
                   ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
             - name: Deploy to Server
               run: |
-                  ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "\
-                  echo 'Starting deployment...' && \
-                  mkdir -p ~/shopix-frontend && \
-                  cd ~/shopix-frontend && \
-                  if [ ! -d .git ]; then \
-                    echo 'Initializing git repository...' && \
-                    git init && \
-                    git remote add origin git@github.com:MTUCI-Pixel-Team/shopix-frontend.git && \
-                    git fetch && \
-                    git checkout -f main; \
-                  else \
-                    git fetch && \
-                    git reset --hard origin/main; \
-                  fi && \
+                  ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}
+                  echo 'Starting deployment...'
+                  mkdir -p ~/shopix-frontend
+                  cd ~/shopix-frontend
+                  if [ ! -d .git ]; then
+                    echo 'Initializing git repository...'
+                    git init
+                    git remote add origin git@github.com:MTUCI-Pixel-Team/shopix-frontend.git
+                    git fetch
+                    git checkout -f main;
+                  else 
+                    git fetch
+                    git reset --hard origin/main; 
+                  fi
                   cat > docker-compose.yml << EOF
                   version: '3'
                   services:
@@ -48,9 +48,9 @@ jobs:
                         - .env
                       ports:
                         - "8080:80"
-                  EOF && \
-                  docker compose pull && \
-                  docker compose down --remove-orphans && \
-                  docker compose up -d --build && \
+                  EOF
+                  docker compose pull
+                  docker compose down --remove-orphans
+                  docker compose up -d --build
                   echo 'Deployment completed successfully'"
               timeout-minutes: 10
